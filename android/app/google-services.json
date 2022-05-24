@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "126438782271",
+    "project_id": "yesdemofirebase",
+    "storage_bucket": "yesdemofirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:126438782271:android:10657c51493826fba88f8a",
+        "android_client_info": {
+          "package_name": "com.example.yes_demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "126438782271-jp4tc0k3kb15o3rfeb8u1kdacc5ddr0i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEG1gZen5mmKi3Q0ClhuvVuC_lD8IYqbw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "126438782271-jp4tc0k3kb15o3rfeb8u1kdacc5ddr0i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
