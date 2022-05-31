@@ -1,18 +1,12 @@
-import 'dart:io';
-
-import 'package:dio/dio.dart';
-
-
-import '../constants.dart';
-import '../models/promotion_model.dart';
+import 'package:yes/data/models/promotion/promotion.model.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 
 class PromotionService {
-  static Future<List<PromotionModel>?> fetchPromotions() async {
-    final res = await Dio(kBaseOptions).get('/promotions');
-    if (res.statusCode == HttpStatus.ok) {
-      final jsonBody = PromotionsModel.fromJson(res.data);
-
-      return jsonBody.data;
-    }
+  static Future<List<Promotion>> fetchPromotions() async {
+    try {
+      
+      var uri = Uri.http(Apis.kBaseUrl, Apis.kAllPromotions);
+      final parsedBody = await 
+    } catch (_) {}
   }
 }

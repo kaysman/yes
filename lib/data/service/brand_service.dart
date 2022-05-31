@@ -1,17 +1,17 @@
-import 'dart:io';
-import 'package:dio/dio.dart';
-import '../constants.dart';
-import '../models/brands_model.dart';
-
+import 'package:yes/data/models/brand/brand.model.dart';
+import 'package:yes/data/service/api_client.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 
 class BrandService {
-  static Future<List<BrandModel>?> fetchBrandList() async {
-    final res = await Dio(kBaseOptions).get('/brands');
-    if (res.statusCode == HttpStatus.ok) {
-      final jsonBody = BrandsModel.fromJson(res.data);
-      return jsonBody.data;
+  Future<List<Brand>> fetchBrands() async {
+    try {
+      var uri = Uri.http(Apis.kBaseUrl, Apis.kAllBrands);
+      var parsedBody = await ApiClient.instance.get(uri);
+      return List.from(parsedBody as List<Map<String, dynamic>>)
+          .map((e) => Brand.fromJson(e))
+          .toList();
+    } catch (_) {
+      throw _;
     }
-    return null;
   }
-
 }

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/constants.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/apply_cupon.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/cart_bottom_nav.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/item_select_bar.dart';
@@ -9,8 +8,6 @@ import 'package:yes/presentation/screens/shopping_bag/widgets/product_details.da
 import 'package:yes/presentation/screens/shopping_bag/widgets/user_adress.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet.dart';
 import 'package:yes/presentation/shared/colors.dart';
-
-import '../../../data/models/product_model.dart';
 
 class CartScreen extends StatelessWidget {
   CartScreen({Key? key}) : super(key: key);
@@ -59,7 +56,7 @@ class CartScreen extends StatelessWidget {
                 child: ItemSelectBar(),
               ),
               ProductDetailList(
-                products: products,
+                products: [],
               ),
               SizedBox(
                 child: Padding(

@@ -1,5 +1,33 @@
 import 'package:flutter/material.dart';
 
+class Apis {
+  static const kBaseUrl = 'http://yes.com.tm/api/front';
+
+  // categories
+  static const kHomeCategories = '/home_categories';
+  static const kTabCategories = '/tab_categories';
+  static kCategoryById(int subId) => "/category/:$subId";
+  static kCategoryProducts(int subId) => "/category/:$subId/products";
+
+  // promotions
+  static const kAllPromotions = '/promotions';
+  static kPromotionProducts(int id) => "/promotion/$id/products";
+
+  // brands
+  static const kAllBrands = '/brands';
+  static const kVIPBrands = '/vip/brands';
+  static kBrandById(int id) => "/brand/$id";
+  static kBrandProducts(int id) => "/brand/$id/products";
+
+  // budgets
+  static const kAllBudgets = '/budgets';
+  static kBudgetById(int id) => '/budget/$id';
+  static kBudgetProducts(int id) => '/budget/$id/products';
+
+  // products
+  static kProductById(int id) => '/product/$id';
+}
+
 List<Map<String, dynamic>> menuItems = [
   {
     "activeIcon": Icon(Icons.home),

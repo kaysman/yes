@@ -1,12 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:yes/data/constants.dart';
 import 'package:yes/data/models/product_model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/widgets/custom_new_branch.dart';
 import 'package:yes/presentation/shared/widgets/custom_rating_bar.dart';
-
 import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
@@ -179,7 +175,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) {
-          return ProductDetailScreen(product: products[0]);
+          return ProductDetailScreen();
         },
       ),
     );

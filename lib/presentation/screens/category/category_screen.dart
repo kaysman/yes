@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/constants.dart';
 import 'widgets/category_list.dart';
-
-
 
 class CategoryScreen extends StatelessWidget {
   const CategoryScreen({Key? key}) : super(key: key);
@@ -18,7 +15,9 @@ class CategoryScreen extends StatelessWidget {
           style: const TextStyle(color: Colors.blueGrey),
         ),
       ),
-      body:  CategoryList(categories: categories),
+      body: CategoryList(
+        categories: [],
+      ),
     );
   }
 }

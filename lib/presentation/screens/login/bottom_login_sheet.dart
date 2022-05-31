@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/validators.dart';
 
-
 class BottomLoginSheet extends StatelessWidget {
   const BottomLoginSheet({Key? key}) : super(key: key);
 
@@ -278,6 +277,6 @@ class LoginStyleUtils {
   );
   TextStyle labelText =
       TextStyle(letterSpacing: .15, fontSize: 13, color: kText2Color);
-  TextStyle btnText = const TextStyle(
-      fontSize: 15, color: kWhite, fontWeight: FontWeight.w500);
+  TextStyle btnText =
+      const TextStyle(fontSize: 15, color: kWhite, fontWeight: FontWeight.w500);
 }

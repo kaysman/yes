@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/constants.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wish_list_category.dart';
 import 'package:yes/presentation/shared/colors.dart';
@@ -119,7 +118,6 @@ class _WishGridListState extends State<WishGridList> {
                 children: List.generate(
                   4,
                   (index) => WishListCard(
-                    product: products[index],
                     width: MediaQuery.of(context).size.width / 2.5,
                   ),
                 ),

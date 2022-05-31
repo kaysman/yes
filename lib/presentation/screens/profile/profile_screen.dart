@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
-import 'widgets/bottom_login_sheet.dart';
-
+import '../login/bottom_login_sheet.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -52,7 +51,8 @@ class ProfileScreen extends StatelessWidget {
                         width: 120,
                         height: 120,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Colors.grey[100]!, width: 2),
+                          border:
+                              Border.all(color: Colors.grey[100]!, width: 2),
                           color: Colors.grey[300],
                           borderRadius: BorderRadius.circular(3),
                         ),
@@ -100,7 +100,7 @@ class ProfileScreen extends StatelessWidget {
         isScrollControlled: true,
         context: context,
         builder: (context) {
-          return  BottomLoginSheet();
+          return BottomLoginSheet();
         });
   }
 }

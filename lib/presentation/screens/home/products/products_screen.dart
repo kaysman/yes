@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import '../../../../data/constants.dart';
 import 'widgets/product_bottom_nav.dart';
 import 'widgets/product_grid_list.dart';
 
@@ -15,9 +14,7 @@ class ProductsScreen extends StatelessWidget {
           title: Text(
             'Products',
           )),
-      body: ProductsGridList(
-        products: products,
-      ),
+      body: ProductsGridList(),
       bottomNavigationBar: ProductBootNav(),
     );
   }

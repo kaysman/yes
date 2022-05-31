@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/models/categories_model.dart';
+import 'package:yes/data/models/category/category.model.dart';
+
 class CategoryList extends StatelessWidget {
-  final List<CategoryModel> categories;
-   CategoryList({Key? key, required this.categories}) : super(key: key);
+  final List<Category> categories;
+  CategoryList({Key? key, required this.categories}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-        child: Column(
-            children: 
-                 categories
-                    .map((e) => _CategoryListSubCategory(
-                          data: e,
-                        ))
-                    .toList()
-                ));
+      child: Column(
+          children: categories
+              .map((e) => _CategoryListSubCategory(
+                    data: e,
+                  ))
+              .toList()),
+    );
   }
 }
 
 class _CategoryListSubCategory extends StatefulWidget {
-  final CategoryModel data;
+  final Category data;
   _CategoryListSubCategory({Key? key, required this.data}) : super(key: key);
 
   @override
@@ -129,22 +129,21 @@ class __CategoryListSubCategoryState extends State<_CategoryListSubCategory> {
       ),
       if (isOpened)
         // if (widget.data.sub != null)
-          Container(
-            color: Colors.white,
-            width: double.infinity,
-            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
-            child: SubCategoryItem(subCategories: widget.data.sub ?? []),
-          ),
+        Container(
+          color: Colors.white,
+          width: double.infinity,
+          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          child: SubCategoryItem(subCategories: widget.data.sub ?? []),
+        ),
     ]);
   }
 }
 
 class SubCategoryItem extends StatefulWidget {
-  final List<CategoryModel> subCategories;
+  final List<Category> subCategories;
   SubCategoryItem({
     Key? key,
-    required
-    this.subCategories,
+    required this.subCategories,
   }) : super(key: key);
 
   @override
@@ -156,22 +155,23 @@ class _SubCategoryItemState extends State<SubCategoryItem> {
   Widget build(BuildContext context) {
     return ExpansionPanelList(
       expansionCallback: (panelIndex, isExpanded) {
-        setState(() {
-          widget.subCategories[panelIndex].isExpanded = !isExpanded;
-        });
+        // setState(() {
+        //   widget.subCategories[panelIndex].isExpanded = !isExpanded;
+        // });
       },
       children: widget.subCategories
           .map(
             (e) => ExpansionPanel(
               canTapOnHeader: true,
-              isExpanded: e.isExpanded ?? false,
+              isExpanded: false,
               headerBuilder: (context, isExpanded) {
                 return ListTile(title: Text(e.title_tm ?? ''));
               },
               body: Column(
                 children: e.sub
-                    ?.map((e) => ListTile(title: Text(e.subtitle_tm ?? '')))
-                    .toList() ?? [],
+                        ?.map((e) => ListTile(title: Text(e.subtitle_tm ?? '')))
+                        .toList() ??
+                    [],
               ),
             ),
           )

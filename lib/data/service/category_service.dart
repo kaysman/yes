@@ -1,19 +1,17 @@
-import 'dart:io';
+import 'package:yes/data/models/category/category.model.dart';
+import 'package:yes/data/service/api_client.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 
-import 'package:dio/dio.dart';
-
-import '../constants.dart';
-import '../models/categories_model.dart';
-
-
-
- class CategoryReqresService {
-  static Future<List<CategoryModel>?> fetchCategoryList() async {
-    final res = await Dio(kBaseOptions).get('/tab_categories');
-    if (res.statusCode == HttpStatus.ok) {
-      final jsonBody = CategoriesModel.fromJson(res.data);
-      return jsonBody.data;
+class CategoryService {
+  static Future<List<Category>?> fetchCategory() async {
+    try {
+      var uri = Uri.http(Apis.kBaseUrl, Apis.kHomeCategories);
+      final parsedBody = await ApiClient.instance.get(uri);
+      return List.from(parsedBody as List<Map<String, dynamic>>)
+          .map((e) => Category.fromJson(e))
+          .toList();
+    } catch (_) {
+      throw _;
     }
-    return null;
   }
 }

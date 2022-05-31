@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/constants.dart';
 import 'package:yes/presentation/screens/home/product_detail/product_detail_screen.dart';
 import 'package:yes/presentation/screens/home/products/products_screen.dart';
 
@@ -32,7 +31,7 @@ class HomeBanner extends StatelessWidget {
           InkWell(
             onTap: () => Navigator.of(context)
                 .push(MaterialPageRoute(builder: (context) {
-              return ProductDetailScreen(product: products[0],);
+              return ProductDetailScreen();
             })),
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
