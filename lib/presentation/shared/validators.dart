@@ -1,7 +1,13 @@
 // - max 6 character
 String? phoneValidator(String? value) {
   if (value == null || value.isEmpty) {
-    return "Doldyrow shuyeri";
+    return "Telefon belginizi girizin!";
+  } else
+    return null;
+}
+String? keyWordValidator(String? value) {
+  if (value == null || value.isEmpty) {
+    return "Achar sozuni girizin!";
   } else
     return null;
 }

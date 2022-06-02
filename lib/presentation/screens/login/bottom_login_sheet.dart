@@ -71,6 +71,7 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final phoneNumberController = TextEditingController();
+  final keyWordController = TextEditingController();
 
   @override
   void initState() {
@@ -80,6 +81,7 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
   @override
   void dispose() {
     phoneNumberController.dispose();
+    keyWordController.dispose();
     super.dispose();
   }
 
@@ -182,13 +184,56 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
                             borderSide: BorderSide(
                           color: Colors.pinkAccent,
                         )),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 5),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal:10),
                         prefixIcon: this._phoneFieldPrefixIcon,
                       ),
                       validator: phoneValidator,
                       inputFormatters: [
                         LengthLimitingTextInputFormatter(6),
                       ],
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Container(
+                    width: double.infinity,
+                    child: TextFormField(
+                      controller: keyWordController,
+                      validator: keyWordValidator,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        label: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            clipBehavior: Clip.none,
+                            children: [
+                              Text('Key word',
+                                  style: LoginStyleUtils().labelText),
+                              Positioned(
+                                top: 0,
+                                right: -10,
+                                child: Text('*',
+                                    style: LoginStyleUtils().pinkText),
+                              ),
+                            ],
+                          ),
+                        ),
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.black12),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.black38,
+                        )),
+                        errorBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.pinkAccent,
+                        )),
+                        focusedErrorBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(
+                          color: Colors.pinkAccent,
+                        )),
+                        contentPadding: const EdgeInsets.symmetric(vertical: 5, ),
+                      ),
                     ),
                   ),
                   SizedBox(height: 16),
