@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag_screen.dart';
+import 'package:yes/presentation/shared/colors.dart';
 
 import '../shopping_bag/widgets/wish_grid_list.dart';
 import 'widgets/banner.dart';
@@ -7,26 +9,77 @@ import 'widgets/brands.dart';
 import 'widgets/promotions.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const routeName = "home";
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
       appBar: AppBar(
-        title: Text('YES'),
+        title: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: const BoxDecoration(
+              color: Colors.deepOrange, shape: BoxShape.circle),
+          child: const Text(
+            'YES.',
+            style: TextStyle(
+                fontSize: 15,
+                color: Colors.white,
+                fontWeight: FontWeight.w500,
+                letterSpacing: -1.2),
+          ),
+        ),
         actions: [
           IconButton(
               onPressed: () {
-                  Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) {
-                  return WishGridList();
-                }));
+                Navigator.pushNamed(context, 'search');
               },
               icon: Icon(
-                Icons.favorite_border_outlined,
-                size: 20,
-              ))
+                Icons.search_outlined,
+                size: 26,
+              )),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return WishGridList();
+              }));
+            },
+            icon: Icon(
+              Icons.favorite_border_outlined,
+              size: 26,
+            ),
+          ),
+          Stack(
+            children: [
+              IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, 'shopping-bag');
+                },
+                icon: Icon(
+                  Icons.shopping_bag_outlined,
+                  size: 26,
+                ),
+              ),
+              Positioned(
+                top: 10,
+                right: 6,
+                child: Container(
+                  width: 15,
+                  height: 15,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: kPrimaryColor, shape: BoxShape.circle),
+                  child: Text(
+                    '12',
+                    style: TextStyle(
+                        color: kWhite,
+                        fontSize: 8,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              )
+            ],
+          )
         ],
         bottom: VipCategories(),
       ),

@@ -10,6 +10,7 @@ import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet
 import 'package:yes/presentation/shared/colors.dart';
 
 class CartScreen extends StatelessWidget {
+   static const routeName = "shopping-bag";
   CartScreen({Key? key}) : super(key: key);
 
   @override

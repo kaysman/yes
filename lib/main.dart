@@ -20,7 +20,7 @@ class YesApp extends StatelessWidget {
       initialRoute: IndexScreen.routeName,
       onGenerateRoute: onGenerateRoute,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
-      builder: (context, home) => AppObserver(child: home),
+      // builder: (context, home) => AppObserver(child: home),
     );
   }
 }
