@@ -1,6 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/presentation/screens/login/login.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/validators.dart';
 
@@ -184,12 +186,13 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
                             borderSide: BorderSide(
                           color: Colors.pinkAccent,
                         )),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 5, horizontal:10),
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
                         prefixIcon: this._phoneFieldPrefixIcon,
                       ),
                       validator: phoneValidator,
                       inputFormatters: [
-                        LengthLimitingTextInputFormatter(6),
+                        LengthLimitingTextInputFormatter(8),
                       ],
                     ),
                   ),
@@ -232,7 +235,9 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
                             borderSide: BorderSide(
                           color: Colors.pinkAccent,
                         )),
-                        contentPadding: const EdgeInsets.symmetric(vertical: 5, ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 5,
+                        ),
                       ),
                     ),
                   ),
@@ -265,11 +270,27 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
                   SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _onTap,
-                      child: Text('CONTINUE', style: LoginStyleUtils().btnText),
-                      style:
-                          ElevatedButton.styleFrom(primary: Colors.pinkAccent),
+                    child: BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState?.validate() == true) {
+                              // logic
+                              context.read<LoginBloc>().login(
+                                  "+993"+phoneNumberController.text,
+                                  keyWordController.text);
+                            }
+                          },
+                          child: state.status == LoginStatus.loading
+                              ? Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                )
+                              : Text('CONTINUE',
+                                  style: LoginStyleUtils().btnText),
+                          style: ElevatedButton.styleFrom(
+                              primary: Colors.pinkAccent),
+                        );
+                      },
                     ),
                   ),
                   SizedBox(height: 12),
@@ -304,6 +325,7 @@ class BootmSheetLoginState extends State<BootmSheetLogin> {
   void _onTap() {
     if (_formKey.currentState?.validate() == true) {
       // logic
+
     }
   }
 }

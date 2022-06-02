@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:yes/data/service/app_service.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
-import 'package:yes/presentation/shared/widgets/app_observer.dart';
 
 import 'presentation/shared/routes.dart';
 import 'presentation/shared/theming.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   AppService.instance.startApp();
 }
 

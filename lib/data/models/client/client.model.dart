@@ -1,7 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 part 'client.model.g.dart';
 
-
 @JsonSerializable(explicitToJson: false)
 class Client {
   final int id;
@@ -13,7 +12,7 @@ class Client {
   final DateTime? updated_at;
 
   Client({
-   required this.id,
+    required this.id,
     required this.phone,
     required this.address,
     this.name,
@@ -23,5 +22,6 @@ class Client {
   });
 
   factory Client.fromJson(Map<String, dynamic> json) => _$ClientFromJson(json);
-  
+
+  Map<String, dynamic> toJson() => _$ClientToJson(this);
 }

@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 class Apis {
   static const kBaseUrl = 'http://yes.com.tm/api/front';
 
+  // auth
+  static const kLogin = '/login';
+  static const kRegister = '/register';
+
   // categories
   static const kHomeCategories = '/home_categories';
   static const kTabCategories = '/tab_categories';
