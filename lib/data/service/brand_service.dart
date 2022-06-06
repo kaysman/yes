@@ -7,7 +7,7 @@ class BrandService {
     try {
       var uri = Uri.http(Apis.kBaseUrl, Apis.kAllBrands);
       var parsedBody = await ApiClient.instance.get(uri);
-      return List.from(parsedBody as List<Map<String, dynamic>>)
+      return List.from(parsedBody['data'] as List<dynamic>)
           .map((e) => Brand.fromJson(e))
           .toList();
     } catch (_) {
@@ -20,7 +20,7 @@ class BrandService {
     try {
       var uri = Uri.http(Apis.kBaseUrl, Apis.kVIPBrands);
       var parsedBody = await ApiClient.instance.get(uri);
-      return List.from(parsedBody as List<Map<String, dynamic>>)
+      return List.from(parsedBody['data'] as List<dynamic>)
           .map((e) => Brand.fromJson(e))
           .toList();
     } catch (_) {

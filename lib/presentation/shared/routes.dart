@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:yes/presentation/screens/home/products/products_screen.dart';
 import 'package:yes/presentation/screens/home/search/serach.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
 
+import '../screens/home/product_detail/product_detail_screen.dart';
 import '../screens/shopping_bag/shopping_bag_screen.dart';
 
 List<Route<dynamic>> onGenerateInitialRoutes(String name) {
@@ -35,6 +37,20 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => CartScreen(),
       );
+    case ProductDetailScreen.routeName:
+      return MaterialPageRoute(
+        builder: (_) => ProductDetailScreen(),
+      );
+    case ProductsScreen.routeName:
+      return MaterialPageRoute(builder: (_) {
+        return Container();
+        // var args = settings.arguments as Map<String, dynamic>;
+        // switch (args.keys.first) {
+        //   case "promotionId":
+        //     return ProductsScreen(promotionId: args['promotionId']);
+        // }
+        // default:return
+      });
     default:
       return MaterialPageRoute(
         builder: (_) => IndexScreen(),

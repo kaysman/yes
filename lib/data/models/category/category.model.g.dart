@@ -17,6 +17,14 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
           .toList(),
       subtitle_ru: json['subtitle_ru'] as String?,
       subtitle_tm: json['subtitle_tm'] as String?,
+      isExpanded: json['isExpanded'] as bool? ?? false,
+      parent_id: json['parent_id'] as int?,
+      created_at: json['created_at'] == null
+          ? null
+          : DateTime.parse(json['created_at'] as String),
+      updated_at: json['updated_at'] == null
+          ? null
+          : DateTime.parse(json['updated_at'] as String),
     );
 
 Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
@@ -28,4 +36,8 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'image': instance.image,
       'background_image': instance.background_image,
       'sub': instance.sub,
+      'parent_id': instance.parent_id,
+      'created_at': instance.created_at?.toIso8601String(),
+      'updated_at': instance.updated_at?.toIso8601String(),
+      'isExpanded': instance.isExpanded,
     };

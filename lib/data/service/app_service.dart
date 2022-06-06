@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/main.dart';
 import 'package:yes/presentation/blocs/auth_bloc.dart';
+import 'package:yes/presentation/screens/category/category.bloc.dart';
+import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
-import 'package:yes/presentation/screens/login/login.bloc.dart';
 import 'package:yes/presentation/shared/storage.dart';
 
+import '../../presentation/screens/profile/login/login.bloc.dart';
 import '../models/client/client.model.dart';
 
 class AppService {
@@ -31,8 +33,10 @@ class AppService {
       MultiBlocProvider(
         providers: [
           BlocProvider<IndexBloc>(create: (_) => IndexBloc()),
-          BlocProvider<AuthBloc>(create: (_) => AuthBloc()),
-          BlocProvider<LoginBloc>(create: (_) => LoginBloc(authBloc)),
+          BlocProvider<AuthBloc>(create: (_) => authBloc),
+          BlocProvider<LoginBloc>(create: (_) => loginBloc),
+          BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
+          BlocProvider<CategoryCubit>(create: (_) => CategoryCubit()),
         ],
         child: YesApp(),
       ),

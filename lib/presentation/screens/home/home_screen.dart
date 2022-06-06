@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/presentation/screens/category/category.bloc.dart';
+import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 import '../shopping_bag/widgets/wish_grid_list.dart';
@@ -8,12 +10,25 @@ import 'widgets/banner.dart';
 import 'widgets/brands.dart';
 import 'widgets/promotions.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   static const routeName = "home";
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Container(

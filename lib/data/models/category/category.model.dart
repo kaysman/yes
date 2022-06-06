@@ -11,6 +11,10 @@ class Category {
   final String? image;
   final String? background_image;
   final List<Category>? sub;
+  final int? parent_id;
+  final DateTime? created_at;
+  final DateTime? updated_at;
+  bool isExpanded;
 
   Category({
     required this.id,
@@ -21,6 +25,10 @@ class Category {
     this.sub,
     this.subtitle_ru,
     this.subtitle_tm,
+    this.isExpanded = false,
+    this.parent_id,
+    this.created_at,
+    this.updated_at
   });
 
   factory Category.fromJson(Map<String, dynamic> json) =>

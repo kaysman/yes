@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 import 'my_container.dart';
 
 class UserAdress extends StatelessWidget {
+  final Client? user;
   const UserAdress({
     Key? key,
+    required this.user,
   }) : super(key: key);
 
   @override
@@ -32,7 +35,7 @@ class UserAdress extends StatelessWidget {
                       ),
                       children: [
                         TextSpan(
-                          text: 'Daniyar, 560043',
+                          text: '${user?.name}, ${user?.phone}',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
@@ -43,7 +46,7 @@ class UserAdress extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  '10,Apex Pearl,Horomavu Main Road, Banaswa street',
+                  '${user?.address}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

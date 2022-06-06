@@ -9,8 +9,9 @@ import 'widgets/app_bar_icon_btn.dart';
 import 'widgets/product_detail_bootm_nav.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  final ProductsModel? product;
-  ProductDetailScreen({Key? key, this.product}) : super(key: key);
+  static const routeName = "product-detail";
+  // final ProductsModel? product;
+  ProductDetailScreen({Key? key}) : super(key: key);
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -21,8 +22,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // var data =    ModalRoute(context)!.settings.arguments;
+    var data = ModalRoute.of(context)!.settings.arguments;
     return SizedBox();
-    // return SafeArea(
+    //  SafeArea(
     //   child: Scaffold(
     //     bottomNavigationBar: ProductDetailBottomNav(),
     //     extendBodyBehindAppBar: true,
@@ -52,14 +55,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     //       ],
     //     ),
     //     body: Container(
-    //       // width: double.infinity,
-    //       // height: double.infinity,
     //       color: Colors.grey[100],
     //       child: SingleChildScrollView(
     //         child: Column(
     //           crossAxisAlignment: CrossAxisAlignment.start,
     //           children: [
-    //             if (widget.product.detailImages != null)
+    //             if (data.detailImages != null)
     //               Container(
     //                 width: double.infinity,
     //                 child: Stack(

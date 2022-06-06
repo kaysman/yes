@@ -7,27 +7,26 @@ class CategoryService {
     try {
       var uri = Uri.http(Apis.kBaseUrl, Apis.kHomeCategories);
       final parsedBody = await ApiClient.instance.get(uri);
-      return List.from(parsedBody as List<Map<String, dynamic>>)
+      print(parsedBody['data']);
+      return List.from(parsedBody['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))
           .toList();
     } catch (_) {
       throw _;
     }
   }
-
 
   static Future<List<Category>?> fetchTabCategories() async {
     try {
       var uri = Uri.http(Apis.kBaseUrl, Apis.kTabCategories);
       final parsedBody = await ApiClient.instance.get(uri);
-      return List.from(parsedBody as List<Map<String, dynamic>>)
+      return List.from(parsedBody['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))
           .toList();
     } catch (_) {
       throw _;
     }
   }
-
 
   static Future<Category> fetchCategoryById(int id) async {
     try {
@@ -37,10 +36,7 @@ class CategoryService {
     } catch (_) {
       throw _;
     }
-
-    
   }
-
 
   // static Future<List<Category>?> fetchCategoryProducts(int subId) async {
   //   try {
@@ -53,7 +49,5 @@ class CategoryService {
   //     throw _;
   //   }
   // }
-
-
 
 }

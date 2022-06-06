@@ -6,6 +6,7 @@ import 'package:yes/presentation/shared/widgets/custom_rating_bar.dart';
 import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
+  static const routeName = "product";
   final ProductsModel product;
   const ProductsGridItem({Key? key, required this.product}) : super(key: key);
 
@@ -172,12 +173,11 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
   }
 
   void _navigaTo(context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) {
-          return ProductDetailScreen();
-        },
-      ),
+    Navigator.of(context).pushNamed(
+      'product-detail',
+      arguments: {
+        "product": widget.product,
+      }
     );
   }
 }

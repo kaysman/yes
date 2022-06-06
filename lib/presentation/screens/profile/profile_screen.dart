@@ -1,10 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/client/client.model.dart';
+import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/blocs/auth_bloc.dart';
+import 'package:yes/presentation/screens/profile/login/login.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
+import 'login/bottom_login_sheet.dart';
 
-import '../login/bottom_login_sheet.dart';
-
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late Client? currentUser;
+  late LoginBloc _loginBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = AppService.currentUser.value;
+    _loginBloc = LoginBloc(context.read<AuthBloc>());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,23 +84,39 @@ class ProfileScreen extends StatelessWidget {
                         width: 15,
                       ),
                       Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            _showLoginBottomSheet(context);
+                        child: BlocConsumer<AuthBloc, AuthState>(
+                          listener: (_, state) {},
+                          builder: (context, state) {
+                            print(state.status);
+                            print(state.identity);
+                            return state.status == AuthStatus.Authenticated &&
+                                        state.identity != null ||
+                                    currentUser != null
+                                ? ElevatedButton(
+                                    onPressed: logOut, child: Text('Log out'))
+                                : GestureDetector(
+                                    onTap: () {
+                                      _showLoginBottomSheet(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(2),
+                                        color: kPrimaryColor,
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 7),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        'LOG IN/SIGN UP ',
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color: kWhite,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  );
                           },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: kPrimaryColor,
-                            ),
-                            padding: const EdgeInsets.symmetric(vertical: 7),
-                            alignment: Alignment.center,
-                            child: const Text('LOG IN/SIGN UP',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: kWhite,
-                                    fontWeight: FontWeight.w500)),
-                          ),
                         ),
                       ),
                     ],
@@ -97,10 +132,15 @@ class ProfileScreen extends StatelessWidget {
 
   void _showLoginBottomSheet(BuildContext context) {
     showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (context) {
-          return BottomLoginSheet();
-        });
+      isScrollControlled: true,
+      context: context,
+      builder: (context) {
+        return BottomLoginSheet();
+      },
+    );
+  }
+
+  void logOut() async {
+    await _loginBloc.logOut();
   }
 }

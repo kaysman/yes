@@ -1,0 +1,1 @@
+// ? wodget bolmeli we color-y set etmeli;

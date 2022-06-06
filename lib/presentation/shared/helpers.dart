@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
 
 class Apis {
-  static const kBaseUrl = 'http://yes.com.tm/api/front';
+  static const kBaseUrl = 'yes.com.tm';
+  // http://yes.com.tm/api/front
 
   // auth
   static const kLogin = '/login';
   static const kRegister = '/register';
 
   // categories
-  static const kHomeCategories = '/home_categories';
-  static const kTabCategories = '/tab_categories';
-  static kCategoryById(int subId) => "/category/:$subId";
-  static kCategoryProducts(int subId) => "/category/:$subId/products";
+  static const kHomeCategories = '/api/front/home_categories';
+  static const kTabCategories = '/api/front/tab_categories';
+  static kCategoryById(int subId) => "/api/front/category/:$subId";
+  static kCategoryProducts(int subId) => "/api/front/category/:$subId/products";
 
   // promotions
-  static const kAllPromotions = '/promotions';
-  static kPromotionProducts(int id) => "/promotion/$id/products";
+  static const kAllPromotions = '/api/front/promotions';
+  static kPromotionProducts(int? id) => "/api/front/promotion/$id/products";
 
   // brands
-  static const kAllBrands = '/brands';
-  static const kVIPBrands = '/vip/brands';
-  static kBrandById(int id) => "/brand/$id";
-  static kBrandProducts(int id) => "/brand/$id/products";
+  static const kAllBrands = '/api/front/brands';
+  static const kVIPBrands = '/api/front/vip/brands';
+  static kBrandById(int id) => "/api/front/brand/$id";
+  static kBrandProducts(int id) => "/api/front/brand/$id/products";
 
   // budgets
-  static const kAllBudgets = '/budgets';
-  static kBudgetById(int id) => '/budget/$id';
-  static kBudgetProducts(int id) => '/budget/$id/products';
+  static const kAllBudgets = '/api/front/budgets';
+  static kBudgetById(int id) => '/api/front/budget/$id';
+  static kBudgetProducts(int id) => '/api/front/budget/$id/products';
 
   // products
-  static kProductById(int id) => '/product/$id';
+  static kProductById(int id) => '/api/front/product/$id';
 }
 
 List<Map<String, dynamic>> menuItems = [

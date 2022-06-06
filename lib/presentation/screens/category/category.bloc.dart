@@ -36,12 +36,14 @@ class CategoryState {
 class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(CategoryState()) {
     fetchTabCategories();
+    fetchHomeCategories();
   }
 
   Future<void> fetchTabCategories() async {
     emit(state.copyWith(tabStatus: TabCategoryFetchingStatus.Loading));
     final res = await CategoryService.fetchTabCategories();
-    emit(state.copyWith(tabCategories: res, tabStatus: TabCategoryFetchingStatus.Idle));
+    emit(state.copyWith(
+        tabCategories: res, tabStatus: TabCategoryFetchingStatus.Idle));
   }
 
   Future<void> fetchHomeCategories() async {

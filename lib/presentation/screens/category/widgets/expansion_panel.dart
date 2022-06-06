@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 // import 'mergeable_material.dart';
 // import 'shadows.dart';
 // import 'theme.dart';
-
-const double _kPanelHeaderCollapsedHeight = kMinInteractiveDimension;
+// const double kMinInteractiveDimension = 48.0;
+const double _kPanelHeaderCollapsedHeight = 0;
 const EdgeInsets _kPanelHeaderExpandedDefaultPadding = EdgeInsets.symmetric(
-  vertical: 64.0 - _kPanelHeaderCollapsedHeight,
+  vertical: 0.0 - _kPanelHeaderCollapsedHeight,
 );
 
 class _SaltedKey<S, V> extends LocalKey {
@@ -372,10 +372,10 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
       );
 
       Widget expandIconContainer = Container(
-        margin: const EdgeInsetsDirectional.only(end: 8.0),
+        margin: const EdgeInsetsDirectional.only(end: 0.0),
         child: ExpandIcon(
           isExpanded: _isChildExpanded(index),
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(0.0),
           onPressed: !child.canTapOnHeader
               ? (bool isExpanded) => _handlePressed(isExpanded, index)
               : null,

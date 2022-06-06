@@ -16,6 +16,6 @@ class AppTheme {
           unselectedItemColor: kText1Color,
           selectedItemColor: kPrimaryColor,
           type: BottomNavigationBarType.fixed,
-        ));
+        ),);
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/client/client.model.dart';
+import 'package:yes/data/service/app_service.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/apply_cupon.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/cart_bottom_nav.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/item_select_bar.dart';
@@ -9,9 +11,22 @@ import 'package:yes/presentation/screens/shopping_bag/widgets/user_adress.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
-class CartScreen extends StatelessWidget {
-   static const routeName = "shopping-bag";
+class CartScreen extends StatefulWidget {
+  static const routeName = "shopping-bag";
   CartScreen({Key? key}) : super(key: key);
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  late Client? currentUser;
+
+  @override
+  void initState() {
+    super.initState();
+    currentUser = AppService.currentUser.value;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +53,7 @@ class CartScreen extends StatelessWidget {
                 color: kWhite,
                 padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
                 child: Text(
-                  'Time Line...',
+                  '${currentUser?.address}',
                   style: TextStyle(
                       color: kText1Color,
                       fontSize: 12,
@@ -48,7 +63,7 @@ class CartScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              UserAdress(),
+              UserAdress(user: currentUser),
               SizedBox(
                 height: 8,
               ),

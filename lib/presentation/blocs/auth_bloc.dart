@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
+import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/shared/storage.dart';
 
 enum AuthStatus { Authenticated, Unauthenticated }
 
@@ -24,14 +26,16 @@ class AuthState {
 }
 
 class AuthBloc extends Cubit<AuthState> {
-  AuthBloc() : super(AuthState(status: AuthStatus.Unauthenticated));
+  AuthBloc() : super(AuthState());
 
-  setIdentity(Client? client) {
-    if (client != null) {
-      emit(state.copyWith(
-        identity: client,
-        status: AuthStatus.Authenticated,
-      ));
-    }
+  setIdentity(Client client) {
+    emit(state.copyWith(identity: client, status: AuthStatus.Authenticated));
+  }
+
+  setlogOut() async {
+    var storage = await LocalStorage.instance;
+   await  storage.removeToken;
+    AppService.currentUser.value = null;
+    emit(state.copyWith(identity: null, status: AuthStatus.Unauthenticated));
   }
 }
