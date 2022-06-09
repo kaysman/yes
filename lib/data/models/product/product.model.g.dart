@@ -12,27 +12,27 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       name_tm: json['name_tm'] as String?,
       name_ru: json['name_ru'] as String?,
       image: json['image'] as String?,
-      images: (json['images'] as List<dynamic>?)
-          ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      // images: (json['images'] as List<dynamic>?)
+      //     ?.map((e) => Image.fromJson(e as Map<String, dynamic>))
+      //     .toList(),
       price: json['price'] as int?,
-      color: json['color'] == null
-          ? null
-          : Color.fromJson(json['color'] as Map<String, dynamic>),
-      gender: json['gender'] == null
-          ? null
-          : Gender.fromJson(json['gender'] as Map<String, dynamic>),
-      code: json['code'] as String?,
-      quantity: json['quantity'] as int?,
-      brand: json['brand'] == null
-          ? null
-          : Brand.fromJson(json['brand'] as Map<String, dynamic>),
-      market: json['market'] == null
-          ? null
-          : Market.fromJson(json['market'] as Map<String, dynamic>),
-      category: json['category'] == null
-          ? null
-          : Category.fromJson(json['category'] as Map<String, dynamic>),
+      // color: json['color'] == null
+      //     ? null
+      //     : Color.fromJson(json['color'] as Map<String, dynamic>),
+      // gender: json['gender'] == null
+      //     ? null
+      //     : Gender.fromJson(json['gender'] as Map<String, dynamic>),
+      // code: json['code'] as String?,
+      // quantity: json['quantity'] as int?,
+      // brand: json['brand'] == null
+      //     ? null
+      //     : Brand.fromJson(json['brand'] as Map<String, dynamic>),
+      // market: json['market'] == null
+      //     ? null
+      //     : Market.fromJson(json['market'] as Map<String, dynamic>),
+      // category: json['category'] == null
+      //     ? null
+      //     : Category.fromJson(json['category'] as Map<String, dynamic>),
       created_at: json['created_at'] as String?,
       description_tm: json['description_tm'] as String?,
       description_ru: json['description_ru'] as String?,

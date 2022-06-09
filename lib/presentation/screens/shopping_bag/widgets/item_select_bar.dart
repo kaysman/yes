@@ -31,7 +31,7 @@ class _ItemSelectBarState extends State<ItemSelectBar> {
                   children: [
                     CustomCheckBox(
                       isChecked: false,
-                      onTapped: () {},
+                      onTapped: (v) {},
                     ),
                     SizedBox(
                       width: 10,

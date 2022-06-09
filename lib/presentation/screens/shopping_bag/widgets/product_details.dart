@@ -8,16 +8,13 @@ import 'custom_check_box.dart';
 import 'product_discount_price.dart';
 
 class ProductDetailList extends StatelessWidget {
-  final List<Product> products;
-  ProductDetailList({
-    Key? key,
-    required this.products,
-  }) : super(key: key);
+  ProductDetailList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
       builder: (context, state) {
+        var products = state.products;
         return Column(
           children: List.generate(
             products.length,
@@ -25,11 +22,10 @@ class ProductDetailList extends StatelessWidget {
               onDelete: () {
                 context.read<ShoppingBagBloc>().remove(products[index]);
               },
-              onTap: () {
+              onTap: (v) {
                 context
                     .read<ShoppingBagBloc>()
-                    .selectProduct(index, products[index]);
-                print(index);
+                    .selectProduct(products[index], v);
               },
               productName: products[index].name_tm!,
               productCode: products[index].description_tm!,
@@ -57,7 +53,7 @@ class _ProductDetail extends StatelessWidget {
   final bool? isSelected;
   final String productCode;
   final String image;
-  final Function() onTap;
+  final ValueChanged<bool> onTap;
   final Function() onDelete;
   const _ProductDetail({
     Key? key,
