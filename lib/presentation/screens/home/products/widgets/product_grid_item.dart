@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/models/product_model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/widgets/custom_new_branch.dart';
@@ -7,7 +8,7 @@ import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
   static const routeName = "product";
-  final ProductsModel product;
+  final Product product;
   const ProductsGridItem({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -46,28 +47,28 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     width: MediaQuery.of(context).size.width / 2,
                     child: SizedBox(
                       height: double.infinity,
-                      child: Image.asset(
-                        widget.product.imagePath!,
+                      child: Image.network(
+                        widget.product.image!,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  if (widget.product.isNew != false)
-                    // * bolmeli
-                    Positioned(
-                      top: 5,
-                      left: 0,
-                      child: CustomNewBranch(
-                          fontSize: 10, padding: const EdgeInsets.all(3)),
-                    ),
-                  if (widget.product.rating != null)
-                    Positioned(
-                      bottom: 12,
-                      left: 10,
-                      child: CustomRatingBar(
-                          rating: widget.product.rating,
-                          commentsCount: widget.product.commentCount),
-                    ),
+                  // if (widget.product.isNew != false)
+                  // * bolmeli
+                  //   Positioned(
+                  //     top: 5,
+                  //     left: 0,
+                  //     child: CustomNewBranch(
+                  //         fontSize: 10, padding: const EdgeInsets.all(3)),
+                  //   ),
+                  // if (widget.product.rating != null)
+                  //   Positioned(
+                  //     bottom: 12,
+                  //     left: 10,
+                  //     child: CustomRatingBar(
+                  //         rating: widget.product.rating,
+                  //         commentsCount: widget.product.commentCount),
+                  //   ),
                 ],
               ),
             ),
@@ -88,13 +89,14 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                         Expanded(
                           flex: 9,
                           child: Text(
-                            widget.product.productName,
+                            widget.product.name_tm!.toUpperCase(),
                             maxLines: 1,
                             style: TextStyle(
-                                overflow: TextOverflow.ellipsis,
-                                fontSize: 12,
-                                color: kText1Color,
-                                fontWeight: FontWeight.bold),
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 12,
+                              color: kText1Color,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -115,7 +117,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     SizedBox(
                       height: 2,
                     ),
-                    Text(widget.product.productCode,
+                    Text(widget.product.description_tm!,
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: 11,
@@ -124,44 +126,44 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     SizedBox(
                       height: 4,
                     ),
-                    if (widget.product.discount != null)
-                      RichText(
-                        text: TextSpan(
-                            text: '${widget.product.oldPrice}TMT',
-                            style: TextStyle(
-                              color: Colors.grey[400],
-                              decoration: TextDecoration.lineThrough,
-                              fontSize: 12,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: '  ${widget.product.newPrice}TMT  ',
-                                style: TextStyle(
-                                    color: kText1Color,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none),
-                              ),
-                              TextSpan(
-                                text: '${widget.product.discount}% OFF',
-                                style: TextStyle(
-                                    color: Colors.red,
-                                    fontSize: 12,
-                                    decoration: TextDecoration.none),
-                              ),
-                            ]),
-                      ),
-                    if (widget.product.discount == null)
-                      Text.rich(
-                        TextSpan(
-                          text: "${widget.product.productPrice}TMT",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: kText1Color,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    // if (widget.product.discount != null)
+                    //   RichText(
+                    //     text: TextSpan(
+                    //         text: '${widget.product.oldPrice}TMT',
+                    //         style: TextStyle(
+                    //           color: Colors.grey[400],
+                    //           decoration: TextDecoration.lineThrough,
+                    //           fontSize: 12,
+                    //         ),
+                    //         children: [
+                    //           TextSpan(
+                    //             text: '  ${widget.product.newPrice}TMT  ',
+                    //             style: TextStyle(
+                    //                 color: kText1Color,
+                    //                 fontSize: 12,
+                    //                 fontWeight: FontWeight.bold,
+                    //                 decoration: TextDecoration.none),
+                    //           ),
+                    //           TextSpan(
+                    //             text: '${widget.product.discount}% OFF',
+                    //             style: TextStyle(
+                    //                 color: Colors.red,
+                    //                 fontSize: 12,
+                    //                 decoration: TextDecoration.none),
+                    //           ),
+                    //         ]),
+                    //   ),
+                    // if (widget.product.discount == null)
+                    Text.rich(
+                      TextSpan(
+                        text: "${widget.product.price!}TMT",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: kText1Color,
+                          fontWeight: FontWeight.bold,
                         ),
-                      )
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -173,11 +175,8 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
   }
 
   void _navigaTo(context) {
-    Navigator.of(context).pushNamed(
-      'product-detail',
-      arguments: {
-        "product": widget.product,
-      }
-    );
+    Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: {
+      "product": widget.product,
+    });
   }
 }

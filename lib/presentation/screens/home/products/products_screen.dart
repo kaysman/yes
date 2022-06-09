@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/product/product.model.dart';
+import 'package:yes/data/models/product/filters.model.dart';
+import 'package:yes/data/models/product/products.model.dart';
 import 'package:yes/data/service/promtion_service.dart';
-import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'widgets/product_bottom_nav.dart';
 import 'widgets/product_grid_list.dart';
@@ -27,7 +26,8 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  late Future<List<Product>> fetchProducts;
+  late Future<Products> fetchProducts;
+  Filters? filters;
 
   @override
   void initState() {
@@ -35,33 +35,54 @@ class _ProductsScreenState extends State<ProductsScreen> {
       fetchProducts =
           PromotionService.fetchPromotionProducts(widget.promotionId);
     }
+    fetchFilters();
     super.initState();
+  }
+
+  Future<Filters?> fetchFilters() async {
+    await fetchProducts.then((value) {
+      setState(() {
+        filters = value.filters;
+      });
+    });
+    return filters;
   }
 
   @override
   Widget build(BuildContext context) {
+    print(filters);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: kWhite,
           title: Text(
             'Products',
           )),
-      body: FutureBuilder<List<Product>>(
+      body: FutureBuilder<Products>(
         future: fetchProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // loading widget here
-            return SizedBox();
+            return Center(
+              child: CircularProgressIndicator(
+                color: kPrimaryColor,
+              ),
+            );
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            return ProductsGridList(products: snapshot.data);
+            return ProductsGridList(products: snapshot.data?.products ?? []);
           } else {
             // error placeholder here
-            return SizedBox();
+            return Center(
+                child: Text(
+              'Something went wrong',
+              style: TextStyle(color: kPrimaryColor),
+            ));
           }
         },
       ),
-      bottomNavigationBar: ProductBootNav(),
+      bottomNavigationBar: ProductBootNav(
+        filters: filters,
+      ),
     );
   }
 }

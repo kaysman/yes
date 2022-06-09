@@ -5,6 +5,7 @@ import 'package:yes/presentation/blocs/auth_bloc.dart';
 import 'package:yes/presentation/screens/category/category.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 import 'package:yes/presentation/shared/storage.dart';
 
 import '../../presentation/screens/profile/login/login.bloc.dart';
@@ -21,6 +22,7 @@ class AppService {
     // register all blocs here...
     AuthBloc authBloc = AuthBloc();
     LoginBloc loginBloc = LoginBloc(authBloc);
+    ShoppingBagBloc cartBloc = ShoppingBagBloc();
 
     var storage = (await LocalStorage.instance);
     if (storage.getToken != null && storage.getClient != null) {
@@ -37,6 +39,7 @@ class AppService {
           BlocProvider<LoginBloc>(create: (_) => loginBloc),
           BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
           BlocProvider<CategoryCubit>(create: (_) => CategoryCubit()),
+          BlocProvider<ShoppingBagBloc>(create: (_) => cartBloc),
         ],
         child: YesApp(),
       ),

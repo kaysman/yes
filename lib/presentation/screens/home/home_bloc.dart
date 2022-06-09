@@ -66,8 +66,8 @@ class HomeBloc extends Cubit<HomeState> {
         promotions: res));
   }
 
-  Future<void> fetchPromotionsById(int? id) async {
-    final res = await PromotionService.fetchPromotionProducts(id);
-    emit(state.copyWith(products: res));
-  }
+  // Future<void> fetchPromotionsById(int? id) async {
+  //   final res = await PromotionService.fetchPromotionProducts(id);
+  //   emit(state.copyWith(products: res));
+  // }
 }

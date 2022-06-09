@@ -5,7 +5,7 @@ class Apis {
   // http://yes.com.tm/api/front
 
   // auth
-  static const kLogin = '/login';
+  static const kLogin = '/api/front/login';
   static const kRegister = '/register';
 
   // categories

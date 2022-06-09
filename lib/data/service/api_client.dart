@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:http/http.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 
 class ApiClient {
-  late Client client;
+  
   // late Client client;
+  late Client client;
   late Dio dio;
 
   ApiClient._setHttpClient() {
@@ -31,13 +31,12 @@ class ApiClient {
   // post
   post(Uri url, {Map<String, String>? headers, dynamic data}) async {
     var res = await client.post(url, headers: headers, body: data);
-    // print(res.body);
     if (res.statusCode == 200) {
-      print(json.decode(res.body));
       return json.decode(res.body);
     }
   }
 
+  // dio post
   dioPost(String path, dynamic data) async {
     try {
       var res = await dio.post(path, data: data);

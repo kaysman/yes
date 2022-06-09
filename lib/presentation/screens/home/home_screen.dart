@@ -5,7 +5,8 @@ import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
-import '../shopping_bag/widgets/wish_grid_list.dart';
+import '../shopping_bag/shopping_bag.bloc.dart';
+import '../shopping_bag/widgets/wishlist/wish_grid_list.dart';
 import 'widgets/banner.dart';
 import 'widgets/brands.dart';
 import 'widgets/promotions.dart';
@@ -19,16 +20,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -75,23 +73,29 @@ class _HomeScreenState extends State<HomeScreen> {
                   size: 26,
                 ),
               ),
-              Positioned(
-                top: 10,
-                right: 6,
-                child: Container(
-                  width: 15,
-                  height: 15,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: kPrimaryColor, shape: BoxShape.circle),
-                  child: Text(
-                    '12',
-                    style: TextStyle(
-                        color: kWhite,
-                        fontSize: 8,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
+              BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
+                builder: (context, state) {
+                  return state.productCount != null && state.productCount! > 0
+                      ? Positioned(
+                          top: 10,
+                          right: 6,
+                          child: Container(
+                            width: 15,
+                            height: 15,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: kPrimaryColor, shape: BoxShape.circle),
+                            child: Text(
+                              '${state.productCount}',
+                              style: TextStyle(
+                                  color: kWhite,
+                                  fontSize: 8,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        )
+                      : SizedBox.shrink();
+                },
               )
             ],
           )

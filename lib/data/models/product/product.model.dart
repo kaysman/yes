@@ -1,3 +1,6 @@
+import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../brand/brand.model.dart';
@@ -9,7 +12,7 @@ import 'image.model.dart';
 part 'product.model.g.dart';
 
 @JsonSerializable(explicitToJson: false)
-class Product {
+class Product with EquatableMixin {
   final int id;
   final String? name_tm;
   final String? name_ru;
@@ -22,12 +25,14 @@ class Product {
   final int? quantity;
   final Brand? brand;
   final Market? market;
+  bool isSelected;
   final Category? category;
-  final DateTime? created_at;
+  final String? created_at;
   final String? description_tm;
   final String? description_ru;
 
   Product({
+    this.isSelected = false,
     required this.id,
     this.name_tm,
     this.name_ru,
@@ -46,6 +51,10 @@ class Product {
     this.description_ru,
   });
 
-   factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
 
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id];
 }

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import '../../../../data/models/product_model.dart';
+import '../shopping_bag.bloc.dart';
 import '../shopping_bag_screen.dart';
 import 'custom_check_box.dart';
 import 'product_discount_price.dart';
 
 class ProductDetailList extends StatelessWidget {
-  final List<ProductsModel> products;
+  final List<Product> products;
   ProductDetailList({
     Key? key,
     required this.products,
@@ -14,25 +16,57 @@ class ProductDetailList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: products
-            .map(
-              (e) => _ProductDetail(
-                productCode: e.productCode,
-                productName: e.productName,
-              ),
-            )
-            .toList());
+    return BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
+      builder: (context, state) {
+        return Column(
+          children: List.generate(
+            products.length,
+            (index) => _ProductDetail(
+              onDelete: () {
+                context.read<ShoppingBagBloc>().remove(products[index]);
+              },
+              onTap: () {
+                context
+                    .read<ShoppingBagBloc>()
+                    .selectProduct(index, products[index]);
+                print(index);
+              },
+              productName: products[index].name_tm!,
+              productCode: products[index].description_tm!,
+              image: products[index].image!,
+              isSelected: products[index].isSelected,
+            ),
+          ),
+        );
+      },
+    );
+    // products
+    // .map(
+    //   (e) => _ProductDetail(
+    //     productCode: e.description_tm ?? '',
+    //     productName: e.name_tm ?? '',
+    //     image: e.image ?? '',
+    //   ),
+    // )
+    // .toList(),
   }
 }
 
 class _ProductDetail extends StatelessWidget {
   final String productName;
+  final bool? isSelected;
   final String productCode;
+  final String image;
+  final Function() onTap;
+  final Function() onDelete;
   const _ProductDetail({
     Key? key,
     required this.productName,
     required this.productCode,
+    required this.image,
+    required this.isSelected,
+    required this.onTap,
+    required this.onDelete,
   }) : super(key: key);
 
   @override
@@ -49,8 +83,8 @@ class _ProductDetail extends StatelessWidget {
               flex: 3,
               child: Container(
                 height: 150,
-                child: Image.asset(
-                  'assets/banner.jpg',
+                child: Image.network(
+                  image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -169,12 +203,13 @@ class _ProductDetail extends StatelessWidget {
         ),
       ),
       Positioned(
-        top: 15,
-        left: 15,
-        child: CustomCheckBox(
-          color: Colors.grey[200],
-        ),
-      ),
+          top: 15,
+          left: 15,
+          child: CustomCheckBox(
+            isChecked: isSelected ?? false,
+            onTapped: onTap,
+            color: Colors.grey[200],
+          )),
       Positioned(
           top: 0,
           right: 0,
@@ -184,9 +219,7 @@ class _ProductDetail extends StatelessWidget {
               size: 20,
               color: kText1Color,
             ),
-            onPressed: () {
-              print('object');
-            },
+            onPressed: onDelete,
           ))
     ]);
   }

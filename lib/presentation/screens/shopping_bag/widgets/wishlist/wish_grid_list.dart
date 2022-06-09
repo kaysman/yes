@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wish_list_category.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/whish_bottom_sheet.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/wish_list_category.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import '../shopping_bag_screen.dart';
-import 'my_container.dart';
+import '../../shopping_bag_screen.dart';
+import '../my_container.dart';
 
 class WishGridList extends StatefulWidget {
   WishGridList({Key? key}) : super(key: key);

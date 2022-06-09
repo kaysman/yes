@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
+import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/apply_cupon.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/cart_bottom_nav.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/item_select_bar.dart';
@@ -8,12 +11,15 @@ import 'package:yes/presentation/screens/shopping_bag/widgets/my_container.dart'
 import 'package:yes/presentation/screens/shopping_bag/widgets/offers.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/product_details.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/user_adress.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/whish_bottom_sheet.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/whish_bottom_sheet.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 class CartScreen extends StatefulWidget {
   static const routeName = "shopping-bag";
-  CartScreen({Key? key}) : super(key: key);
+  // final List<Product>? products;
+  CartScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<CartScreen> createState() => _CartScreenState();
@@ -71,8 +77,12 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 child: ItemSelectBar(),
               ),
-              ProductDetailList(
-                products: [],
+              BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
+                builder: (context, state) {
+                  return ProductDetailList(
+                    products: state.products,
+                  );
+                },
               ),
               SizedBox(
                 child: Padding(

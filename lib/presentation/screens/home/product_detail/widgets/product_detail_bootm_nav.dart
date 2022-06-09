@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/product/product.model.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 class ProductDetailBottomNav extends StatelessWidget {
-  const ProductDetailBottomNav({Key? key}) : super(key: key);
+  final Product product;
+  const ProductDetailBottomNav({Key? key, required this.product})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,17 +47,23 @@ class ProductDetailBottomNav extends StatelessWidget {
                   color: kPrimaryColor,
                   borderRadius: BorderRadius.circular(3),
                 ),
-                child: TextButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.shopping_bag_outlined,
-                      size: 18,
-                      color: kWhite,
-                    ),
-                    label: Text(
-                      'ADD TO BAG',
-                      style: TextStyle(color: kWhite, fontSize: 13),
-                    ))),
+                child: BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
+                  builder: (context, state) {
+                    return TextButton.icon(
+                        onPressed: () {
+                          context.read<ShoppingBagBloc>().addToCart(product);
+                        },
+                        icon: Icon(
+                          Icons.shopping_bag_outlined,
+                          size: 18,
+                          color: kWhite,
+                        ),
+                        label: Text(
+                          'ADD TO BAG',
+                          style: TextStyle(color: kWhite, fontSize: 13),
+                        ));
+                  },
+                )),
           ),
         ],
       ),

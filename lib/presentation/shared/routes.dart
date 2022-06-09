@@ -38,18 +38,25 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
         builder: (_) => CartScreen(),
       );
     case ProductDetailScreen.routeName:
-      return MaterialPageRoute(
-        builder: (_) => ProductDetailScreen(),
-      );
+      return MaterialPageRoute(builder: (_) {
+        var args = settings.arguments as Map<String, dynamic>;
+        switch (args.keys.first) {
+          case 'product':
+            return ProductDetailScreen(product: args['product']);
+          default:
+            return SizedBox();
+        }
+        // ProductDetailScreen(),
+      });
     case ProductsScreen.routeName:
       return MaterialPageRoute(builder: (_) {
-        return Container();
-        // var args = settings.arguments as Map<String, dynamic>;
-        // switch (args.keys.first) {
-        //   case "promotionId":
-        //     return ProductsScreen(promotionId: args['promotionId']);
-        // }
-        // default:return
+        var args = settings.arguments as Map<String, dynamic>;
+        switch (args.keys.first) {
+          case "promotionId":
+            return ProductsScreen(promotionId: args['promotionId']);
+          default:
+            return SizedBox();
+        }
       });
     default:
       return MaterialPageRoute(

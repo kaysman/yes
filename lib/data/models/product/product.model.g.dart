@@ -7,6 +7,7 @@ part of 'product.model.dart';
 // **************************************************************************
 
 Product _$ProductFromJson(Map<String, dynamic> json) => Product(
+      isSelected: json['isSelected'] as bool? ?? false,
       id: json['id'] as int,
       name_tm: json['name_tm'] as String?,
       name_ru: json['name_ru'] as String?,
@@ -32,9 +33,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       category: json['category'] == null
           ? null
           : Category.fromJson(json['category'] as Map<String, dynamic>),
-      created_at: json['created_at'] == null
-          ? null
-          : DateTime.parse(json['created_at'] as String),
+      created_at: json['created_at'] as String?,
       description_tm: json['description_tm'] as String?,
       description_ru: json['description_ru'] as String?,
     );
@@ -52,8 +51,9 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'quantity': instance.quantity,
       'brand': instance.brand,
       'market': instance.market,
+      'isSelected': instance.isSelected,
       'category': instance.category,
-      'created_at': instance.created_at?.toIso8601String(),
+      'created_at': instance.created_at,
       'description_tm': instance.description_tm,
       'description_ru': instance.description_ru,
     };

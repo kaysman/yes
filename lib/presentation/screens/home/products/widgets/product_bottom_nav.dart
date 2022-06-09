@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/product/filters.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
+
+import '../filter/filter_screen.dart';
+
 class ProductBootNav extends StatelessWidget {
-  const ProductBootNav({Key? key}) : super(key: key);
+  final Filters? filters;
+  const ProductBootNav({Key? key, required this.filters}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +25,17 @@ class ProductBootNav extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: TextButton(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
                 onPressed: () {},
-                child: Text('GENDER',
-                    style: TextStyle(
-                        color: kText1Color,
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500)),
+                child: Text(
+                  'GENDER',
+                  style: TextStyle(
+                      color: kText1Color,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
             ),
           ),
@@ -41,6 +51,9 @@ class ProductBootNav extends StatelessWidget {
             flex: 3,
             child: Container(
               child: TextButton.icon(
+                style: ButtonStyle(
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                ),
                 onPressed: () {
                   print('object');
                 },
@@ -73,8 +86,19 @@ class ProductBootNav extends StatelessWidget {
             child: Stack(children: [
               Container(
                 child: TextButton.icon(
+                  style: ButtonStyle(
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                  ),
                   onPressed: () {
-                    print('object');
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return FilterScreen(
+                            filters: filters,
+                          );
+                        },
+                      ),
+                    );
                   },
                   icon: Icon(
                     Icons.filter_alt,
@@ -98,8 +122,9 @@ class ProductBootNav extends StatelessWidget {
                     width: 5,
                     height: 5,
                     decoration: BoxDecoration(
-                        color: kPrimaryColor,
-                        borderRadius: BorderRadius.circular(5)),
+                      color: kPrimaryColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
                   ))
             ]),
           )

@@ -29,10 +29,10 @@ class HomeBanner extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () => Navigator.of(context)
-                .push(MaterialPageRoute(builder: (context) {
-              return ProductDetailScreen();
-            })),
+            // onTap: () => Navigator.of(context)
+            //     .push(MaterialPageRoute(builder: (context) {
+            //   // return ProductDetailScreen();
+            // })),
             child: Container(
               width: MediaQuery.of(context).size.width / 2,
               // color: text1Color,
