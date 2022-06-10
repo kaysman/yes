@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 class ProductDetailBottomNav extends StatelessWidget {
@@ -50,18 +51,28 @@ class ProductDetailBottomNav extends StatelessWidget {
                 child: BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
                   builder: (context, state) {
                     return TextButton.icon(
-                        onPressed: () {
+                      onPressed: () {
+                        if (state.products.contains(product)) {
+                          Navigator.of(context).pushNamed(CartScreen.routeName);
+                        } else {
                           context.read<ShoppingBagBloc>().addToCart(product);
-                        },
-                        icon: Icon(
-                          Icons.shopping_bag_outlined,
-                          size: 18,
-                          color: kWhite,
-                        ),
-                        label: Text(
-                          'ADD TO BAG',
-                          style: TextStyle(color: kWhite, fontSize: 13),
-                        ));
+                        }
+                      },
+                      icon: Icon(
+                        Icons.shopping_bag_outlined,
+                        size: 18,
+                        color: kWhite,
+                      ),
+                      label: state.products.contains(product)
+                          ? Text(
+                              'Go TO BAG',
+                              style: TextStyle(color: kWhite, fontSize: 13),
+                            )
+                          : Text(
+                              'ADD TO BAG',
+                              style: TextStyle(color: kWhite, fontSize: 13),
+                            ),
+                    );
                   },
                 )),
           ),

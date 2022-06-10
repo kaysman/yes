@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../brand/brand.model.dart';
@@ -9,13 +10,13 @@ import 'image.model.dart';
 part 'product.model.g.dart';
 
 @JsonSerializable(explicitToJson: false)
-class Product {
+class Product with EquatableMixin {
   final int id;
   final String? name_tm;
   final String? name_ru;
   final String? image;
   final List<Image>? images;
-  final int? price;
+  int? price;
   final Color? color;
   final Gender? gender;
   final String? code;
@@ -29,7 +30,7 @@ class Product {
   bool isSelected;
 
   Product({
-    this.isSelected = false,
+    this.isSelected = true,
     required this.id,
     this.name_tm,
     this.name_ru,
@@ -56,5 +57,8 @@ class Product {
   @override
   String toString() => this.name_tm ?? '';
 
-  //TODO: props:[id, size]
+  @override
+  List<Object?> get props => [id];
+
+  // TODO: props:[id, size]
 }

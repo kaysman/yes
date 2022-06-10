@@ -27,13 +27,13 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   late Client? currentUser;
-  late ShoppingBagBloc shoppingBagBloc;
+  // late ShoppingBagBloc shoppingBagBloc;
 
   @override
   void initState() {
     super.initState();
     currentUser = AppService.currentUser.value;
-    shoppingBagBloc = BlocProvider.of<ShoppingBagBloc>(context);
+    // shoppingBagBloc = BlocProvider.of<ShoppingBagBloc>(context);
     // shoppingBagBloc.updateProducts();
   }
 

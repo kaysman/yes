@@ -30,14 +30,19 @@ class _ItemSelectBarState extends State<ItemSelectBar> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomCheckBox(
-                      isChecked: false,
-                      onTapped: (v) {},
+                      isChecked: state.productsSelectedCount > 0,
+                      onTapped: (v) {
+                        context
+                            .read<ShoppingBagBloc>()
+                            .selectOrUnSelectAllproducts(v);
+                      },
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Text.rich(TextSpan(
-                        text: '0/${state.productCount} ITEMS SELECTED',
+                        text:
+                            '${state.productsSelectedCount}/${state.productsCount} ITEMS SELECTED',
                         style: TextStyleUtils().boldText,
                         children: [
                           TextSpan(

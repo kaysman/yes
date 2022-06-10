@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
                 builder: (context, state) {
-                  return state.productCount != null && state.productCount! > 0
+                  return state.productsSelectedCount > 0
                       ? Positioned(
                           top: 10,
                           right: 6,
@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             decoration: BoxDecoration(
                                 color: kPrimaryColor, shape: BoxShape.circle),
                             child: Text(
-                              '${state.productCount}',
+                              '${state.productsCount}',
                               style: TextStyle(
                                   color: kWhite,
                                   fontSize: 8,

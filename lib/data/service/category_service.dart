@@ -7,7 +7,6 @@ class CategoryService {
     try {
       var uri = Uri.http(Apis.kBaseUrl, Apis.kHomeCategories);
       final parsedBody = await ApiClient.instance.get(uri);
-      print(parsedBody['data']);
       return List.from(parsedBody['data'] as List<dynamic>)
           .map((e) => Category.fromJson(e))
           .toList();
