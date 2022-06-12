@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yes/data/service/app_service.dart';
+
 import 'package:yes/presentation/screens/index/index_screen.dart';
 
 import 'presentation/shared/routes.dart';
@@ -20,7 +21,6 @@ class YesApp extends StatelessWidget {
       initialRoute: IndexScreen.routeName,
       onGenerateRoute: onGenerateRoute,
       onGenerateInitialRoutes: onGenerateInitialRoutes,
-      // builder: (context, home) => AppObserver(child: home),
     );
   }
 }

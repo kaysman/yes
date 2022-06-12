@@ -59,6 +59,4 @@ class Product with EquatableMixin {
 
   @override
   List<Object?> get props => [id];
-
-  // TODO: props:[id, size]
 }

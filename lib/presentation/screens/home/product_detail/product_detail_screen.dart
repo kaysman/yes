@@ -1,11 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:yes/data/models/product/product.model.dart';
-import 'package:yes/data/models/product_model.dart';
 import 'package:yes/presentation/shared/colors.dart';
-
-import '../../../shared/widgets/custom_new_branch.dart';
-import '../../../shared/widgets/custom_rating_bar.dart';
 import 'widgets/app_bar_icon_btn.dart';
 import 'widgets/product_detail_bootm_nav.dart';
 
@@ -54,6 +50,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
+        
         body: Container(
           color: Colors.grey[100],
           child: SingleChildScrollView(

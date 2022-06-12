@@ -52,7 +52,8 @@ class ProductDetailBottomNav extends StatelessWidget {
                   builder: (context, state) {
                     return TextButton.icon(
                       onPressed: () {
-                        if (state.products.contains(product)) {
+                        if (state.cartItems
+                            .contains(state.toCartItem(product))) {
                           Navigator.of(context).pushNamed(CartScreen.routeName);
                         } else {
                           context.read<ShoppingBagBloc>().addToCart(product);
@@ -63,7 +64,7 @@ class ProductDetailBottomNav extends StatelessWidget {
                         size: 18,
                         color: kWhite,
                       ),
-                      label: state.products.contains(product)
+                      label: state.cartItems.contains(state.cartItem)
                           ? Text(
                               'Go TO BAG',
                               style: TextStyle(color: kWhite, fontSize: 13),

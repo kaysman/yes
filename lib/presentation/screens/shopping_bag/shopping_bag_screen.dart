@@ -16,7 +16,6 @@ import 'package:yes/presentation/shared/colors.dart';
 
 class CartScreen extends StatefulWidget {
   static const routeName = "shopping-bag";
-  // final List<Product>? products;
   CartScreen({
     Key? key,
   }) : super(key: key);
@@ -27,14 +26,11 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   late Client? currentUser;
-  // late ShoppingBagBloc shoppingBagBloc;
 
   @override
   void initState() {
     super.initState();
     currentUser = AppService.currentUser.value;
-    // shoppingBagBloc = BlocProvider.of<ShoppingBagBloc>(context);
-    // shoppingBagBloc.updateProducts();
   }
 
   @override

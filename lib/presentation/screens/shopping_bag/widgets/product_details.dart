@@ -4,7 +4,6 @@ import 'package:yes/presentation/shared/colors.dart';
 import '../shopping_bag.bloc.dart';
 import '../shopping_bag_screen.dart';
 import 'custom_check_box.dart';
-import 'product_discount_price.dart';
 
 class ProductDetailList extends StatelessWidget {
   ProductDetailList({Key? key}) : super(key: key);
@@ -13,8 +12,8 @@ class ProductDetailList extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
       builder: (context, state) {
-        var products = state.products;
-        return state.products == []
+        var products = state.cartItems;
+        return products == []
             ? Center(child: Text('EMPTY'))
             : Column(
                 children: List.generate(
@@ -22,20 +21,23 @@ class ProductDetailList extends StatelessWidget {
                   (index) => _ProductDetail(
                     onChangeQauntity: () {
                       showModalBottomSheet(
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  topRight: Radius.circular(8))),
-                          context: context,
-                          builder: (contex) {
-                            return BlocConsumer<ShoppingBagBloc,
-                                ShoppingBagState>(listener: (_, state) {
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        isScrollControlled: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8),
+                              topRight: Radius.circular(8)),
+                        ),
+                        context: context,
+                        builder: (contex) {
+                          return BlocConsumer<ShoppingBagBloc,
+                              ShoppingBagState>(
+                            listener: (_, state) {
                               if (state.isPriceUpdated) {
                                 Navigator.of(context).pop();
                               }
-                            }, builder: (context, state) {
+                            },
+                            builder: (context, state) {
                               return CartModalSheet(
                                 onDone: (val) {
                                   context
@@ -45,11 +47,13 @@ class ProductDetailList extends StatelessWidget {
                                 },
                                 quantity: products[index].quantity!,
                               );
-                            });
-                          });
+                            },
+                          );
+                        },
+                      );
                     },
-                    price: products[index].price,
-                    quantityVal: state.productQuantityVal ?? 1,
+                    price: products[index].totalPrice ?? products[index].price,
+                    quantityVal: products[index].defQuantity,
                     onDelete: () {
                       context.read<ShoppingBagBloc>().remove(products[index]);
                     },
