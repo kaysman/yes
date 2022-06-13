@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/category/category.model.dart';
+import 'package:yes/data/models/wishList/wish-list.model.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/whish_bottom_sheet.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/wish_list_category.dart';
 import 'package:yes/presentation/shared/colors.dart';
@@ -6,31 +10,40 @@ import '../../shopping_bag_screen.dart';
 import '../my_container.dart';
 
 class WishGridList extends StatefulWidget {
-  WishGridList({Key? key}) : super(key: key);
+  final List<Category>? categories;
+  final List<WishListItem>? products;
+  final List<WishListItem>? filteredList;
+
+  WishGridList({
+    Key? key,
+    this.categories,
+    this.products,
+    this.filteredList,
+  }) : super(key: key);
 
   @override
   State<WishGridList> createState() => _WishGridListState();
 }
 
 class _WishGridListState extends State<WishGridList> {
-  List<Category> categories = [
-    Category(title: 'All'),
-    Category(title: 'Trolley Bag'),
-    Category(title: 'Shirts'),
-    Category(title: 'Trolley Bag'),
-    Category(title: 'Kurta Sets'),
-    Category(title: 'Shirts'),
-    Category(title: 'Kurta Sets'),
-    Category(title: 'Shirts'),
-  ];
+  late WishListBloc wishListBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    wishListBloc = BlocProvider.of(context);
+  }
 
   void onSelect(int i) {
-    setState(() {
-      for (var i = 0; i < categories.length; i++) {
-        categories[i].isSelected = false;
-      }
-      categories[i].isSelected = true;
-    });
+    setState(
+      () {
+        for (var i = 0; i < widget.categories!.length; i++) {
+          widget.categories![i].isSelected = false;
+        }
+        widget.categories![i].isSelected = true;
+      },
+    );
+    wishListBloc.onSelectCategory(i);
   }
 
   @override
@@ -90,18 +103,19 @@ class _WishGridListState extends State<WishGridList> {
               child: Expanded(
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: categories.length,
+                    itemCount: widget.categories?.length,
                     itemBuilder: (context, i) {
                       return Container(
                         margin: const EdgeInsets.only(right: 5),
                         child: InkWell(
                           onTap: () {
                             onSelect(i);
-                            print(categories[i].isSelected);
+                            // print(categories[i].isSelected);
                           },
                           child: WhishListCategory(
-                            onSelected: categories[i].isSelected,
-                            title: categories[i].title,
+                            onSelected:
+                                widget.categories?[i].isSelected ?? false,
+                            title: widget.categories?[i].title_tm ?? '',
                           ),
                         ),
                       );
@@ -116,9 +130,14 @@ class _WishGridListState extends State<WishGridList> {
                 crossAxisSpacing: 10,
                 mainAxisSpacing: 10,
                 children: List.generate(
-                  4,
+                  widget.filteredList == null
+                      ? widget.products?.length ?? 0
+                      : widget.filteredList?.length ?? 0,
                   (index) => WishListCard(
                     width: MediaQuery.of(context).size.width / 2.5,
+                    product: widget.filteredList?[index] != null
+                        ? widget.filteredList![index]
+                        : widget.products?[index],
                   ),
                 ),
               ),
@@ -128,11 +147,4 @@ class _WishGridListState extends State<WishGridList> {
       ),
     );
   }
-}
-
-class Category {
-  final String title;
-  bool isSelected;
-
-  Category({required this.title, this.isSelected = false});
 }

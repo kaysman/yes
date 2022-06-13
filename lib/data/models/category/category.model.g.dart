@@ -18,6 +18,7 @@ Category _$CategoryFromJson(Map<String, dynamic> json) => Category(
       subtitle_ru: json['subtitle_ru'] as String?,
       subtitle_tm: json['subtitle_tm'] as String?,
       isExpanded: json['isExpanded'] as bool? ?? false,
+      isSelected: json['isSelected'] as bool? ?? false,
       parent_id: json['parent_id'] as int?,
       created_at: json['created_at'] == null
           ? null
@@ -40,4 +41,5 @@ Map<String, dynamic> _$CategoryToJson(Category instance) => <String, dynamic>{
       'created_at': instance.created_at?.toIso8601String(),
       'updated_at': instance.updated_at?.toIso8601String(),
       'isExpanded': instance.isExpanded,
+      'isSelected': instance.isSelected,
     };

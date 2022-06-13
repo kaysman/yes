@@ -21,7 +21,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: ProductDetailBottomNav(
+        bottomNavigationBar: ProductDetailBottomNavBar(
           product: widget.product
         ),
         extendBodyBehindAppBar: true,

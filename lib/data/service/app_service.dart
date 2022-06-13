@@ -6,6 +6,7 @@ import 'package:yes/presentation/screens/category/category.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
 import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/storage.dart';
 
 import '../../presentation/screens/profile/login/login.bloc.dart';
@@ -40,6 +41,7 @@ class AppService {
           BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
           BlocProvider<CategoryCubit>(create: (_) => CategoryCubit()),
           BlocProvider<ShoppingBagBloc>(create: (_) => cartBloc),
+          BlocProvider<WishListBloc>(create: (_) => WishListBloc()),
         ],
         child: YesApp(),
       ),

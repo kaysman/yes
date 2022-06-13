@@ -30,7 +30,7 @@ class _ItemSelectBarState extends State<ItemSelectBar> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomCheckBox(
-                      isChecked: state.productsCount > 0,
+                      isChecked: state.productsSelectedCount > 0,
                       onTapped: (v) {
                         context
                             .read<ShoppingBagBloc>()

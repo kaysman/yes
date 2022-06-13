@@ -43,7 +43,9 @@ class ProductDetailList extends StatelessWidget {
                                   context
                                       .read<ShoppingBagBloc>()
                                       .changeProductQuantity(
-                                          products[index], val);
+                                        products[index],
+                                        val,
+                                      );
                                 },
                                 quantity: products[index].quantity!,
                               );

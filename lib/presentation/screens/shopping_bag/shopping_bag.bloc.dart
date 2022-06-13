@@ -3,17 +3,14 @@ import 'package:yes/data/models/cart/cart.model.dart';
 import 'package:yes/data/models/product/product.model.dart';
 
 class ShoppingBagState {
-  List<Product> products = [];
   List<CartItem>? selectedProducts = [];
-  CartItem? cartItem;
   List<CartItem> cartItems = [];
-  int? productQuantityVal;
   bool isPriceUpdated;
 
   int get totalPrice {
     int sum = 0;
     selectedProducts?.forEach((e) {
-      sum += e.price ?? 0;
+      sum += e.totalPrice ?? (e.price ?? 0);
     });
     return sum;
   }
@@ -44,28 +41,19 @@ class ShoppingBagState {
 
   ShoppingBagState({
     required this.cartItems,
-    this.cartItem,
     this.isPriceUpdated = false,
-    required this.products,
     required this.selectedProducts,
-    this.productQuantityVal,
   });
 
   ShoppingBagState copyWith({
-    List<Product>? products,
     List<CartItem>? cartItems,
     List<CartItem>? selectedProducts,
-    CartItem? cartItem,
-    int? productQuantityVal,
     bool? isPriceUpdated,
   }) {
     return ShoppingBagState(
-      cartItem: cartItem ?? this.cartItem,
       cartItems: cartItems ?? this.cartItems,
       isPriceUpdated: isPriceUpdated ?? this.isPriceUpdated,
-      productQuantityVal: productQuantityVal ?? this.productQuantityVal,
       selectedProducts: selectedProducts ?? this.selectedProducts,
-      products: products ?? this.products,
     );
   }
 }
@@ -74,42 +62,37 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
   ShoppingBagBloc()
       : super(
           ShoppingBagState(
-            products: [],
             selectedProducts: [],
             cartItems: [],
           ),
         );
 
   addToCart(Product product) {
-    // var item = state.toCartItem(product);
-    // // state.
-    // // var l = state.cartItems;
-    // l.add(item);
-    // print(l);
-    // emit(
-    //   state.copyWith(
-    //     cartItem: item,
-    //     cartItems: l,
-    //     selectedProducts: state.selectedProducts,
-    //   ),
-    // );
-  }
-
-  changeProductQuantity(CartItem product, int q) {
-    emit(state.copyWith(isPriceUpdated: false));
-    state.cartItem?.defQuantity = q;
-    state.cartItem?.totalPrice = (product.price ?? 0) * q;
+    var item = state.toCartItem(product);
+    var l = state.cartItems;
+    state.selectedProducts?.add(item);
+    l.add(item);
     emit(
       state.copyWith(
-        cartItem: state.cartItem,
-        isPriceUpdated: true,
+        cartItems: l,
+        selectedProducts: state.selectedProducts,
       ),
     );
   }
 
-  setQuantity(int val) {
-    state.cartItem?.defQuantity = val;
-    emit(state.copyWith(cartItem: state.cartItem));
+  changeProductQuantity(CartItem product, int v) {
+    emit(state.copyWith(isPriceUpdated: false));
+    if (state.cartItems.contains(product)) {
+      var l = state.cartItems;
+      state.cartItems[l.indexOf(product)].defQuantity = v;
+      state.cartItems[l.indexOf(product)].totalPrice = (product.price ?? 0) * v;
+    }
+    emit(
+      state.copyWith(
+        cartItems: state.cartItems,
+        isPriceUpdated: true,
+      ),
+    );
   }
 
   selectOrUnSelectAllproducts(bool v) {
@@ -138,7 +121,8 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
       state.selectedProducts?.remove(product);
     }
     emit(state.copyWith(
-        selectedProducts: state.selectedProducts, products: state.products));
+      selectedProducts: state.selectedProducts,
+    ));
   }
 
   remove(CartItem product) {
@@ -152,15 +136,15 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
     );
   }
 
-  updateProducts() {
-    List<Product> products = [];
-    state.products.forEach((product) {
-      var map = product.toJson();
-      map['id'] = state.products.indexOf(product);
-      map['name_tm'] =
-          product.name_tm! + state.products.indexOf(product).toString();
-      products.add(Product.fromJson(map));
-    });
-    emit(state.copyWith(products: products));
-  }
+  // updateProducts() {
+  //   List<Product> products = [];
+  //   state.products.forEach((product) {
+  //     var map = product.toJson();
+  //     map['id'] = state.products.indexOf(product);
+  //     map['name_tm'] =
+  //         product.name_tm! + state.products.indexOf(product).toString();
+  //     products.add(Product.fromJson(map));
+  //   });
+  //   emit(state.copyWith(products: products));
+  // }
 }
