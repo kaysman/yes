@@ -1,16 +1,18 @@
 import 'package:bloc/bloc.dart';
 import 'package:yes/data/models/cart/cart.model.dart';
 import 'package:yes/data/models/product/product.model.dart';
+import 'package:yes/data/models/wishList/wish-list.model.dart';
 
 class ShoppingBagState {
   List<CartItem>? selectedProducts = [];
   List<CartItem> cartItems = [];
   bool isPriceUpdated;
+  bool isAdded;
 
   int get totalPrice {
     int sum = 0;
     selectedProducts?.forEach((e) {
-      sum += e.totalPrice ?? (e.price ?? 0);
+      sum += e.totalPrice ?? e.price;
     });
     return sum;
   }
@@ -26,7 +28,23 @@ class ShoppingBagState {
       name_ru: product.name_ru,
       name_tm: product.name_tm,
       quantity: product.quantity,
-      price: product.price,
+      price: product.price ?? 0,
+    );
+    return cartItem;
+  }
+
+  CartItem toCartItemFromWishList(WishListItem product) {
+    CartItem cartItem = CartItem(
+      id: product.id,
+      code: product.code,
+      description_ru: product.description_ru,
+      description_tm: product.description_tm,
+      image: product.image,
+      isSelected: product.isSelected,
+      name_ru: product.name_ru,
+      name_tm: product.name_tm,
+      quantity: product.quantity,
+      price: product.price ?? 0,
     );
     return cartItem;
   }
@@ -40,6 +58,7 @@ class ShoppingBagState {
   }
 
   ShoppingBagState({
+    this.isAdded = false,
     required this.cartItems,
     this.isPriceUpdated = false,
     required this.selectedProducts,
@@ -49,8 +68,10 @@ class ShoppingBagState {
     List<CartItem>? cartItems,
     List<CartItem>? selectedProducts,
     bool? isPriceUpdated,
+    bool? isAdded,
   }) {
     return ShoppingBagState(
+      isAdded: isAdded ?? this.isAdded,
       cartItems: cartItems ?? this.cartItems,
       isPriceUpdated: isPriceUpdated ?? this.isPriceUpdated,
       selectedProducts: selectedProducts ?? this.selectedProducts,
@@ -70,12 +91,35 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
   addToCart(Product product) {
     var item = state.toCartItem(product);
     var l = state.cartItems;
-    state.selectedProducts?.add(item);
-    l.add(item);
+    if (l.contains(item)) {
+      var existItem = l.firstWhere((element) => element.id == item.id);
+      var val = existItem.defQuantity++;
+      existItem.totalPrice = existItem.totalPrice == null
+          ? existItem.price * val
+          : existItem.totalPrice! * val;
+    } else {
+      state.selectedProducts?.add(item);
+      l.add(item);
+    }
     emit(
       state.copyWith(
         cartItems: l,
         selectedProducts: state.selectedProducts,
+      ),
+    );
+  }
+
+  addToCartFromWishList(CartItem item) {
+    emit(state.copyWith(isAdded: false));
+    if (!state.cartItems.contains(item)) {
+      state.cartItems.add(item);
+      state.selectedProducts?.add(item);
+    }
+    emit(
+      state.copyWith(
+        cartItems: state.cartItems,
+        selectedProducts: state.selectedProducts,
+        isAdded: true,
       ),
     );
   }
@@ -85,7 +129,7 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
     if (state.cartItems.contains(product)) {
       var l = state.cartItems;
       state.cartItems[l.indexOf(product)].defQuantity = v;
-      state.cartItems[l.indexOf(product)].totalPrice = (product.price ?? 0) * v;
+      state.cartItems[l.indexOf(product)].totalPrice = product.price * v;
     }
     emit(
       state.copyWith(
@@ -104,7 +148,6 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
       state.cartItems.forEach((e) => e.isSelected = v);
       state.selectedProducts?.clear();
     }
-
     emit(state.copyWith(selectedProducts: state.selectedProducts));
   }
 

@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
+import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 
 import '../../../../../../data/models/category/category.model.dart';
 
@@ -8,6 +9,7 @@ class WishListState {
   List<WishListItem> wishListItems = [];
   List<Category> categories = [];
   List<WishListItem> filteredList = [];
+  // bool isMovedToCard;
 
   WishListItem toWishListItem(Product product) {
     WishListItem wishListItem = WishListItem(
@@ -27,6 +29,7 @@ class WishListState {
   }
 
   WishListState({
+    // this.isMovedToCard = false,
     required this.categories,
     required this.wishListItems,
     required this.filteredList,
@@ -36,8 +39,10 @@ class WishListState {
     List<WishListItem>? wishListItems,
     List<WishListItem>? filteredList,
     List<Category>? categories,
+    // bool? isMovedToCard,
   }) {
     return WishListState(
+      // isMovedToCard: isMovedToCard ?? this.isMovedToCard,
       filteredList: filteredList ?? this.filteredList,
       categories: categories ?? this.categories,
       wishListItems: wishListItems ?? this.wishListItems,
@@ -46,7 +51,8 @@ class WishListState {
 }
 
 class WishListBloc extends Cubit<WishListState> {
-  WishListBloc()
+  final ShoppingBagBloc shoppingBagBloc;
+  WishListBloc(this.shoppingBagBloc)
       : super(
           WishListState(
             filteredList: [],
@@ -62,8 +68,6 @@ class WishListBloc extends Cubit<WishListState> {
     var categories = state.categories;
     if (!l.contains(item)) {
       l.add(item);
-    } else {
-      l.remove(item);
     }
 
     if (!categories.contains(category)) {
@@ -86,9 +90,18 @@ class WishListBloc extends Cubit<WishListState> {
     emit(state.copyWith(wishListItems: l, filteredList: filterList));
   }
 
-  moveToBag(int id){
-    
+  moveToBag(int? id) async {
+    var item = state.wishListItems.firstWhere(
+      (element) => element.id == id,
+      orElse: () => WishListItem(id: 0),
+    );
+    var cartItem = shoppingBagBloc.state.toCartItemFromWishList(item);
+    await shoppingBagBloc.addToCartFromWishList(cartItem);
+    if (shoppingBagBloc.state.isAdded) {
+      await state.wishListItems.remove(item);
+    }
+    emit(
+      state.copyWith(wishListItems: state.wishListItems),
+    );
   }
-
-
 }

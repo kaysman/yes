@@ -5,14 +5,14 @@ class CartItem with EquatableMixin {
   String? name_tm;
   String? name_ru;
   String? image;
-  int? price;
+  int price;
   String? code;
   int? quantity;
   int? totalPrice;
   String? description_tm;
   String? description_ru;
   bool isSelected;
-  int? defQuantity;
+  int defQuantity;
 
   CartItem({
     required this.id,
@@ -26,7 +26,7 @@ class CartItem with EquatableMixin {
     this.description_ru,
     this.isSelected = true,
     this.defQuantity = 1,
-    this.price,
+    required this.price,
   });
 
   @override

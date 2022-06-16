@@ -41,7 +41,7 @@ class AppService {
           BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
           BlocProvider<CategoryCubit>(create: (_) => CategoryCubit()),
           BlocProvider<ShoppingBagBloc>(create: (_) => cartBloc),
-          BlocProvider<WishListBloc>(create: (_) => WishListBloc()),
+          BlocProvider<WishListBloc>(create: (_) => WishListBloc(cartBloc)),
         ],
         child: YesApp(),
       ),

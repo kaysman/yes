@@ -10,9 +10,7 @@ import '../../shopping_bag_screen.dart';
 import '../my_container.dart';
 
 class WishGridList extends StatefulWidget {
-  final List<Category>? categories;
-  final List<WishListItem>? products;
-  final List<WishListItem>? filteredList;
+  static const routeName = "wish-list";
 
   WishGridList({
     Key? key,
@@ -21,12 +19,16 @@ class WishGridList extends StatefulWidget {
     this.filteredList,
   }) : super(key: key);
 
+  final List<Category>? categories;
+  final List<WishListItem>? products;
+  final List<WishListItem>? filteredList;
   @override
   State<WishGridList> createState() => _WishGridListState();
 }
 
 class _WishGridListState extends State<WishGridList> {
   late WishListBloc wishListBloc;
+  double opacity = 1;
 
   @override
   void initState() {
@@ -124,23 +126,29 @@ class _WishGridListState extends State<WishGridList> {
             ),
             Expanded(
               flex: 9,
-              child: GridView.count(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                children: List.generate(
-                  widget.filteredList == null
-                      ? widget.products?.length ?? 0
-                      : widget.filteredList?.length ?? 0,
-                  (index) => WishListCard(
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    product: widget.filteredList?[index] != null
-                        ? widget.filteredList![index]
-                        : widget.products?[index],
-                  ),
-                ),
-              ),
+              child: BlocConsumer<WishListBloc, WishListState>(
+                  listener: (_, state) {},
+                  builder: (context, state) {
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      children: List.generate(
+                        widget.products?.length ?? 0,
+                        (index) => Opacity(
+                          opacity: opacity,
+                          child: WishListCard(
+                            moveToBag: (val) {
+                              wishListBloc.moveToBag(val);
+                            },
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            product: widget.products?[index],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
             )
           ],
         ),

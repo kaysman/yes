@@ -22,30 +22,31 @@ class WhishBottomSheet extends StatelessWidget {
                 title: 'Wishlist',
                 onSelected: false,
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) {
-                      return BlocBuilder<WishListBloc, WishListState>(
-                          builder: (context, state) {
-                        return WishGridList(
-                          categories: state.categories,
-                          products: state.wishListItems,
-                        );
-                      });
-                    }),
-                  );
-                },
-                child: Container(
-                  child: Text(
-                    'VIEW ALL',
-                    style: TextStyle(
+              BlocBuilder<WishListBloc, WishListState>(
+                  builder: (context, state) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.of(context).pushNamed(
+                      WishGridList.routeName,
+                      arguments: {
+                        'products': state.wishListItems,
+                        'categories': state.categories,
+                        'filteredList': state.filteredList,
+                      },
+                    );
+                  },
+                  child: Container(
+                    child: Text(
+                      'VIEW ALL',
+                      style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: 12,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ),
-                ),
-              )
+                );
+              })
             ],
           ),
           SizedBox(
@@ -53,19 +54,25 @@ class WhishBottomSheet extends StatelessWidget {
           ),
           Expanded(
             child: BlocBuilder<WishListBloc, WishListState>(
-                builder: (context, state) {
-              return ListView.builder(
+              builder: (context, state) {
+                return ListView.builder(
                   itemCount: state.wishListItems.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, i) {
                     var product = state.wishListItems[i];
                     return WishListCard(
+                      moveToBag: (int i) {
+                        context.read<WishListBloc>().moveToBag(i);
+                        print(i);
+                      },
                       product: product,
                       margin: const EdgeInsets.only(right: 5),
                       width: MediaQuery.of(context).size.width / 2.8,
                     );
-                  });
-            }),
+                  },
+                );
+              },
+            ),
           )
         ],
       ),
@@ -77,8 +84,13 @@ class WishListCard extends StatelessWidget {
   final double? width;
   final EdgeInsets? margin;
   final WishListItem? product;
-  final ValueSetter<int>? moveToBag;
-  const WishListCard({Key? key, this.width, this.margin, this.product, this.moveToBag})
+  final Function(int) moveToBag;
+  const WishListCard(
+      {Key? key,
+      this.width,
+      this.margin,
+      this.product,
+      required this.moveToBag})
       : super(key: key);
 
   @override
@@ -151,9 +163,8 @@ class WishListCard extends StatelessWidget {
           color: Colors.black26,
         ),
         Material(
-          color: Colors.transparent,
           child: InkWell(
-            onTap:()=> moveToBag!(product?.id ?? 0),
+            onTap: () => moveToBag(product!.id),
             splashColor: kPrimaryColor,
             child: Ink(
               width: double.infinity,
@@ -162,9 +173,10 @@ class WishListCard extends StatelessWidget {
                 'MOVE TO BAG',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 11,
-                    fontWeight: FontWeight.w500),
+                  color: kPrimaryColor,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ),
           ),

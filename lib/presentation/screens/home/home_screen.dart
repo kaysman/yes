@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/presentation/screens/category/category.bloc.dart';
-import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
+import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 import '../shopping_bag/shopping_bag.bloc.dart';
@@ -51,17 +50,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.search_outlined,
                 size: 26,
               )),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                return WishGridList();
-              }));
-            },
-            icon: Icon(
-              Icons.favorite_border_outlined,
-              size: 26,
-            ),
-          ),
+          BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
+            return IconButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  WishGridList.routeName,
+                  arguments: {
+                    'products': state.wishListItems,
+                    'categories': state.categories,
+                    'filteredList': state.filteredList,
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.favorite_border_outlined,
+                size: 26,
+              ),
+            );
+          }),
           Stack(
             children: [
               IconButton(

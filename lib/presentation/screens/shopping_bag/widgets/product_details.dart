@@ -64,9 +64,9 @@ class ProductDetailList extends StatelessWidget {
                           .read<ShoppingBagBloc>()
                           .selectProduct(products[index], v);
                     },
-                    productName: products[index].name_tm!,
-                    productCode: products[index].description_tm!,
-                    image: products[index].image!,
+                    productName: products[index].name_tm ?? '',
+                    productCode: products[index].description_tm ?? '',
+                    image: products[index].image ?? '',
                     isSelected: products[index].isSelected,
                   ),
                 ),

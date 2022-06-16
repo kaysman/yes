@@ -61,7 +61,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
         future: fetchProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // loading widget here
             return Center(
               child: CircularProgressIndicator(
                 color: kPrimaryColor,
@@ -71,7 +70,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
               snapshot.hasData) {
             return ProductsGridList(products: snapshot.data?.products ?? []);
           } else {
-            // error placeholder here
             return Center(
                 child: Text(
               'Something went wrong',
