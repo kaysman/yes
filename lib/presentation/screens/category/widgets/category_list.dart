@@ -30,8 +30,7 @@ class _CategoryListState extends State<CategoryList> {
                 canTapOnHeader: true,
                 isExpanded: e.isExpanded,
                 headerBuilder: (context, isExpanded) =>
-                    _CategoryListSubCategory(
-                        data: e, isExpanded: e.isExpanded),
+                    _CategoryListSubCategory(data: e, isExpanded: e.isExpanded),
                 body: SubCategoryItem(
                   subCategories: e.sub,
                 ),
@@ -45,10 +44,12 @@ class _CategoryListState extends State<CategoryList> {
 
 class _CategoryListSubCategory extends StatefulWidget {
   final Category data;
-  final bool isExpanded;
-  _CategoryListSubCategory(
-      {Key? key, required this.data, required this.isExpanded})
-      : super(key: key);
+  final bool? isExpanded;
+  _CategoryListSubCategory({
+    Key? key,
+    required this.data,
+    this.isExpanded,
+  }) : super(key: key);
 
   @override
   State<_CategoryListSubCategory> createState() =>
@@ -97,7 +98,7 @@ class __CategoryListSubCategoryState extends State<_CategoryListSubCategory> {
                             ),
                             if (widget.data.sub != null)
                               AnimatedRotation(
-                                turns: widget.isExpanded
+                                turns: widget.data.isExpanded
                                     ? turns - 4.0 / 8.0
                                     : turns,
                                 duration: const Duration(seconds: 1),

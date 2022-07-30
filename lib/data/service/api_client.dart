@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart';
+import 'package:yes/data/models/response.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 
 class ApiClient {
-  
   // late Client client;
   late Client client;
   late Dio dio;
@@ -21,7 +21,7 @@ class ApiClient {
     try {
       var res = await client.get(url, headers: headers);
       if (res.statusCode == 200) {
-        return json.decode(res.body);
+        return ApiResponse.fromJson(jsonDecode(res.body));
       }
     } catch (_) {
       throw _;

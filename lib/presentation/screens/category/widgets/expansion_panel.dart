@@ -4,14 +4,6 @@
 
 import 'package:flutter/material.dart';
 
-// import 'constants.dart';
-// import 'expand_icon.dart';
-// import 'ink_well.dart';
-// import 'material_localizations.dart';
-// import 'mergeable_material.dart';
-// import 'shadows.dart';
-// import 'theme.dart';
-// const double kMinInteractiveDimension = 48.0;
 const double _kPanelHeaderCollapsedHeight = 0;
 const EdgeInsets _kPanelHeaderExpandedDefaultPadding = EdgeInsets.symmetric(
   vertical: 0.0 - _kPanelHeaderCollapsedHeight,

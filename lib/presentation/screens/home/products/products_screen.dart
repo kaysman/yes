@@ -26,15 +26,18 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
+  final ScrollController _scrollController = ScrollController();
   late Future<Products> fetchProducts;
   Filters? filters;
 
   @override
   void initState() {
     if (widget.promotionId != null) {
+      print(widget.promotionId);
       fetchProducts =
           PromotionService.fetchPromotionProducts(widget.promotionId);
     }
+    // _scrollController.;
     fetchFilters();
     super.initState();
   }
@@ -68,7 +71,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
             );
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            return ProductsGridList(products: snapshot.data?.products ?? []);
+            return ProductsGridList(
+                scrollController: _scrollController,
+                products: snapshot.data?.products ?? []);
           } else {
             return Center(
                 child: Text(

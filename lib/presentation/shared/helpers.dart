@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+Map<String, String> header() {
+  return {
+    "Content-Type": "application/json",
+    "Accept": "*/*",
+  };
+}
+
 class Apis {
-  static const kBaseUrl = 'yes.com.tm';
+  static const kBaseUrl = 'http://192.168.1.2:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -33,6 +40,28 @@ class Apis {
   static kProductById(int id) => '/api/front/product/$id';
 }
 
+enum SnackbarType { success, error }
+
+void showSnackBar(
+  BuildContext context,
+  Widget child, {
+  SnackbarType type = SnackbarType.error,
+  Color? backgroundColor,
+}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      backgroundColor: backgroundColor != null
+          ? backgroundColor
+          : type == SnackbarType.error
+              ? Color(0xffdf4759)
+              : Color(0xFF15AA40),
+      behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 3),
+      content: child,
+    ),
+  );
+}
+
 List<Map<String, dynamic>> menuItems = [
   {
     "activeIcon": Icon(Icons.home),
@@ -54,4 +83,11 @@ List<Map<String, dynamic>> menuItems = [
     "icon": Icon(Icons.person_outline),
     "label": 'Profile'
   },
+];
+
+List<Color> bgColors = [
+  Colors.pinkAccent.withOpacity(.1),
+  Colors.amber.withOpacity(.1),
+  Colors.lightGreen.withOpacity(.1).withOpacity(.1),
+  Colors.blueAccent.withOpacity(.1),
 ];

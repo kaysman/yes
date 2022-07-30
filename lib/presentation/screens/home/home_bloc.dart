@@ -1,73 +1,44 @@
 import 'package:bloc/bloc.dart';
-import 'package:yes/data/models/brand/brand.model.dart';
-import 'package:yes/data/models/product/product.model.dart';
-import 'package:yes/data/models/product/products.model.dart';
-import 'package:yes/data/models/promotion/promotion.model.dart';
-import 'package:yes/data/service/brand_service.dart';
-import 'package:yes/data/service/promtion_service.dart';
+import 'package:yes/data/models/gadget/gadget.model.dart';
+import 'package:yes/data/service/gadget_service.dart';
 
-enum BrandFetchingStatus { Idle, Loading, Error }
-
-enum VipBrandsfetchingStatus { Idle, Loading, Error }
-
-enum PromotionFetchingStatus { Idle, Loading, Error }
-
-enum FetchPromotionsByIdStatus { Idle, Loading, Error }
+enum GadgetFetchingStatus { Idle, Loading, Error }
 
 class HomeState {
-  final BrandFetchingStatus? brandFetchingStatus;
-  final PromotionFetchingStatus? promotionFetchingStatus;
-  final List<Brand>? brands;
-  final List<Promotion>? promotions;
-  final List<Product>? products;
+  final List<GadgetEntity>? gadgets;
+  final GadgetFetchingStatus gadgetFetchingStatus;
 
-  HomeState(
-      {this.brandFetchingStatus,
-      this.promotionFetchingStatus,
-      this.brands,
-      this.promotions,
-      this.products});
+  HomeState({
+    this.gadgets,
+    this.gadgetFetchingStatus = GadgetFetchingStatus.Idle,
+  });
 
-  HomeState copyWith({
-    List<Brand>? brands,
-    List<Promotion>? promotions,
-    List<Product>? products,
-    BrandFetchingStatus? brandFetchingStatus,
-    PromotionFetchingStatus? promotionFetchingStatus,
-  }) {
+  HomeState copyWith(
+      {List<GadgetEntity>? gadgets,
+      GadgetFetchingStatus? gadgetFetchingStatus}) {
     return HomeState(
-        brandFetchingStatus: brandFetchingStatus ?? this.brandFetchingStatus,
-        promotionFetchingStatus:
-            promotionFetchingStatus ?? this.promotionFetchingStatus,
-        products: products ?? this.products,
-        brands: brands ?? this.brands,
-        promotions: promotions ?? this.promotions);
+      gadgets: gadgets ?? this.gadgets,
+      gadgetFetchingStatus: gadgetFetchingStatus ?? this.gadgetFetchingStatus,
+    );
   }
 }
 
 class HomeBloc extends Cubit<HomeState> {
   HomeBloc() : super(HomeState()) {
-    Future.wait([fetchVipBrands(), fetchPromotions()]);
+    fetchGadgets();
   }
 
-  Future<void> fetchVipBrands() async {
-    emit(state.copyWith(brandFetchingStatus: BrandFetchingStatus.Loading));
-    final res = await BrandService.fetchVipBrands();
-    emit(state.copyWith(
-        brandFetchingStatus: BrandFetchingStatus.Idle, brands: res));
+  Future<void> fetchGadgets() async {
+    try {
+      emit(state.copyWith(gadgetFetchingStatus: GadgetFetchingStatus.Loading));
+      final res = await GadgetService.getAllGadgets();
+      emit(state.copyWith(
+        gadgetFetchingStatus: GadgetFetchingStatus.Idle,
+        gadgets: res,
+      ));
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(gadgetFetchingStatus: GadgetFetchingStatus.Error));
+    }
   }
-
-  Future<void> fetchPromotions() async {
-    emit(state.copyWith(
-        promotionFetchingStatus: PromotionFetchingStatus.Loading));
-    final res = await PromotionService.fetchPromotions();
-    emit(state.copyWith(
-        promotionFetchingStatus: PromotionFetchingStatus.Idle,
-        promotions: res));
-  }
-
-  // Future<void> fetchPromotionsById(int? id) async {
-  //   final res = await PromotionService.fetchPromotionProducts(id);
-  //   emit(state.copyWith(products: res));
-  // }
 }

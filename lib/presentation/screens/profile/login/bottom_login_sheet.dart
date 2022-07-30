@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/presentation/blocs/auth_bloc.dart';
 import 'package:yes/presentation/screens/profile/login/login.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 import 'package:yes/presentation/shared/validators.dart';
 
 class BottomLoginSheet extends StatefulWidget {
@@ -77,12 +78,10 @@ class _BottomLoginSheetState extends State<BottomLoginSheet> {
         if (state.status == AuthStatus.Authenticated &&
             state.identity != null) {
           _close(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              behavior: SnackBarBehavior.floating,
-              duration: Duration(milliseconds: 1000),
-              content: Text('Icheri girdiniz!'),
-            ),
+          showSnackBar(
+            context,
+            Text('Iceri girdiniz!'),
+            type: SnackbarType.success,
           );
         }
       },

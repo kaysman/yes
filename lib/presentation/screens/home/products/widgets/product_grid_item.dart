@@ -8,7 +8,7 @@ import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
   static const routeName = "product";
-  final Product product;
+  final Product? product;
   const ProductsGridItem({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -34,7 +34,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
       },
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(width: .4, color: Colors.grey[200]!),
+          border: Border.all(width: 1, color: Colors.grey[200]!),
         ),
         width: MediaQuery.of(context).size.width / 2,
         child: Column(
@@ -48,7 +48,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     child: SizedBox(
                       height: double.infinity,
                       child: Image.network(
-                        widget.product.image!,
+                        widget.product!.image!,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -89,7 +89,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                         Expanded(
                           flex: 9,
                           child: Text(
-                            widget.product.name_tm!.toUpperCase(),
+                            widget.product!.name_tm!.toUpperCase(),
                             maxLines: 1,
                             style: TextStyle(
                               overflow: TextOverflow.ellipsis,
@@ -117,7 +117,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     SizedBox(
                       height: 2,
                     ),
-                    Text(widget.product.description_tm!,
+                    Text(widget.product!.description_tm!,
                         maxLines: 2,
                         style: TextStyle(
                             fontSize: 11,
@@ -156,7 +156,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     // if (widget.product.discount == null)
                     Text.rich(
                       TextSpan(
-                        text: "${widget.product.price!}TMT",
+                        text: "${widget.product!.price!}TMT",
                         style: TextStyle(
                           fontSize: 12,
                           color: kText1Color,
