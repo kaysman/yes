@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/data/models/product/product.model.dart';
-import 'package:yes/data/models/product_model.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/widgets/custom_new_branch.dart';
-import 'package:yes/presentation/shared/widgets/custom_rating_bar.dart';
 import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
   static const routeName = "product";
   final Product? product;
-  const ProductsGridItem({Key? key, required this.product}) : super(key: key);
+  final ProductEntity? item;
+  final Color? bgColor;
+  final String? gadgetImage;
+  const ProductsGridItem(
+      {Key? key, this.product, this.item, this.bgColor, this.gadgetImage})
+      : super(key: key);
 
   @override
   State<ProductsGridItem> createState() => _ProductsGridItemState();
@@ -18,16 +21,9 @@ class ProductsGridItem extends StatefulWidget {
 class _ProductsGridItemState extends State<ProductsGridItem> {
   bool isLiked = false;
 
-  void onLike() {
-    setState(
-      () {
-        isLiked = !isLiked;
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    var item = widget.item;
     return GestureDetector(
       onTap: () {
         _navigaTo(context);
@@ -43,37 +39,12 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
               flex: 12,
               child: Stack(
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: Image.network(
-                        widget.product!.image!,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  // if (widget.product.isNew != false)
-                  // * bolmeli
-                  //   Positioned(
-                  //     top: 5,
-                  //     left: 0,
-                  //     child: CustomNewBranch(
-                  //         fontSize: 10, padding: const EdgeInsets.all(3)),
-                  //   ),
-                  // if (widget.product.rating != null)
-                  //   Positioned(
-                  //     bottom: 12,
-                  //     left: 10,
-                  //     child: CustomRatingBar(
-                  //         rating: widget.product.rating,
-                  //         commentsCount: widget.product.commentCount),
-                  //   ),
+                  buildProductImage(context, widget.gadgetImage),
                 ],
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Container(
                 padding: const EdgeInsets.only(
                   top: 5,
@@ -86,43 +57,20 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Expanded(
-                          flex: 9,
-                          child: Text(
-                            widget.product!.name_tm!.toUpperCase(),
-                            maxLines: 1,
-                            style: TextStyle(
-                              overflow: TextOverflow.ellipsis,
-                              fontSize: 12,
-                              color: kText1Color,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: GestureDetector(
-                            onTap: onLike,
-                            child: Icon(
-                              isLiked
-                                  ? Icons.favorite_outlined
-                                  : Icons.favorite_outline,
-                              size: 20,
-                              color: isLiked ? kPrimaryColor : Colors.grey[500],
-                            ),
-                          ),
-                        ),
+                        buildProductName(item, context),
+                        buildLikeBtn(),
                       ],
                     ),
                     SizedBox(
                       height: 2,
                     ),
-                    Text(widget.product!.description_tm!,
-                        maxLines: 2,
-                        style: TextStyle(
+                    Text(
+                      item?.description_tm ?? '-',
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.bodyText1?.copyWith(
                             fontSize: 11,
-                            color: Colors.black38,
-                            overflow: TextOverflow.ellipsis)),
+                          ),
+                    ),
                     SizedBox(
                       height: 4,
                     ),
@@ -156,12 +104,11 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     // if (widget.product.discount == null)
                     Text.rich(
                       TextSpan(
-                        text: "${widget.product!.price!}TMT",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: kText1Color,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        text: "${item?.ourPrice ?? '-'} TMT",
+                        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     )
                   ],
@@ -171,6 +118,60 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
           ],
         ),
       ),
+    );
+  }
+
+  void onLike() {
+    setState(
+      () {
+        isLiked = !isLiked;
+      },
+    );
+  }
+
+  buildLikeBtn() {
+    return Expanded(
+      flex: 1,
+      child: GestureDetector(
+        onTap: onLike,
+        child: Icon(
+          isLiked ? Icons.favorite_outlined : Icons.favorite_outline,
+          size: 20,
+          color: isLiked ? kPrimaryColor : Colors.grey[500],
+        ),
+      ),
+    );
+  }
+
+  buildProductName(ProductEntity? item, BuildContext context) {
+    return Expanded(
+      flex: 9,
+      child: Text(
+        item?.name_tm?.toUpperCase() ?? '-',
+        maxLines: 1,
+        style: Theme.of(context).textTheme.bodyText1?.copyWith(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              overflow: TextOverflow.ellipsis,
+            ),
+      ),
+    );
+  }
+
+  buildProductImage(BuildContext context, String? image) {
+    print(image);
+    return Container(
+      // width: MediaQuery.of(context).size.width / 2,
+      height: double.infinity,
+      width: double.infinity,
+      color: widget.bgColor,
+      child: image != null
+          ? Image.network(
+              cacheHeight: MediaQuery.of(context).size.width.toInt(),
+              image,
+              fit: BoxFit.cover,
+            )
+          : Text('Comes null'),
     );
   }
 

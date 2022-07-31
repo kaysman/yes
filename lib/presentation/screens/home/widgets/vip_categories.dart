@@ -17,25 +17,23 @@ class VipCategories extends StatelessWidget with PreferredSizeWidget {
       child: ListView.builder(
         padding: const EdgeInsets.only(right: 15, left: 15, bottom: 5),
         scrollDirection: Axis.horizontal,
-        itemCount: items?.length ?? bgColors.length,
+        itemCount: items == null ? bgColors.length : items.length,
         itemBuilder: (context, i) {
           var item = items?[i];
           return item == null
-              ? CircleAvatar(
-                  backgroundColor: bgColors[i],
+              ? Container(
+                  margin: const EdgeInsets.only(right: 10),
+                  color: bgColors[i],
+                  height: 80,
+                  width: 80,
                 )
               : Container(
-                  child: Container(
-                    alignment: Alignment.center,
+                  margin: const EdgeInsets.only(right: 10),
+                  color: bgColors[i],
+                  child: Image.network(
                     width: MediaQuery.of(context).size.width * 0.2,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          item.getFullPathImage!,
-                        ),
-                      ),
-                    ),
+                    item.getFullPathImage!,
+                    fit: BoxFit.cover,
                   ),
                 );
         },

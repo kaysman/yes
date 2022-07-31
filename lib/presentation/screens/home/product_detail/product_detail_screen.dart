@@ -21,9 +21,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        bottomNavigationBar: ProductDetailBottomNavBar(
-          product: widget.product
-        ),
+        bottomNavigationBar: ProductDetailBottomNavBar(product: widget.product),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           toolbarHeight: 45,
@@ -50,7 +48,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         ),
-        
         body: Container(
           color: Colors.grey[100],
           child: SingleChildScrollView(
@@ -73,12 +70,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     ),
                                   )),
                           options: CarouselOptions(
-                              onPageChanged: (index, reason) => setState(() {
-                                    activePage = index;
-                                  }),
-                              height: MediaQuery.of(context).size.height *.7,
-                              viewportFraction: 1,
-                              reverse: true),
+                            onPageChanged: (index, reason) => setState(() {
+                              activePage = index;
+                            }),
+                            height: MediaQuery.of(context).size.height * .7,
+                            viewportFraction: 1,
+                            reverse: true,
+                          ),
                         ),
                         // Positioned(
                         //     top: 50,
@@ -170,12 +168,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       //         ]),
                       //   ),
                       // if (widget.product.discount == null)
-                        Text.rich(
-                          TextSpan(
-                            text: "${widget.product.price}TMT",
-                            style: TextStyle(fontSize: 15, color: kText1Color),
-                          ),
+                      Text.rich(
+                        TextSpan(
+                          text: "${widget.product.price}TMT",
+                          style: TextStyle(fontSize: 15, color: kText1Color),
                         ),
+                      ),
                     ],
                   ),
                 ),

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
 import 'package:yes/data/models/gadget/image.model.dart';
 import 'package:yes/data/models/product/product.model.dart';
@@ -12,6 +13,7 @@ import 'package:yes/presentation/screens/home/widgets/views.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
+import 'package:yes/presentation/shared/widgets/app-loading-bar.dart';
 
 import '../../../data/enums/gadget-type.dart';
 import '../shopping_bag/shopping_bag.bloc.dart';
@@ -42,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
       listener: (context, state) {},
       builder: (context, state) {
         // loading widget
-        if (state.gadgetFetchingStatus == GadgetFetchingStatus.Loading) {
-          return SizedBox();
-        }
 
+        if (state.gadgetFetchingStatus == GadgetFetchingStatus.Error) {
+          return HomeErrorView(state: state);
+        }
         // error widget
 
         var types = state.gadgets;
@@ -106,57 +108,62 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
             bottom: VipCategories(gadget: circleItems),
           ),
-          body: SingleChildScrollView(
-            child: Container(
-              color: Colors.grey.withOpacity(.05),
-              child: Column(
-                children: List.generate(
-                  state.gadgets?.length ?? 0,
-                  (index) {
-                    var gadget = state.gadgets![index];
-                    switch (gadget.type) {
-                      case GadgetType.BANNER_FOR_MEN_AND_WOMEN:
-                      case GadgetType.ONE_IMAGE_WITH_FULL_WIDTH:
-                        return GadgetOneImageView(
-                          gadget: gadget,
-                        );
-                      // grid
-                      case GadgetType.TWO_SMALL_CARDS_HORIZONTAL:
-                      case GadgetType.TWO_TO_TWO_WITH_TITLE_AS_IMAGE:
-                      case GadgetType.TWO_TO_TWO_GRID_WITH_TITLE_AS_TEXT:
-                      case GadgetType.THREE_TO_THREE_GRID_WITH_TITLE_AS_TEXT:
-                        return GadgetGridView(gadget: gadget);
+          body: state.gadgetFetchingStatus == GadgetFetchingStatus.Loading
+              ? AppLoadingBar()
+              : SingleChildScrollView(
+                  child: Container(
+                    color: kGrey5Color,
+                    child: Column(
+                      children: List.generate(
+                        state.gadgets?.length ?? 0,
+                        (index) {
+                          var gadget = state.gadgets![index];
+                          switch (gadget.type) {
+                            case GadgetType.BANNER_FOR_MEN_AND_WOMEN:
+                            case GadgetType.ONE_IMAGE_WITH_FULL_WIDTH:
+                              return GadgetOneImageView(
+                                gadget: gadget,
+                              );
+                            // grid
+                            case GadgetType.TWO_SMALL_CARDS_HORIZONTAL:
+                            case GadgetType.TWO_TO_TWO_WITH_TITLE_AS_IMAGE:
+                            case GadgetType.TWO_TO_TWO_GRID_WITH_TITLE_AS_TEXT:
+                            case GadgetType
+                                .THREE_TO_THREE_GRID_WITH_TITLE_AS_TEXT:
+                              return GadgetGridView(gadget: gadget);
 
-                      // listview
-                      case GadgetType
-                          .CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
-                      case GadgetType
-                          .CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_IMAGE:
-                      case GadgetType
-                          .CARDS_2_3_IN_HORIZONTAL_WITH_TITLE_AS_IMAGE:
-                      case GadgetType
-                          .CARDS_2_3_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
-                      case GadgetType
-                          .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
-                      case GadgetType.CATEGORY_BANNER:
-                        return GadgetListView(
-                          gadget: gadget,
-                        );
+                            // listview
+                            case GadgetType
+                                .CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
+                            case GadgetType
+                                .CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_IMAGE:
+                            case GadgetType
+                                .CARDS_2_3_IN_HORIZONTAL_WITH_TITLE_AS_IMAGE:
+                            case GadgetType
+                                .CARDS_2_3_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
+                            case GadgetType.CATEGORY_BANNER:
+                              return GadgetListView(
+                                gadget: gadget,
+                              );
 
-                      // Banners, One Image
-                      case GadgetType.BANNER_SWIPE_WITH_DOTS:
-                        return GadgetSwiperView(
-                          gadget: gadget,
-                        );
+                            case GadgetType
+                                .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
+                              return GadgetProductListView(gadget: gadget);
 
-                      default:
-                        return SizedBox();
-                    }
-                  },
+                            // Banners, One Image
+                            case GadgetType.BANNER_SWIPE_WITH_DOTS:
+                              return GadgetSwiperView(
+                                gadget: gadget,
+                              );
+
+                            default:
+                              return SizedBox();
+                          }
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         );
       },
     );
@@ -173,141 +180,97 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class GadgetView extends StatefulWidget {
-  GadgetView({
-    Key? key,
-    required this.gadget,
-  }) : super(key: key);
-  final GadgetEntity gadget;
-
-  @override
-  State<GadgetView> createState() => _GadgetViewState();
-}
-
-class _GadgetViewState extends State<GadgetView> {
-  int activePage = 0;
+class HomeErrorView extends StatelessWidget {
+  const HomeErrorView({Key? key, required this.state}) : super(key: key);
+  final HomeState state;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox();
-    // return Container(
-    //   color: kWhite,
-    //   child: () {
-    //           switch (widget.gadget.type) {
-    //             case GadgetType.TWO_TO_TWO_GRID_WITH_TITLE_AS_TEXT:
-    //               return GridTwoTwoTitleAsText(items: [], title: '',);
-    //             case GadgetType
-    //                 .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT:
-    //               return Container(
-    //                 padding: const EdgeInsets.symmetric(
-    //                     vertical: 20, horizontal: 10),
-    //                 height: 400,
-    //                 width: MediaQuery.of(context).size.width,
-    //                 child: Column(
-    //                   crossAxisAlignment: CrossAxisAlignment.start,
-    //                   children: [
-    //                     Padding(
-    //                       padding: const EdgeInsets.only(bottom: 10.0),
-    //                       child: Text(
-    //                         'Our brands are best'.toUpperCase(),
-    //                         style: Theme.of(context).textTheme.bodyLarge,
-    //                       ),
-    //                     ),
-    //                     Expanded(
-    //                       child: ListView.builder(
-    //                           shrinkWrap: true,
-    //                           scrollDirection: Axis.horizontal,
-    //                           itemCount: ,
-    //                           itemBuilder: (_, i) {
-    //                             return Container(
-    //                               margin: const EdgeInsets.only(right: 10),
-    //                               child: ProductsGridItem(
-    //                                   product: widget.items?[i]),
-    //                             );
-    //                           },),
-    //                     ),
-    //                   ],
-    //                 ),
-    //               );
-    //             case GadgetType.BANNER_SWIPE_WITH_DOTS:
-    //               return CarouselSlider(
-    //                 items: List.generate(
-    //                     bgColors.length,
-    //                     (index) => SizedBox(
-    //                           width: double.infinity,
-    //                           child: Container(
-    //                             color: bgColors[index],
-    //                           ),
-    //                         )),
-    //                 options: CarouselOptions(
-    //                   onPageChanged: (index, reason) => setState(() {
-    //                     activePage = index;
-    //                   }),
-    //                   height: 400,
-    //                   viewportFraction: 1,
-    //                   reverse: true,
-    //                 ),
-    //               );
-    //             default:
-    //               return null;
-    //           }
-    //         }(),
-    // );
-  }
-}
-
-class GridTwoTwoTitleAsText extends StatelessWidget {
-  const GridTwoTwoTitleAsText({
-    Key? key,
-    required this.title,
-    required this.items,
-  }) : super(key: key);
-
-  final String title;
-  final List<GadgetImage> items;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 10,
-        horizontal: 10,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: Text(
-              title.toUpperCase(),
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Logo(),
+        actions: [
+          buildIconBtn(
+            context,
+            () {
+              Navigator.pushNamed(context, 'search');
+            },
+            Icons.search,
           ),
-          GridView.count(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            crossAxisCount: 2,
-            crossAxisSpacing: 2,
-            childAspectRatio: 1,
-            mainAxisSpacing: 2,
-            children: items
-                .map(
-                  (e) => e.getFullPathImage != null
-                      ? InkWell(
-                          onTap: () {
-                            Navigator.pushNamed(
-                                context, ProductsGridItem.routeName,
-                                arguments: {"": ""});
-                          },
-                          child: Image.network(e.getFullPathImage!))
-                      : SizedBox(),
-                )
-                .toList(),
+          BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
+            return buildIconBtn(
+              context,
+              () {
+                Navigator.of(context).pushNamed(
+                  WishGridList.routeName,
+                  arguments: {
+                    'products': state.wishListItems,
+                    'categories': state.categories,
+                    'filteredList': state.filteredList,
+                  },
+                );
+              },
+              Icons.favorite_border,
+            );
+          }),
+          buildIconBtn(
+            context,
+            () {
+              Navigator.pushNamed(context, 'shopping-bag');
+            },
+            Icons.shopping_bag_outlined,
           ),
         ],
+        bottom: VipCategories(
+          gadget: GadgetEntity(
+            type: GadgetType.CIRCLE_ITEMS,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            GadgetOneImageView(
+              gadget: GadgetEntity(
+                type: GadgetType.BANNER_FOR_MEN_AND_WOMEN,
+              ),
+            ),
+            GadgetSwiperView(
+              gadget: GadgetEntity(
+                type: GadgetType.BANNER_SWIPE_WITH_DOTS,
+              ),
+            ),
+            GadgetListView(
+              gadget: GadgetEntity(
+                type: GadgetType.CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_TEXT,
+              ),
+            ),
+            GadgetGridView(
+              gadget: GadgetEntity(
+                type: GadgetType.TWO_TO_TWO_GRID_WITH_TITLE_AS_TEXT,
+              ),
+            ),
+            GadgetProductListView(
+              gadget: GadgetEntity(
+                type: GadgetType
+                    .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
+
+buildIconBtn(BuildContext context, VoidCallback onTap, IconData icon) {
+  return IconButton(
+    onPressed: onTap,
+    icon: Icon(
+      icon,
+      size: 26,
+    ),
+  );
 }
 
 class ProductCountIndicator extends StatelessWidget {
