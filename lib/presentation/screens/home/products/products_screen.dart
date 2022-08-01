@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/models/product/filters.model.dart';
-import 'package:yes/data/models/product/products.model.dart';
-import 'package:yes/data/service/promtion_service.dart';
+import 'package:yes/data/models/product%20-new/product.model.dart';
+import 'package:yes/data/service/products_service.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'widgets/product_bottom_nav.dart';
-import 'widgets/product_grid_list.dart';
+import 'package:yes/presentation/shared/components/app-loading-bar.dart';
+import 'widgets/product_list.dart';
 
 class ProductsScreen extends StatefulWidget {
   static const routeName = "products";
@@ -27,53 +26,48 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   final ScrollController _scrollController = ScrollController();
-  late Future<Products> fetchProducts;
-  Filters? filters;
+  // late Future<Products> fetchProducts;
+  late Future<List<ProductEntity>> fetchProducts;
+  // Filters? filters;
 
   @override
   void initState() {
     if (widget.promotionId != null) {
       print(widget.promotionId);
-      fetchProducts =
-          PromotionService.fetchPromotionProducts(widget.promotionId);
+      fetchProducts = ProductsService.getProducts();
     }
     // _scrollController.;
-    fetchFilters();
     super.initState();
   }
 
-  Future<Filters?> fetchFilters() async {
-    await fetchProducts.then((value) {
-      setState(() {
-        filters = value.filters;
-      });
-    });
-    return filters;
-  }
+  // Future<Filters?> fetchFilters() async {
+  //   await fetchProducts.then((value) {
+  //     setState(() {
+  //       filters = value.filters;
+  //     });
+  //   });
+  //   return filters;
+  // }
 
   @override
   Widget build(BuildContext context) {
-    print(filters);
     return Scaffold(
       appBar: AppBar(
           backgroundColor: kWhite,
           title: Text(
             'Products',
           )),
-      body: FutureBuilder<Products>(
+      body: FutureBuilder<List<ProductEntity>>(
         future: fetchProducts,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: kPrimaryColor,
-              ),
-            );
+            return AppLoadingBar();
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
             return ProductsGridList(
-                scrollController: _scrollController,
-                products: snapshot.data?.products ?? []);
+              scrollController: _scrollController,
+              products: snapshot.data ?? [],
+            );
           } else {
             return Center(
                 child: Text(
@@ -83,9 +77,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
           }
         },
       ),
-      bottomNavigationBar: ProductBootNav(
-        filters: filters,
-      ),
+      // bottomNavigationBar: ProductBootNav(
+      //   filters: filters,
+      // ),
     );
   }
 }

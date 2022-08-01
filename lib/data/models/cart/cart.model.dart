@@ -1,21 +1,32 @@
 import 'package:equatable/equatable.dart';
+import 'package:yes/data/models/product%20-new/image.model.dart';
+
+import '../product -new/size.model.dart';
 
 class CartItem with EquatableMixin {
-  int id;
+  int? id;
   String? name_tm;
   String? name_ru;
-  String? image;
-  int price;
-  String? code;
+  int? ourPrice;
+  int? marketPrice;
   int? quantity;
-  int? totalPrice;
+  String? code;
   String? description_tm;
   String? description_ru;
+  List<ImageEntity>? images;
+  List<SizeEntity>? sizes;
+  String? image;
+  int price;
+  int? totalPrice;
   bool isSelected;
   int defQuantity;
 
   CartItem({
     required this.id,
+    this.ourPrice,
+    this.marketPrice,
+    this.images,
+    this.sizes,
     this.name_tm,
     this.name_ru,
     this.image,

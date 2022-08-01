@@ -6,16 +6,18 @@ class VipCategories extends StatelessWidget with PreferredSizeWidget {
   VipCategories({
     Key? key,
     required this.gadget,
+    required this.isLoading,
   }) : super(key: key);
 
   final GadgetEntity? gadget;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     var items = gadget?.items;
     return Container(
       height: 80,
       child: ListView.builder(
-        padding: const EdgeInsets.only(right: 15, left: 15, bottom: 5),
+        padding: isLoading ? const EdgeInsets.only(left: 15, bottom: 10) : null,
         scrollDirection: Axis.horizontal,
         itemCount: items == null ? bgColors.length : items.length,
         itemBuilder: (context, i) {

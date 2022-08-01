@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:yes/data/models/product%20-new/product.model.dart';
-import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import '../../product_detail/product_detail_screen.dart';
 
 class ProductsGridItem extends StatefulWidget {
   static const routeName = "product";
-  final Product? product;
   final ProductEntity? item;
   final Color? bgColor;
   final String? gadgetImage;
   const ProductsGridItem(
-      {Key? key, this.product, this.item, this.bgColor, this.gadgetImage})
+      {Key? key,  this.item, this.bgColor, this.gadgetImage})
       : super(key: key);
 
   @override
@@ -32,7 +30,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
         decoration: BoxDecoration(
           border: Border.all(width: 1, color: Colors.grey[200]!),
         ),
-        width: MediaQuery.of(context).size.width / 2,
+        width: MediaQuery.of(context).size.width / 2.5,
         child: Column(
           children: [
             Expanded(
@@ -177,7 +175,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
 
   void _navigaTo(context) {
     Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: {
-      "product": widget.product,
+      // "product": widget.product,
     });
   }
 }

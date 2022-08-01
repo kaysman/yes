@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:yes/data/models/product/filters.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 import '../filter/filter_screen.dart';
 
 class ProductBootNav extends StatelessWidget {
-  final Filters? filters;
-  const ProductBootNav({Key? key, required this.filters}) : super(key: key);
+  // final Filters? filters;
+  const ProductBootNav({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -90,15 +91,15 @@ class ProductBootNav extends StatelessWidget {
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                   ),
                   onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) {
-                          return FilterScreen(
-                            filters: filters,
-                          );
-                        },
-                      ),
-                    );
+                    // Navigator.of(context).push(
+                    //   MaterialPageRoute(
+                    //     builder: (_) {
+                    //       return FilterScreen(
+                    //         filters: filters,
+                    //       );
+                    //     },
+                    //   ),
+                    // );
                   },
                   icon: Icon(
                     Icons.filter_alt,

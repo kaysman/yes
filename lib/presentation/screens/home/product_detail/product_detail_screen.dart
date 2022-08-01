@@ -1,13 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:yes/data/models/product/product.model.dart';
+import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'widgets/app_bar_icon_btn.dart';
 import 'widgets/product_detail_bootm_nav.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = "product-detail";
-  final Product product;
+  final ProductEntity product;
   ProductDetailScreen({Key? key, required this.product}) : super(key: key);
 
   @override
@@ -170,8 +170,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       // if (widget.product.discount == null)
                       Text.rich(
                         TextSpan(
-                          text: "${widget.product.price}TMT",
-                          style: TextStyle(fontSize: 15, color: kText1Color),
+                          text: "${widget.product.ourPrice} TMT",
+                          style: Theme.of(context).textTheme.bodyText1,
                         ),
                       ),
                     ],
@@ -203,27 +203,38 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       // * keep it Db
                                       TextSpan(
                                         text:
-                                            '${widget.product.price! - 100.0}TMT',
-                                        style: TextStyle(
-                                            fontSize: 12, color: Colors.red),
+                                            '${widget.product.ourPrice! - 0.0}TMT',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.copyWith(
+                                              fontSize: 12,
+                                            ),
                                       )
                                     ],
                                   ),
                                 ),
                                 Text(
                                   'Save 300TMT',
-                                  style: TextStyle(
-                                      color: Color.fromARGB(255, 40, 110, 83),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      ?.copyWith(
+                                        color: Color.fromARGB(255, 40, 110, 83),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                 )
                               ],
                             ),
                             SizedBox(height: 5),
                             Text(
                               'Use at checkout',
-                              style:
-                                  TextStyle(fontSize: 12, color: kText1Color),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                    fontSize: 12,
+                                  ),
                             ),
                             SizedBox(height: 5),
                             Row(
@@ -233,8 +244,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   flex: 6,
                                   child: Text(
                                     'Orders above Rs.1999 (only on first purchase)',
-                                    style: TextStyle(
-                                        color: kText1Color, fontSize: 11),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
+                                          fontSize: 12,
+                                        ),
                                   ),
                                 ),
                                 Expanded(
@@ -244,10 +259,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       onTap: () {},
                                       child: Text(
                                         'View Products',
-                                        style: TextStyle(
-                                            color: kPrimaryColor,
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.bold),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1
+                                            ?.copyWith(
+                                              fontSize: 12,
+                                              color: kPrimaryColor,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -280,19 +298,25 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               children: [
                                 Text(
                                   'Emi option available',
-                                  style: TextStyle(
-                                      color: kText1Color,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1
+                                      ?.copyWith(
+                                        fontSize: 12,
+                                      ),
                                 ),
                                 InkWell(
                                   onTap: () {},
                                   child: Text(
                                     'View Plan',
-                                    style: TextStyle(
-                                        color: kPrimaryColor,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1
+                                        ?.copyWith(
+                                          color: kPrimaryColor,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                   ),
                                 ),
                               ],
@@ -302,8 +326,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             ),
                             Text(
                               'Emi starting from 90TMT/month',
-                              style:
-                                  TextStyle(color: kText1Color, fontSize: 12),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1
+                                  ?.copyWith(
+                                    fontSize: 12,
+                                  ),
                             )
                           ],
                         ),

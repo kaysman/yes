@@ -3,7 +3,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:yes/data/enums/gadget-type.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
-import 'package:yes/presentation/screens/home/products/widgets/product_grid_item.dart';
+import 'package:yes/presentation/screens/home/product_detail/product_detail_screen.dart';
+import 'package:yes/presentation/screens/home/products/products_screen.dart';
+import 'package:yes/presentation/screens/home/products/widgets/product_list_item.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 class GadgetGridView extends StatelessWidget {
@@ -167,7 +169,6 @@ class GadgetProductListView extends StatelessWidget {
                 (index) {
                   var item = items?[index];
                   var image = gadgets?[index];
-                  // print(object)
                   return item != null
                       ? ProductsGridItem(
                           bgColor: bgColors[index],
@@ -281,12 +282,42 @@ class GadgetOneImageView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: item?.getFullPathImage != null
-          ? Container(
-              color: bgColors.last,
-              child: Image.network(
-                item!.getFullPathImage!,
-                cacheWidth: MediaQuery.of(context).size.width.toInt(),
-              ),
+          ? Stack(
+              children: [
+                Container(
+                  color: bgColors.last,
+                  child: Image.network(
+                    item!.getFullPathImage!,
+                    cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            print('Men');
+                            Navigator.pushNamed(
+                                context, ProductsScreen.routeName);
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            print('Women');
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             )
           : Container(
               width: double.infinity,

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:yes/presentation/shared/colors.dart';
+import 'package:yes/presentation/shared/components/icons.dart';
 
 Map<String, String> header() {
   return {
@@ -62,32 +65,75 @@ void showSnackBar(
   );
 }
 
+void showAppBottomSheet(
+  BuildContext context,
+  Widget body,
+) {
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+    ),
+    clipBehavior: Clip.antiAliasWithSaveLayer,
+    isScrollControlled: true,
+    builder: (BuildContext context) {
+      return body;
+    },
+  );
+}
+
 List<Map<String, dynamic>> menuItems = [
   {
-    "activeIcon": Icon(Icons.home),
-    "icon": Icon(Icons.home_outlined),
-    "label": 'Home'
+    "activeIcon": Image.asset(
+      AppIcons.home,
+      width: 24,
+      height: 24,
+      color: kPrimaryColor,
+    ),
+    "icon": Image.asset(
+      AppIcons.home,
+      width: 24,
+      height: 24,
+    ),
+    "label": 'Esasy sahypa'
   },
   {
-    "activeIcon": Icon(Icons.category_rounded),
-    "icon": Icon(Icons.category_outlined),
-    "label": 'Categories'
+    "activeIcon": AppIcons.svgAsset(
+      AppIcons.category,
+      color: kPrimaryColor,
+    ),
+    "icon": AppIcons.svgAsset(
+      AppIcons.category,
+    ),
+    "label": 'Kategoriýalar'
   },
   {
-    "activeIcon": Icon(Icons.shopping_bag),
-    "icon": Icon(Icons.shopping_bag_outlined),
-    "label": 'Shopping bag'
+    "activeIcon": Image.asset(
+      AppIcons.bag,
+      width: 24,
+      height: 24,
+      color: kPrimaryColor,
+    ),
+    "icon": Image.asset(
+      AppIcons.bag,
+      width: 24,
+      height: 24,
+    ),
+    "label": 'Sebet'
   },
   {
-    "activeIcon": Icon(Icons.person),
-    "icon": Icon(Icons.person_outline),
-    "label": 'Profile'
+    "activeIcon": Image.asset(
+      AppIcons.profile,
+      width: 24,
+      height: 24,
+      color: kPrimaryColor,
+    ),
+    "icon": Image.asset(
+      AppIcons.profile,
+      width: 24,
+      height: 24,
+    ),
+    "label": 'Profil'
   },
-];
-
-List<Color> bgColors = [
-  Colors.pinkAccent.withOpacity(.1),
-  Colors.amber.withOpacity(.1),
-  Colors.lightGreen.withOpacity(.1).withOpacity(.1),
-  Colors.blueAccent.withOpacity(.1),
 ];

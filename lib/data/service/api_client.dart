@@ -32,19 +32,19 @@ class ApiClient {
   post(Uri url, {Map<String, String>? headers, dynamic data}) async {
     var res = await client.post(url, headers: headers, body: data);
     if (res.statusCode == 200) {
-      return json.decode(res.body);
+      return ApiResponse.fromJson(jsonDecode(res.body));
     }
   }
 
   // dio post
-  dioPost(String path, dynamic data) async {
-    try {
-      var res = await dio.post(path, data: data);
-      if (res.statusCode == 200) {
-        return res.data;
-      }
-    } catch (_) {
-      throw _;
-    }
-  }
+  // dioPost(String path, dynamic data) async {
+  //   try {
+  //     var res = await dio.post(path, data: data);
+  //     if (res.statusCode == 200) {
+  //       return res.data;
+  //     }
+  //   } catch (_) {
+  //     throw _;
+  //   }
+  // }
 }

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:faker/faker.dart';
 import 'package:yes/data/models/cart/cart.model.dart';
-import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
 
 class ShoppingBagState {
@@ -17,21 +17,21 @@ class ShoppingBagState {
     return sum;
   }
 
-  CartItem toCartItem(Product product) {
-    CartItem cartItem = CartItem(
-      id: product.id,
-      code: product.code,
-      description_ru: product.description_ru,
-      description_tm: product.description_tm,
-      image: product.image,
-      isSelected: product.isSelected,
-      name_ru: product.name_ru,
-      name_tm: product.name_tm,
-      quantity: product.quantity,
-      price: product.price ?? 0,
-    );
-    return cartItem;
-  }
+  // CartItem toCartItem(Product product) {
+  //   CartItem cartItem = CartItem(
+  //     id: product.id,
+  //     code: product.code,
+  //     description_ru: product.description_ru,
+  //     description_tm: product.description_tm,
+  //     image: product.image,
+  //     isSelected: product.isSelected,
+  //     name_ru: product.name_ru,
+  //     name_tm: product.name_tm,
+  //     quantity: product.quantity,
+  //     price: product.price ?? 0,
+  //   );
+  //   return cartItem;
+  // }
 
   CartItem toCartItemFromWishList(WishListItem product) {
     CartItem cartItem = CartItem(
@@ -84,30 +84,33 @@ class ShoppingBagBloc extends Cubit<ShoppingBagState> {
       : super(
           ShoppingBagState(
             selectedProducts: [],
-            cartItems: [],
+            cartItems: [
+             
+         
+            ],
           ),
         );
 
-  addToCart(Product product) {
-    var item = state.toCartItem(product);
-    var l = state.cartItems;
-    if (l.contains(item)) {
-      var existItem = l.firstWhere((element) => element.id == item.id);
-      var val = existItem.defQuantity++;
-      existItem.totalPrice = existItem.totalPrice == null
-          ? existItem.price * val
-          : existItem.totalPrice! * val;
-    } else {
-      state.selectedProducts?.add(item);
-      l.add(item);
-    }
-    emit(
-      state.copyWith(
-        cartItems: l,
-        selectedProducts: state.selectedProducts,
-      ),
-    );
-  }
+  // addToCart(Product product) {
+  //   var item = state.toCartItem(product);
+  //   var l = state.cartItems;
+  //   if (l.contains(item)) {
+  //     var existItem = l.firstWhere((element) => element.id == item.id);
+  //     var val = existItem.defQuantity++;
+  //     existItem.totalPrice = existItem.totalPrice == null
+  //         ? existItem.price * val
+  //         : existItem.totalPrice! * val;
+  //   } else {
+  //     state.selectedProducts?.add(item);
+  //     l.add(item);
+  //   }
+  //   emit(
+  //     state.copyWith(
+  //       cartItems: l,
+  //       selectedProducts: state.selectedProducts,
+  //     ),
+  //   );
+  // }
 
   addToCartFromWishList(CartItem item) {
     emit(state.copyWith(isAdded: false));

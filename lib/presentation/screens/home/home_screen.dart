@@ -1,21 +1,16 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
-import 'package:yes/data/models/gadget/image.model.dart';
-import 'package:yes/data/models/product/product.model.dart';
-import 'package:yes/data/models/product/products.model.dart';
-import 'package:yes/data/service/promtion_service.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
-import 'package:yes/presentation/screens/home/products/widgets/product_grid_item.dart';
+import 'package:yes/presentation/screens/home/widgets/home-error-view.dart';
 import 'package:yes/presentation/screens/home/widgets/views.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/widgets/app-loading-bar.dart';
+import 'package:yes/presentation/shared/components/icons.dart';
 
 import '../../../data/enums/gadget-type.dart';
+import '../../shared/components/app-loading-bar.dart';
 import '../shopping_bag/shopping_bag.bloc.dart';
 import '../shopping_bag/widgets/wishlist/wish_grid_list.dart';
 
@@ -55,20 +50,22 @@ class _HomeScreenState extends State<HomeScreen> {
             types?.firstWhere((e) => e.type == GadgetType.CIRCLE_ITEMS);
         return Scaffold(
           appBar: AppBar(
+            elevation: .5,
             title: Logo(),
             actions: [
-              buildIconBtn(
-                context,
-                () {
+              IconButton(
+                onPressed: () {
                   Navigator.pushNamed(context, 'search');
                 },
-                Icons.search,
+                icon: AppIcons.svgAsset(
+                  AppIcons.search,
+                  color: kText1Color,
+                ),
               ),
               BlocBuilder<WishListBloc, WishListState>(
                   builder: (context, state) {
-                return buildIconBtn(
-                  context,
-                  () {
+                return IconButton(
+                  onPressed: () {
                     Navigator.of(context).pushNamed(
                       WishGridList.routeName,
                       arguments: {
@@ -78,17 +75,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     );
                   },
-                  Icons.favorite_border,
+                  icon: Icon(Icons.favorite_border),
                 );
               }),
               Stack(
                 children: [
-                  buildIconBtn(
-                    context,
-                    () {
+                  IconButton(
+                    onPressed: () {
                       Navigator.pushNamed(context, 'shopping-bag');
                     },
-                    Icons.shopping_bag_outlined,
+                    icon: Image.asset(
+                      AppIcons.bag,
+                      width: 24,
+                      height: 24,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
                     builder: (context, state) {
@@ -106,14 +107,28 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               )
             ],
-            bottom: VipCategories(gadget: circleItems),
+            // bottom: state.gadgetFetchingStatus == GadgetFetchingStatus.Loading
+            //     ? VipCategories(isLoading: true, gadget: circleItems)
+            //     : null,
           ),
-          body: state.gadgetFetchingStatus == GadgetFetchingStatus.Loading
-              ? AppLoadingBar()
-              : SingleChildScrollView(
-                  child: Container(
+          body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  title: VipCategories(
+                    isLoading: false,
+                    gadget: circleItems,
+                  ),
+                )
+              ];
+            },
+            body: state.gadgetFetchingStatus == GadgetFetchingStatus.Loading
+                ? AppLoadingBar()
+                : Container(
                     color: kGrey5Color,
-                    child: Column(
+                    child: ListView(
                       children: List.generate(
                         state.gadgets?.length ?? 0,
                         (index) {
@@ -163,114 +178,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                ),
+          ),
         );
       },
     );
   }
-
-  buildIconBtn(BuildContext context, VoidCallback onTap, IconData icon) {
-    return IconButton(
-      onPressed: onTap,
-      icon: Icon(
-        icon,
-        size: 26,
-      ),
-    );
-  }
-}
-
-class HomeErrorView extends StatelessWidget {
-  const HomeErrorView({Key? key, required this.state}) : super(key: key);
-  final HomeState state;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Logo(),
-        actions: [
-          buildIconBtn(
-            context,
-            () {
-              Navigator.pushNamed(context, 'search');
-            },
-            Icons.search,
-          ),
-          BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
-            return buildIconBtn(
-              context,
-              () {
-                Navigator.of(context).pushNamed(
-                  WishGridList.routeName,
-                  arguments: {
-                    'products': state.wishListItems,
-                    'categories': state.categories,
-                    'filteredList': state.filteredList,
-                  },
-                );
-              },
-              Icons.favorite_border,
-            );
-          }),
-          buildIconBtn(
-            context,
-            () {
-              Navigator.pushNamed(context, 'shopping-bag');
-            },
-            Icons.shopping_bag_outlined,
-          ),
-        ],
-        bottom: VipCategories(
-          gadget: GadgetEntity(
-            type: GadgetType.CIRCLE_ITEMS,
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            GadgetOneImageView(
-              gadget: GadgetEntity(
-                type: GadgetType.BANNER_FOR_MEN_AND_WOMEN,
-              ),
-            ),
-            GadgetSwiperView(
-              gadget: GadgetEntity(
-                type: GadgetType.BANNER_SWIPE_WITH_DOTS,
-              ),
-            ),
-            GadgetListView(
-              gadget: GadgetEntity(
-                type: GadgetType.CARDS_16_9_IN_HORIZONTAL_WITH_TITLE_AS_TEXT,
-              ),
-            ),
-            GadgetGridView(
-              gadget: GadgetEntity(
-                type: GadgetType.TWO_TO_TWO_GRID_WITH_TITLE_AS_TEXT,
-              ),
-            ),
-            GadgetProductListView(
-              gadget: GadgetEntity(
-                type: GadgetType
-                    .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-buildIconBtn(BuildContext context, VoidCallback onTap, IconData icon) {
-  return IconButton(
-    onPressed: onTap,
-    icon: Icon(
-      icon,
-      size: 26,
-    ),
-  );
 }
 
 class ProductCountIndicator extends StatelessWidget {

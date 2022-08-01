@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
-import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/service/app_service.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/apply_cupon.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/cart_bottom_nav.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/item_select_bar.dart';

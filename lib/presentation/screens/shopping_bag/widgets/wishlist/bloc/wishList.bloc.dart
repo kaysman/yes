@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:yes/data/models/product/product.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
 import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
 
@@ -11,22 +10,22 @@ class WishListState {
   List<WishListItem> filteredList = [];
   // bool isMovedToCard;
 
-  WishListItem toWishListItem(Product product) {
-    WishListItem wishListItem = WishListItem(
-      id: product.id,
-      code: product.code,
-      description_ru: product.description_ru,
-      description_tm: product.description_tm,
-      image: product.image,
-      isSelected: product.isSelected,
-      name_ru: product.name_ru,
-      name_tm: product.name_tm,
-      quantity: product.quantity,
-      price: product.price,
-      category: product.category,
-    );
-    return wishListItem;
-  }
+  // WishListItem toWishListItem(Product product) {
+  //   WishListItem wishListItem = WishListItem(
+  //     id: product.id,
+  //     code: product.code,
+  //     description_ru: product.description_ru,
+  //     description_tm: product.description_tm,
+  //     image: product.image,
+  //     isSelected: product.isSelected,
+  //     name_ru: product.name_ru,
+  //     name_tm: product.name_tm,
+  //     quantity: product.quantity,
+  //     price: product.price,
+  //     category: product.category,
+  //   );
+  //   return wishListItem;
+  // }
 
   WishListState({
     // this.isMovedToCard = false,
@@ -61,25 +60,25 @@ class WishListBloc extends Cubit<WishListState> {
           ),
         );
 
-  addToWishList(Product product) {
-    var item = state.toWishListItem(product);
-    var l = state.wishListItems;
-    var category = item.category;
-    var categories = state.categories;
-    if (!l.contains(item)) {
-      l.add(item);
-    }
+  // addToWishList(Product product) {
+  //   var item = state.toWishListItem(product);
+  //   var l = state.wishListItems;
+  //   var category = item.category;
+  //   var categories = state.categories;
+  //   if (!l.contains(item)) {
+  //     l.add(item);
+  //   }
 
-    if (!categories.contains(category)) {
-      categories.add(category!);
-    }
-    var filterList = state.filteredList;
-    if (filterList.isNotEmpty) {
-      filterList = l.where((e) => e.category == category).toList();
-    }
-    emit(state.copyWith(
-        wishListItems: l, categories: categories, filteredList: filterList));
-  }
+  //   if (!categories.contains(category)) {
+  //     categories.add(category!);
+  //   }
+  //   var filterList = state.filteredList;
+  //   if (filterList.isNotEmpty) {
+  //     filterList = l.where((e) => e.category == category).toList();
+  //   }
+  //   emit(state.copyWith(
+  //       wishListItems: l, categories: categories, filteredList: filterList));
+  // }
 
   onSelectCategory(int i) {
     var categories = state.categories;

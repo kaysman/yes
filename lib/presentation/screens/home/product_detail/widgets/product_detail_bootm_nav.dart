@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/product/product.model.dart';
+import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag_screen.dart';
 import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
 class ProductDetailBottomNavBar extends StatelessWidget {
-  final Product product;
+  final ProductEntity product;
   const ProductDetailBottomNavBar({Key? key, required this.product})
       : super(key: key);
 
@@ -29,17 +28,18 @@ class ProductDetailBottomNavBar extends StatelessWidget {
                   builder: (context, state) {
                 return TextButton.icon(
                   onPressed: () {
-                    context.read<WishListBloc>().addToWishList(product);
+                    // context.read<WishListBloc>().addToWishList(product);
                   },
                   icon: Icon(
-                    state.wishListItems.contains(state.toWishListItem(product))
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined,
+                    // state.wishListItems.contains(state.toWishListItem(product))
+                    // ? Icons.favorite
+                    Icons.favorite_border_outlined,
                     size: 18,
-                    color: state.wishListItems
-                            .contains(state.toWishListItem(product))
-                        ? kPrimaryColor
-                        : kText1Color,
+                    color:
+                        // state.wishListItems
+                        // .contains(state.toWishListItem(product))
+                        // ? kPrimaryColor
+                        kText1Color,
                   ),
                   label: Text(
                     'WISHLIST',
@@ -63,28 +63,30 @@ class ProductDetailBottomNavBar extends StatelessWidget {
                 builder: (context, state) {
                   return TextButton.icon(
                     onPressed: () {
-                      if (state.cartItems.contains(
-                        state.toCartItem(product),
-                      )) {
-                        Navigator.of(context).pushNamed(CartScreen.routeName);
-                      } else {
-                        context.read<ShoppingBagBloc>().addToCart(product);
-                      }
+                      // if (state.cartItems.contains(
+                      //   state.toCartItem(product),
+                      // )) {
+                      //   Navigator.of(context).pushNamed(CartScreen.routeName);
+                      // } else {
+                      //   context.read<ShoppingBagBloc>().addToCart(product);
+                      // }
                     },
                     icon: Icon(
                       Icons.shopping_bag_outlined,
                       size: 18,
                       color: kWhite,
                     ),
-                    label: state.cartItems.contains(state.toCartItem(product))
-                        ? Text(
-                            'Go TO BAG',
-                            style: TextStyle(color: kWhite, fontSize: 13),
-                          )
-                        : Text(
-                            'ADD TO BAG',
-                            style: TextStyle(color: kWhite, fontSize: 13),
-                          ),
+                    label:
+                        // state.cartItems.contains(state.toCartItem(product))
+                        // ? Text(
+                        //     'Go TO BAG',
+                        //     style: TextStyle(color: kWhite, fontSize: 13),
+                        //   )
+                        // :
+                        Text(
+                      'ADD TO BAG',
+                      style: TextStyle(color: kWhite, fontSize: 13),
+                    ),
                   );
                 },
               ),
