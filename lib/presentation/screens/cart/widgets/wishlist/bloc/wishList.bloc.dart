@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 
 import '../../../../../../data/models/category/category.model.dart';
 
@@ -50,7 +50,7 @@ class WishListState {
 }
 
 class WishListBloc extends Cubit<WishListState> {
-  final ShoppingBagBloc shoppingBagBloc;
+  final CartBloc shoppingBagBloc;
   WishListBloc(this.shoppingBagBloc)
       : super(
           WishListState(

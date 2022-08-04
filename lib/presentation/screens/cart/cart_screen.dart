@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/data/service/app_service.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/apply_cupon.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/cart_bottom_nav.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/item_select_bar.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/my_container.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/offers.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/product_details.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/user_adress.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/whish_bottom_sheet.dart';
 import 'package:yes/presentation/shared/colors.dart';
+
+import 'widgets/apply_cupon.dart';
+import 'widgets/cart_bottom_nav.dart';
+import 'widgets/cart_item_detail.dart';
+import 'widgets/item_select_bar.dart';
+import 'widgets/my_container.dart';
+import 'widgets/offers.dart';
+import 'widgets/user_adress.dart';
+import 'widgets/wishlist/whish_bottom_sheet.dart';
 
 class CartScreen extends StatefulWidget {
   static const routeName = "shopping-bag";
@@ -33,16 +34,21 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(actions: [
-        IconButton(
-            onPressed: () {
-              showWhishListSheet(context);
-            },
-            icon: Icon(
-              Icons.favorite_border_outlined,
-              size: 20,
-            )),
-      ], elevation: 0.6, title: Text('Shopping bag')),
+      appBar: AppBar(
+        actions: [
+          IconButton(
+              onPressed: () {
+                showWhishListSheet(context);
+              },
+              icon: Icon(
+                Icons.favorite_border_outlined,
+                size: 20,
+              ),
+              ),
+        ],
+        elevation: 0.6,
+        title: Text('Shopping bag'),
+      ),
       body: Container(
         color: Colors.grey[100],
         width: double.infinity,
@@ -196,8 +202,9 @@ class _CartScreenState extends State<CartScreen> {
                       Expanded(
                         flex: 3,
                         child: ProductGurrantee(
-                            icon: Icons.security_sharp,
-                            title: 'Secure Payments'),
+                          icon: Icons.security_sharp,
+                          title: 'Secure Payments',
+                        ),
                       ),
                     ],
                   ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import '../shopping_bag_screen.dart';
+import '../cart_screen.dart';
 import 'custom_check_box.dart';
 
 class ItemSelectBar extends StatefulWidget {
@@ -16,10 +16,15 @@ class ItemSelectBar extends StatefulWidget {
 
 class _ItemSelectBarState extends State<ItemSelectBar> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child: BlocConsumer<ShoppingBagBloc, ShoppingBagState>(
+      child: BlocConsumer<CartBloc, CartState>(
         listener: (context, state) {},
         builder: (context, state) {
           return Row(
@@ -30,25 +35,28 @@ class _ItemSelectBarState extends State<ItemSelectBar> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomCheckBox(
-                      isChecked: state.productsSelectedCount > 0,
+                      isChecked: state.cartItems.length > 0,
                       onTapped: (v) {
-                        context
-                            .read<ShoppingBagBloc>()
-                            .selectOrUnSelectAllproducts(v);
+                        // context
+                        //     .read<ShoppingBagBloc>()
+                        //     .selectOrUnSelectAllproducts(v);
                       },
                     ),
                     SizedBox(
                       width: 10,
                     ),
-                    Text.rich(TextSpan(
-                        text:
-                            '${state.productsSelectedCount}/${state.productsCount} ITEMS SELECTED',
+                    Text.rich(
+                      TextSpan(
+                        text: '${state.productsCount} sany haryt sayladynyz',
                         style: TextStyleUtils().boldText,
                         children: [
                           TextSpan(
-                              text: ' (${state.totalPrice}TMT)',
-                              style: TextStyle(color: kPrimaryColor))
-                        ]))
+                            text: ' (${state.totalPrice} TMT)',
+                            style: TextStyle(color: kPrimaryColor),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

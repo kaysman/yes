@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:yes/presentation/screens/cart/cart_screen.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/wish_grid_list.dart';
 import 'package:yes/presentation/screens/home/products/products_screen.dart';
 import 'package:yes/presentation/screens/home/search/serach.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/wish_grid_list.dart';
 
 import '../screens/home/product_detail/product_detail_screen.dart';
-import '../screens/shopping_bag/shopping_bag_screen.dart';
 
 List<Route<dynamic>> onGenerateInitialRoutes(String name) {
   switch (name) {
@@ -15,6 +15,13 @@ List<Route<dynamic>> onGenerateInitialRoutes(String name) {
           builder: (_) => IndexScreen(),
         )
       ];
+    case CartScreen.routeName:
+      return [
+        MaterialPageRoute(
+          builder: (_) => CartScreen(),
+        )
+      ];
+
     default:
       return [
         MaterialPageRoute(
@@ -55,15 +62,16 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case ProductsScreen.routeName:
       return MaterialPageRoute(
         builder: (_) {
-          var args = settings.arguments as Map<String, dynamic>;
-          switch (args.keys.first) {
-            case "promotionId":
-              return ProductsScreen(
-                promotionId: args['promotionId'],
+          return ProductsScreen(
+              // promotionId: args['promotionId'],
               );
-            default:
-              return SizedBox();
-          }
+          // var args = settings.arguments as Map<String, dynamic>;
+          // switch (args.keys.first) {
+          //   case "promotionId":
+
+          //   default:
+          //     return SizedBox();
+          // }
         },
       );
     case WishGridList.routeName:

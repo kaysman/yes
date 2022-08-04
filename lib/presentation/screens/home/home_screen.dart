@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/gadget/gadget.model.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/home-error-view.dart';
 import 'package:yes/presentation/screens/home/widgets/views.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/icons.dart';
 
 import '../../../data/enums/gadget-type.dart';
 import '../../shared/components/app-loading-bar.dart';
-import '../shopping_bag/shopping_bag.bloc.dart';
-import '../shopping_bag/widgets/wishlist/wish_grid_list.dart';
+import '../cart/widgets/wishlist/bloc/wishList.bloc.dart';
+import '../cart/widgets/wishlist/wish_grid_list.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "home";
@@ -91,9 +90,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  BlocBuilder<ShoppingBagBloc, ShoppingBagState>(
+                  BlocBuilder<CartBloc, CartState>(
                     builder: (context, state) {
-                      return state.productsSelectedCount > 0
+                      return state.cartItems.length > 0
                           ? Positioned(
                               top: 10,
                               right: 6,
@@ -107,9 +106,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               )
             ],
-            // bottom: state.gadgetFetchingStatus == GadgetFetchingStatus.Loading
-            //     ? VipCategories(isLoading: true, gadget: circleItems)
-            //     : null,
           ),
           body: NestedScrollView(
             floatHeaderSlivers: true,
@@ -117,6 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 (BuildContext context, bool innerBoxIsScrolled) {
               return [
                 SliverAppBar(
+                  toolbarHeight: 80,
+                  leadingWidth: 0,
                   title: VipCategories(
                     isLoading: false,
                     gadget: circleItems,
@@ -190,7 +188,7 @@ class ProductCountIndicator extends StatelessWidget {
     Key? key,
     required this.state,
   }) : super(key: key);
-  final ShoppingBagState state;
+  final CartState state;
 
   @override
   Widget build(BuildContext context) {
@@ -222,10 +220,11 @@ class Logo extends StatelessWidget {
       child: const Text(
         'YES.',
         style: TextStyle(
-            fontSize: 15,
-            color: Colors.white,
-            fontWeight: FontWeight.w500,
-            letterSpacing: -1.2),
+          fontSize: 15,
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          letterSpacing: -1.2,
+        ),
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/presentation/screens/home/products/widgets/product_list_item.dart';
+import 'package:yes/presentation/shared/colors.dart';
 
 class ProductsGridList extends StatelessWidget {
   final ScrollController scrollController;
@@ -15,14 +16,13 @@ class ProductsGridList extends StatelessWidget {
       controller: scrollController,
       crossAxisCount: 2,
       childAspectRatio: 1 / 2,
-      children: products
-              ?.map(
-                (e) => ProductsGridItem(
-                  item: e,
-                ),
-              )
-              .toList() ??
-          [],
+      children: List.generate(
+        products?.length ?? bgColors.length,
+        (index) => ProductsGridItem(
+          bgColor: bgColors[index],
+          item: products?[index],
+        ),
+      ),
     );
   }
 }

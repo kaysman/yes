@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/presentation/screens/cart/cart_screen.dart';
 import 'package:yes/presentation/screens/home/home_screen.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
 
 import '../../shared/helpers.dart';
 import '../category/category_screen.dart';
 import '../profile/profile_screen.dart';
-import '../shopping_bag/shopping_bag_screen.dart';
 
 class IndexScreen extends StatefulWidget {
   static const routeName = "index";

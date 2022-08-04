@@ -11,7 +11,7 @@ Map<String, String> header() {
 }
 
 class Apis {
-  static const kBaseUrl = 'http://192.168.1.3:3333';
+  static const kBaseUrl = 'http://localhost:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -43,6 +43,25 @@ class Apis {
   static kProductById(int id) => '/api/front/product/$id';
 }
 
+final OutlineInputBorder kErrorInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: Colors.red),
+  borderRadius: BorderRadius.circular(8),
+);
+final OutlineInputBorder kFocusedInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(
+    color: kGrey1Color,
+  ),
+  borderRadius: BorderRadius.circular(8),
+);
+final OutlineInputBorder kEnabledInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: kGrey3Color),
+  borderRadius: BorderRadius.circular(8),
+);
+final OutlineInputBorder kDisabledInputBorder = OutlineInputBorder(
+  borderSide: BorderSide(color: kGrey4Color),
+  borderRadius: BorderRadius.circular(8),
+);
+
 enum SnackbarType { success, error }
 
 void showSnackBar(
@@ -70,69 +89,67 @@ void showAppBottomSheet(
   Widget body,
 ) {
   showModalBottomSheet(
+    isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8), topRight: Radius.circular(8)),
     ),
     clipBehavior: Clip.antiAliasWithSaveLayer,
-    isScrollControlled: true,
     builder: (BuildContext context) {
-      return body;
+      return Container(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: body,
+      );
     },
   );
 }
 
 List<Map<String, dynamic>> menuItems = [
   {
-    "activeIcon": Image.asset(
-      AppIcons.home,
-      width: 24,
-      height: 24,
+    "activeIcon": Icon(
+      Icons.home,
       color: kPrimaryColor,
     ),
-    "icon": Image.asset(
-      AppIcons.home,
-      width: 24,
-      height: 24,
+    // Image.asset(
+    //   AppIcons.home,
+    //   width: 24,
+    //   height: 24,
+    //   color: kPrimaryColor,
+    // ),
+    "icon": Icon(
+      Icons.home_outlined,
     ),
-    "label": 'Esasy sahypa'
+    "label": 'Bas sahypa'
   },
   {
-    "activeIcon": AppIcons.svgAsset(
-      AppIcons.category,
+    "activeIcon": Icon(
+      Icons.category,
       color: kPrimaryColor,
     ),
-    "icon": AppIcons.svgAsset(
-      AppIcons.category,
+    "icon": Icon(
+      Icons.category_outlined,
     ),
     "label": 'Kategoriýalar'
   },
   {
-    "activeIcon": Image.asset(
-      AppIcons.bag,
-      width: 24,
-      height: 24,
+    "activeIcon": Icon(
+      Icons.shopping_bag,
       color: kPrimaryColor,
     ),
-    "icon": Image.asset(
-      AppIcons.bag,
-      width: 24,
-      height: 24,
+    "icon": Icon(
+      Icons.shopping_bag_outlined,
     ),
     "label": 'Sebet'
   },
   {
-    "activeIcon": Image.asset(
-      AppIcons.profile,
-      width: 24,
-      height: 24,
+    "activeIcon": Icon(
+      Icons.person,
       color: kPrimaryColor,
     ),
-    "icon": Image.asset(
-      AppIcons.profile,
-      width: 24,
-      height: 24,
+    "icon": Icon(
+      Icons.person_outlined,
     ),
     "label": 'Profil'
   },

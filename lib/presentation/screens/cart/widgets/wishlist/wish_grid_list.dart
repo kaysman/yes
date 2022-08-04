@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/category/category.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/whish_bottom_sheet.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/wish_list_category.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/bloc/wishList.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/wish_list_category.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import '../../shopping_bag_screen.dart';
+import '../../cart_screen.dart';
 import '../my_container.dart';
+import 'whish_bottom_sheet.dart';
 
 class WishGridList extends StatefulWidget {
   static const routeName = "wish-list";

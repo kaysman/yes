@@ -8,8 +8,7 @@ class ProductsGridItem extends StatefulWidget {
   final ProductEntity? item;
   final Color? bgColor;
   final String? gadgetImage;
-  const ProductsGridItem(
-      {Key? key,  this.item, this.bgColor, this.gadgetImage})
+  const ProductsGridItem({Key? key, this.item, this.bgColor, this.gadgetImage})
       : super(key: key);
 
   @override
@@ -37,12 +36,19 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
               flex: 12,
               child: Stack(
                 children: [
-                  buildProductImage(context, widget.gadgetImage),
+                  Container(
+                    color: widget.bgColor,
+                    child: buildProductImage(
+                      context,
+                      widget.gadgetImage ??
+                          item?.images?.first.getFullPathImage,
+                    ),
+                  ),
                 ],
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 6,
               child: Container(
                 padding: const EdgeInsets.only(
                   top: 5,
@@ -104,7 +110,6 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                       TextSpan(
                         text: "${item?.ourPrice ?? '-'} TMT",
                         style: Theme.of(context).textTheme.bodyText1?.copyWith(
-                              fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
                       ),
@@ -162,20 +167,20 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
       // width: MediaQuery.of(context).size.width / 2,
       height: double.infinity,
       width: double.infinity,
-      color: widget.bgColor,
+      color: widget.bgColor ?? kGrey5Color,
       child: image != null
           ? Image.network(
               cacheHeight: MediaQuery.of(context).size.width.toInt(),
               image,
               fit: BoxFit.cover,
             )
-          : Text('Comes null'),
+          : SizedBox(),
     );
   }
 
   void _navigaTo(context) {
     Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: {
-      // "product": widget.product,
+      "product": widget.item,
     });
   }
 }

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/main.dart';
 import 'package:yes/presentation/blocs/auth_bloc.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/category/category.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
-import 'package:yes/presentation/screens/shopping_bag/shopping_bag.bloc.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/storage.dart';
 
+import '../../presentation/screens/cart/order/order.bloc.dart';
+import '../../presentation/screens/cart/widgets/wishlist/bloc/wishList.bloc.dart';
 import '../../presentation/screens/profile/login/login.bloc.dart';
 import '../models/client/client.model.dart';
 
@@ -23,7 +24,7 @@ class AppService {
     // register all blocs here...
     AuthBloc authBloc = AuthBloc();
     LoginBloc loginBloc = LoginBloc(authBloc);
-    ShoppingBagBloc cartBloc = ShoppingBagBloc();
+    CartBloc cartBloc = CartBloc();
 
     var storage = (await LocalStorage.instance);
     if (storage.getToken != null && storage.getClient != null) {
@@ -40,8 +41,9 @@ class AppService {
           BlocProvider<LoginBloc>(create: (_) => loginBloc),
           BlocProvider<HomeBloc>(create: (_) => HomeBloc()),
           BlocProvider<CategoryCubit>(create: (_) => CategoryCubit()),
-          BlocProvider<ShoppingBagBloc>(create: (_) => cartBloc),
+          BlocProvider<CartBloc>(create: (_) => cartBloc),
           BlocProvider<WishListBloc>(create: (_) => WishListBloc(cartBloc)),
+          BlocProvider<OrderBloc>(create: (_) => OrderBloc()),
         ],
         child: YesApp(),
       ),

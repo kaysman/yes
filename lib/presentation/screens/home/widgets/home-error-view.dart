@@ -66,9 +66,9 @@ class HomeErrorView extends StatelessWidget {
               forceElevated: true,
               centerTitle: false,
               title: Container(
-                color: kBlack,
+                // color: kBlack,
                 child: VipCategories(
-                  isLoading: false,
+                  isLoading: true,
                   gadget: GadgetEntity(
                     type: GadgetType.CIRCLE_ITEMS,
                   ),

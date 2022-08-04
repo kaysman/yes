@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
-import 'package:yes/presentation/screens/shopping_bag/widgets/wishlist/bloc/wishList.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'wish_grid_list.dart';
 import 'wish_list_category.dart';

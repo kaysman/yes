@@ -28,14 +28,15 @@ class UserAdress extends StatelessWidget {
               children: [
                 Text.rich(
                   TextSpan(
-                      text: 'Deliver to: ',
+                      text: 'Dostawka: ',
                       style: TextStyle(
                         color: kText1Color,
                         fontSize: 12,
                       ),
                       children: [
                         TextSpan(
-                          text: '${user?.name}, ${user?.phone}',
+                          text:
+                              '${user?.name ?? ' -'} ,  ${user?.phone ?? '-'}',
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                           ),
@@ -46,7 +47,7 @@ class UserAdress extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  '${user?.address}',
+                  '${user?.address ?? '-'}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -57,12 +58,13 @@ class UserAdress extends StatelessWidget {
               ],
             ),
           ),
+          //TODO: update adress or order?
           Expanded(
             flex: 2,
             child: TextButton(
               onPressed: () {},
               child: Text(
-                'CHANGE',
+                'ÜÝTGET',
                 style: TextStyle(
                   color: kPrimaryColor,
                   fontWeight: FontWeight.w500,

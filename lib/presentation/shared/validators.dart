@@ -5,6 +5,7 @@ String? phoneValidator(String? value) {
   } else
     return null;
 }
+
 String? keyWordValidator(String? value) {
   if (value == null || value.isEmpty) {
     return "Achar sozuni girizin!";
@@ -18,6 +19,14 @@ String? emailValidator(String? value) {
     return 'Fill empty input..';
   } else if (!emailRegExp.hasMatch(value)) {
     return 'PLease enter valid email';
+  }
+  return null;
+}
+
+String? emtyField(String? value) {
+  dynamic trimmedVal = value?.trim();
+  if (trimmedVal!.isEmpty) {
+    return 'Bos bolmay dal';
   }
   return null;
 }

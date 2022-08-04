@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../../presentation/shared/helpers.dart';
 part 'image.model.g.dart';
 
 @JsonSerializable()
@@ -17,7 +19,8 @@ class ImageEntity {
     this.updatedAt,
   });
 
-  // String? get getFullPathImage => image == null ? null : baseUrl + '/' + image!;
+  String? get getFullPathImage =>
+      image == null ? null : Apis.kBaseUrl + '/' + image!;
 
   factory ImageEntity.fromJson(Map<String, dynamic> json) =>
       _$ImageEntityFromJson(json);

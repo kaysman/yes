@@ -143,7 +143,7 @@ class GadgetProductListView extends StatelessWidget {
       color: kWhite,
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-      height: 300,
+      height: 320,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -303,7 +303,9 @@ class GadgetOneImageView extends StatelessWidget {
                           onTap: () {
                             print('Men');
                             Navigator.pushNamed(
-                                context, ProductsScreen.routeName);
+                              context,
+                              ProductsScreen.routeName,
+                            );
                           },
                         ),
                       ),

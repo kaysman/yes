@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
-import '../shopping_bag_screen.dart';
+import '../cart_screen.dart';
 import 'my_container.dart';
 
 class ApplyCupon extends StatelessWidget {
