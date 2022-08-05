@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/cart/cart.model.dart';
 import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
@@ -20,6 +21,17 @@ class ProductDetailBottomNavBar extends StatefulWidget {
 }
 
 class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
+  late CartBloc cartBloc;
+
+  SizeEntity? selectedSize;
+  int time = 0;
+
+  @override
+  void initState() {
+    cartBloc = BlocProvider.of<CartBloc>(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -43,78 +55,49 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
               ),
             ),
           ),
-          //   Container(
-          //     decoration: BoxDecoration(
-          //         border: Border.all(width: 1.2, color: Colors.grey[200]!),
-          //         borderRadius: BorderRadius.circular(3)),
-          //     child: BlocBuilder<WishListBloc, WishListState>(
-          //         builder: (context, state) {
-          //       return TextButton.icon(
-          //         onPressed: () {
-          //           // context.read<WishListBloc>().addToWishList(product);
-          //         },
-          //         icon: Icon(
-          //           // state.wishListItems.contains(state.toWishListItem(product))
-          //           // ? Icons.favorite
-          //           Icons.favorite_border_outlined,
-          //           size: 18,
-          //           color:
-          //               // state.wishListItems
-          //               // .contains(state.toWishListItem(product))
-          //               // ? kPrimaryColor
-          //               kText1Color,
-          //         ),
-          //         label: Text(
-          //           'WISHLIST',
-          //           style: TextStyle(color: kText1Color, fontSize: 13),
-          //         ),
-          //       );
-          //     }),
-          //   ),
-          // ),
           SizedBox(
             width: 6,
           ),
           Expanded(
-              flex: 5,
-              child: BlocConsumer<CartBloc, CartState>(
-                listenWhen: (p, c) => p.cartItems != c.cartItems,
-                listener: (context, state) {},
-                builder: (context, state) {
-                  var hasItem = state.cartItems
-                      .contains(state.toCartItem(widget.product));
-
-                  return Button(
-                    text: hasItem
-                        ? 'Sebede git'.toUpperCase()
-                        : 'Sebede gos'.toUpperCase(),
-                    icon: Icon(
-                      Icons.shopping_bag_outlined,
-                      color: kWhite,
-                    ),
-                    hasBorder: true,
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    borderColor: kGrey5Color,
-                    primary: kPrimaryColor,
-                    textColor: kWhite,
-                    onPressed: () {
-                      if (state.selectedSize == null && !hasItem) {
-                        showAppBottomSheet(
-                          context,
-                          SizeSelectSheet(
-                            sizes: widget.product.sizes ?? [],
-                          ),
-                        );
-                      }
-                      if (hasItem) {
-                        Navigator.pushNamed(context, CartScreen.routeName);
-                      } else {
-                        context.read<CartBloc>().addToCart(widget.product);
-                      }
-                    },
-                  );
-                },
-              )),
+            flex: 5,
+            child: BlocConsumer<CartBloc, CartState>(
+              // listenWhen: (p, c) => p.cartItems != c.cartItems,
+              listener: (context, state) {},
+              builder: (context, state) {
+                var hasItem = cartBloc.checkIfHasItem(widget.product);
+                var item = state.toCartItem(widget.product);
+                print(hasItem);
+                return Button(
+                  text: state.cartItems.contains(item)
+                      ? 'Sebede git'.toUpperCase()
+                      : 'Sebede gos'.toUpperCase(),
+                  icon: Icon(
+                    Icons.shopping_bag_outlined,
+                    color: kWhite,
+                  ),
+                  hasBorder: true,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  borderColor: kGrey5Color,
+                  primary: kPrimaryColor,
+                  textColor: kWhite,
+                  onPressed: () async {
+                    if (!state.cartItems.contains(item)) {
+                      await showAppBottomSheet(
+                        context,
+                        SizeSelectSheet(
+                          hasItem: hasItem != null && hasItem,
+                          sizes: widget.product.sizes,
+                          item: item,
+                        ),
+                      );
+                    } else if (state.cartItems.contains(item)) {
+                      Navigator.pushNamed(context, CartScreen.routeName);
+                    }
+                  },
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
@@ -122,11 +105,14 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
 }
 
 class SizeSelectSheet extends StatefulWidget {
-  final List<SizeEntity> sizes;
-
+  final List<SizeEntity>? sizes;
+  final bool hasItem;
+  final CartItem item;
   SizeSelectSheet({
     Key? key,
     required this.sizes,
+    required this.hasItem,
+    required this.item,
   }) : super(key: key);
 
   @override
@@ -137,7 +123,6 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
   late CartBloc cartBloc;
 
   SizeEntity? selectedSize;
-
   @override
   void initState() {
     cartBloc = BlocProvider.of<CartBloc>(context);
@@ -148,79 +133,77 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 15,
-        horizontal: 20,
-      ),
-      decoration: BoxDecoration(
-        color: kWhite,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Olcegi:',
-            style: Theme.of(context).textTheme.bodyText2,
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 20,
           ),
-          buildSizesBox(context),
-          SizedBox(
-            height: 14,
+          decoration: BoxDecoration(
+            color: kWhite,
           ),
-          BlocConsumer<CartBloc, CartState>(
-            listenWhen: (p, c) => p.selectedSize != c.selectedSize,
-            listener: (context, state) {
-              if (state.selectedSize != null) {
-                Navigator.of(context).pop();
-              }
-            },
-            builder: (context, state) {
-              return Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Olcegi:',
+                style: Theme.of(context).textTheme.bodyText2,
+              ),
+              buildSizesBox(context, state),
+              SizedBox(
+                height: 14,
+              ),
+              Container(
                 width: double.infinity,
                 child: Button(
                   textColor: kWhite,
                   primary: kPrimaryColor,
                   onPressed: () => {
-                    if (selectedSize != null)
-                      {cartBloc.toSetSize(selectedSize!)},
-                    setState(() {
-                      isSelectedSize = selectedSize == state.selectedSize;
-                    })
+                    widget.item.selectedSize = selectedSize,
+                    context.read<CartBloc>().addToCart(widget.item),
+                    if (state.cartItems.contains(widget.item))
+                      {
+                        Navigator.of(context).pop(),
+                      }
                   },
                   text: 'Yatda sakla',
                 ),
-              );
-            },
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  buildSizesBox(BuildContext context) {
+  buildSizesBox(BuildContext context, CartState state) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * .1,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: widget.sizes
-            .map(
-              (e) => Container(
-                margin: const EdgeInsets.only(
-                  right: 10,
-                ),
-                child: SizeBox(
-                  isSelected: isSelectedSize,
-                  onSelect: (v) {
-                    setState(() {
-                      selectedSize = v;
-                    });
-                  },
-                  size: e,
-                ),
+        children: List.generate(
+          widget.sizes?.length ?? 0,
+          (index) {
+            var size = widget.sizes?[index];
+            return Container(
+              margin: const EdgeInsets.only(
+                right: 10,
               ),
-            )
-            .toList(),
+              child: SizeBox(
+                isSelected: size == selectedSize,
+                onSelect: (v) {
+                  setState(() {
+                    selectedSize = v;
+                  });
+                },
+                size: size!,
+              ),
+            );
+          },
+        ),
       ),
     );
   }

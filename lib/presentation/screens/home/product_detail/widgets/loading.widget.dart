@@ -52,7 +52,7 @@ class ProductDetailScreenLoading extends StatelessWidget {
           children: [
             if (product.images != null)
               CaruselProductImages(
-                onPageCahnge: (v) {},
+                // onPageCahnge: (v) {},
                 images: product.images,
               ),
             if (product.images != null)

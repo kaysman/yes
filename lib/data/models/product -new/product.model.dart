@@ -55,4 +55,7 @@ class ProductEntity {
       _$ProductEntityFromJson(json);
 
   Map<String, dynamic> toJson() => _$ProductEntityToJson(this);
+
+  @override
+  String toString() => '${name_tm} size:${sizes}';
 }

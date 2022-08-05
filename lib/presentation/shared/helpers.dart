@@ -11,7 +11,7 @@ Map<String, String> header() {
 }
 
 class Apis {
-  static const kBaseUrl = 'http://localhost:3333';
+  static const kBaseUrl = 'http://192.168.1.4:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -84,11 +84,11 @@ void showSnackBar(
   );
 }
 
-void showAppBottomSheet(
+Future<void> showAppBottomSheet(
   BuildContext context,
   Widget body,
-) {
-  showModalBottomSheet(
+) async {
+  await showModalBottomSheet(
     isScrollControlled: true,
     context: context,
     shape: RoundedRectangleBorder(

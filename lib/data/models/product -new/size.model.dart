@@ -29,4 +29,7 @@ class SizeEntity with EquatableMixin {
 
   @override
   List<Object?> get props => [this.id];
+
+  @override
+  String toString() => '${name_tm} X ${quantity}';
 }

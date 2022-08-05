@@ -5,9 +5,9 @@ import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
 
 class CartState {
-  // List<CartItem>? selectedProducts = [];
   List<CartItem> cartItems = [];
-  SizeEntity? selectedSize;
+  // SizeEntity? selectedSize;
+  CartItem? selectedCartItem;
   bool isPriceUpdated;
   bool isAdded;
 
@@ -18,20 +18,17 @@ class CartState {
         sum += element.ourPrice ?? 0;
       },
     );
-    // selectedProducts?.forEach((e) {
-    //   sum += e.totalPrice ?? e.price;
-    // });
     return sum;
   }
 
   CartItem toCartItem(ProductEntity product) {
     CartItem cartItem = CartItem(
+      selectedSizes: [],
       id: product.id,
       code: product.code,
       description_ru: product.description_ru,
       description_tm: product.description_tm,
       image: product.images?.first.getFullPathImage,
-      // isSelected: product.isSelected,
       name_ru: product.name_ru,
       sizes: product.sizes,
       name_tm: product.name_tm,
@@ -43,6 +40,7 @@ class CartState {
 
   CartItem toCartItemFromWishList(WishListItem product) {
     CartItem cartItem = CartItem(
+      selectedSizes: [],
       id: product.id,
       code: product.code,
       description_ru: product.description_ru,
@@ -61,66 +59,98 @@ class CartState {
     return cartItems.length;
   }
 
-  // int get productsSelectedCount {
-  //   return selectedProducts?.length ?? 0;
-  // }
-
   CartState({
     this.isAdded = false,
     required this.cartItems,
-    this.selectedSize,
+    // this.selectedSize,
     this.isPriceUpdated = false,
-    // required this.selectedProducts,
+    this.selectedCartItem,
   });
 
   CartState copyWith({
     List<CartItem>? cartItems,
-    SizeEntity? selectedSize,
+    // SizeEntity? selectedSize,
     List<CartItem>? selectedProducts,
+    CartItem? selectedCartItem,
     bool? isPriceUpdated,
     bool? isAdded,
   }) {
     return CartState(
       isAdded: isAdded ?? this.isAdded,
-      selectedSize: selectedSize ?? this.selectedSize,
+      selectedCartItem: selectedCartItem ?? this.selectedCartItem,
+      // selectedSize: selectedSize ?? this.selectedSize,
       cartItems: cartItems ?? this.cartItems,
       isPriceUpdated: isPriceUpdated ?? this.isPriceUpdated,
-      // selectedProducts: selectedProducts ?? this.selectedProducts,
     );
   }
 }
 
 class CartBloc extends Cubit<CartState> {
-  CartBloc()
-      : super(
-          CartState(
-            // selectedProducts: [],
-            cartItems: [],
-          ),
-        );
+  CartBloc() : super(CartState(cartItems: []));
 
-  toSetSize(SizeEntity size) {
-    emit(state.copyWith(selectedSize: size));
+  // toSetSize(SizeEntity size) {
+  //   print('---in bloc----');
+  //   state.selectedCartItem?.selectedSize = size;
+  //   state.selectedCartItem?.selectedSizes.add(size);
+
+  //   emit(
+  //     state.copyWith(
+  //       selectedCartItem: state.selectedCartItem,
+  //     ),
+  //   );
+  // }
+
+  bool? checkIfHasItem(ProductEntity product) {
+    var item = state.toCartItem(product);
+    if (state.cartItems.contains(item)) return true;
+
+    return null;
   }
 
-  addToCart(ProductEntity product) {
-    var item = state.toCartItem(product);
-    item.selectedSize = state.selectedSize;
+  // addToCart(ProductEntity product) {
+  //   var item = state.toCartItem(product);
+  //   // item.selectedSize = state.selectedSize;
 
-    var l = state.cartItems;
-    if (l.contains(item)) {
-      var existItem = l.firstWhere((element) => element.id == item.id);
+  //   if (state.cartItems.contains(item)) {
+  //     var existItem =
+  //         state.cartItems.firstWhere((element) => element.id == item.id);
+  //     var val = existItem.defQuantity++;
+  //     existItem.totalPrice = existItem.totalPrice == null
+  //         ? existItem.price * val
+  //         : existItem.totalPrice! * val;
+  //   } else {
+  //     state.cartItems.add(item);
+  //   }
+
+  //   // state.selectedSize = null;
+
+  //   emit(
+  //     state.copyWith(
+  //       cartItems: state.cartItems,
+  //       // selectedSize: state.selectedSize,
+  //     ),
+  //   );
+  // }
+  addToCart(CartItem item) {
+    // state.selectedCartItem?.selectedSize = item.selectedSize;
+    // if (item.selectedSize != null) {
+    //   state.selectedCartItem?.selectedSizes.add(item.selectedSize!);
+    // }
+
+    if (state.cartItems.contains(item)) {
+      var existItem =
+          state.cartItems.firstWhere((element) => element.id == item.id);
       var val = existItem.defQuantity++;
       existItem.totalPrice = existItem.totalPrice == null
           ? existItem.price * val
           : existItem.totalPrice! * val;
     } else {
-      l.add(item);
+      state.cartItems.add(item);
     }
     emit(
       state.copyWith(
-        cartItems: l,
-        selectedSize: null,
+        // selectedCartItem: item,
+        cartItems: state.cartItems,
       ),
     );
   }
@@ -129,12 +159,10 @@ class CartBloc extends Cubit<CartState> {
     emit(state.copyWith(isAdded: false));
     if (!state.cartItems.contains(item)) {
       state.cartItems.add(item);
-      // state.selectedProducts?.add(item);
     }
     emit(
       state.copyWith(
         cartItems: state.cartItems,
-        // selectedProducts: state.selectedProducts,
         isAdded: true,
       ),
     );

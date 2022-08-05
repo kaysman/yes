@@ -1,7 +1,5 @@
-import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/cart/cart.model.dart';
 import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-list.dart';
@@ -48,7 +46,7 @@ class _ProductDetailListState extends State<ProductDetailList> {
               price: item.price,
               quantityVal: item.defQuantity,
               onDelete: () {
-                // context.read<ShoppingBagBloc>().remove(products[index]);
+                context.read<CartBloc>().remove(products[index]);
               },
               onTap: (v) {
                 // context
@@ -382,9 +380,7 @@ class _ProductDetail extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              size != null
-                  ? 'Olcegi: ${sizes.first.name_tm}'
-                  : 'Sany: ${count}',
+              size != null ? 'Olcegi: ${size.name_tm}' : 'Sany: ${count}',
               style: TextStyleUtils().boldText,
             ),
             Icon(

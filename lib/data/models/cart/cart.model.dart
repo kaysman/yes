@@ -16,6 +16,7 @@ class CartItem with EquatableMixin {
   List<ImageEntity>? images;
   List<SizeEntity>? sizes;
   SizeEntity? selectedSize;
+  List<SizeEntity> selectedSizes;
   String? image;
   int price;
   int? totalPrice;
@@ -40,11 +41,12 @@ class CartItem with EquatableMixin {
     this.defQuantity = 1,
     required this.price,
     this.selectedSize,
+    required this.selectedSizes,
   });
 
   @override
-  String toString() => this.name_tm ?? '';
+  String toString() => '${this.name_tm}  size: ${selectedSize}';
 
   @override
-  List<Object?> get props => [selectedSize?.id, id];
+  List<Object?> get props => [id];
 }

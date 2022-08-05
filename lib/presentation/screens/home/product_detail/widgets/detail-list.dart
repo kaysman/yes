@@ -84,6 +84,9 @@ class SizeBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('---is selected---');
+    print(size);
+    print('---is selected---');
     return InkWell(
       onTap: () => onSelect.call(size),
       child: Container(
@@ -95,8 +98,8 @@ class SizeBox extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected ? kPrimaryColor : null,
           border: Border.all(
-            width: isSelected ? 3 : 1,
-            color: isSelected ? kWhite : kText1Color,
+            width: 1,
+            color: kText1Color,
           ),
           shape: BoxShape.circle,
         ),

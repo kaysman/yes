@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/data/service/products_service.dart';
 import 'package:yes/presentation/screens/home/products/widgets/product_bottom_nav.dart';
@@ -29,25 +28,9 @@ class ProductsScreen extends StatefulWidget {
 class _ProductsScreenState extends State<ProductsScreen> {
   final ScrollController _scrollController = ScrollController();
 
-  RefreshController refreshController = RefreshController();
   // late Future<Products> fetchProducts;
   late Future<List<ProductEntity>> fetchProducts;
 
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: false);
-
-  void _onRefresh() async {
-    fetchProducts = ProductsService.getProducts();
-    _refreshController.refreshCompleted();
-  }
-
-  void _onLoading() async {
-    var hasData = await fetchProducts.then((v) => v.isNotEmpty);
-    if (mounted) setState(() {});
-    if (hasData) {
-      _refreshController.loadComplete();
-    }
-  }
   // Filters? filters;
 
   @override
@@ -84,14 +67,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
             return AppLoadingBar();
           } else if (snapshot.connectionState == ConnectionState.done &&
               snapshot.hasData) {
-            return SmartRefresher(
-              controller: refreshController,
-              onRefresh: _onRefresh,
-              onLoading: _onLoading,
-              child: ProductsGridList(
-                scrollController: _scrollController,
-                products: snapshot.data ?? [],
-              ),
+            return ProductsGridList(
+              scrollController: _scrollController,
+              products: snapshot.data ?? [],
             );
           } else {
             return Center(
