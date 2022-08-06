@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/cart/cart.model.dart';
 import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-list.dart';
@@ -26,20 +27,14 @@ class _ProductDetailListState extends State<ProductDetailList> {
           children: List.generate(products.length, (index) {
             var item = products[index];
             return _ProductDetail(
+              onTap: (v) {},
+              sizes: [],
               selectedSize: item.selectedSize,
-              sizes: item.sizes ?? [],
               onChangeSizeAndCount: () {
                 showAppBottomSheet(
                   context,
                   CartModalSheet(
-                    sizes: item.sizes ?? [],
-                    onDone: (v) {
-                      // setState(
-                      //   () {
-                      //     // counter = v;
-                      //   },
-                      // );
-                    },
+                    item: item,
                   ),
                 );
               },
@@ -47,11 +42,6 @@ class _ProductDetailListState extends State<ProductDetailList> {
               quantityVal: item.defQuantity,
               onDelete: () {
                 context.read<CartBloc>().remove(products[index]);
-              },
-              onTap: (v) {
-                // context
-                // .read<ShoppingBagBloc>()
-                // .selectProduct(products[index], v);
               },
               productName: item.name_tm ?? '',
               productCode: item.description_tm ?? '',
@@ -66,15 +56,11 @@ class _ProductDetailListState extends State<ProductDetailList> {
 }
 
 class CartModalSheet extends StatefulWidget {
-  // int quantity;
-  final ValueSetter<int> onDone;
-  final List<SizeEntity> sizes;
+  final CartItem item;
+
   CartModalSheet({
     Key? key,
-    required this.onDone,
-    required this.sizes,
-    // required this.quantity,
-    // required this.onDone,
+    required this.item,
   }) : super(key: key);
 
   @override
@@ -83,84 +69,108 @@ class CartModalSheet extends StatefulWidget {
 
 class _CartModalSheetState extends State<CartModalSheet> {
   int counter = 0;
-  bool isSelected = false;
+  late CartBloc cartBloc;
+  SizeEntity? selectedSize;
   @override
   void initState() {
     super.initState();
+
+    cartBloc = BlocProvider.of<CartBloc>(context);
+    counter = widget.item.defQuantity;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 15,
-        horizontal: 20,
-      ),
-      decoration: BoxDecoration(
-        color: kWhite,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            'Olcegi:',
-            style: Theme.of(context).textTheme.bodyText2,
+    return BlocConsumer<CartBloc, CartState>(
+      listener: (context, state) {},
+      builder: (context, state) {
+        var hasSizes = cartBloc.checkIfHasItemsSizes(cartItem: widget.item);
+
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            vertical: 15,
+            horizontal: 20,
           ),
-          buildSizesBox(),
-          Text(
-            'Sany:',
-            style: Theme.of(context).textTheme.bodyText2,
+          decoration: BoxDecoration(
+            color: kWhite,
           ),
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              buildCounterBtn('+', true, context),
-              SizedBox(
-                width: 20,
+              Text(
+                'Olcegi:',
+                style: Theme.of(context).textTheme.bodyText2,
               ),
-              Text('${counter}'),
-              SizedBox(
-                width: 20,
+              buildSizesBox(hasSizes),
+              Text(
+                'Sany:',
+                style: Theme.of(context).textTheme.bodyText2,
               ),
-              buildCounterBtn('-', false, context),
+              Row(
+                children: [
+                  buildCounterBtn('+', true, context),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Text('${counter}'),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  buildCounterBtn('-', false, context),
+                ],
+              ),
+              SizedBox(
+                height: 14,
+              ),
+              Container(
+                width: double.infinity,
+                child: Button(
+                  textColor: kWhite,
+                  primary: kPrimaryColor,
+                  onPressed: () => {
+                    cartBloc.updateItemCountAndSize(
+                      widget.item,
+                      widget.item.price == counter ? null : counter,
+                      widget.item.selectedSize == selectedSize
+                          ? null
+                          : selectedSize,
+                    ),
+                    Navigator.of(context).pop(),
+                  },
+                  text: 'Yatda sakla',
+                ),
+              ),
             ],
           ),
-          SizedBox(
-            height: 14,
-          ),
-          Container(
-            width: double.infinity,
-            child: Button(
-              textColor: kWhite,
-              primary: kPrimaryColor,
-              onPressed: () => widget.onDone.call(counter),
-              text: 'Yatda sakla',
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
-  buildSizesBox() {
+  buildSizesBox(List<SizeEntity>? hasSizes) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * .1,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: widget.sizes
-            .map(
-              (e) => Container(
-                margin: const EdgeInsets.only(
-                  right: 10,
-                ),
-                child: SizeBox(
-                  isSelected: false,
-                  onSelect: (v) {},
-                  size: e,
-                ),
-              ),
-            )
-            .toList(),
+        children: List.generate(widget.item.sizes?.length ?? 0, (index) {
+          var size = widget.item.sizes?[index];
+          return Container(
+            margin: const EdgeInsets.only(
+              right: 10,
+            ),
+            child: SizeBox(
+              isSelected:
+                  size == selectedSize || hasSizes?.contains(size) == true,
+              onSelect: (v) {
+                setState(() {
+                  selectedSize = v;
+                });
+              },
+              size: size!,
+            ),
+          );
+        }),
       ),
     );
   }
@@ -301,7 +311,7 @@ class _ProductDetail extends StatelessWidget {
                       // ProductDiscountPrice(),
                       Text.rich(
                         TextSpan(
-                          text: '$price',
+                          text: '$price TMT',
                           style: TextStyle(
                             color: kText1Color,
                             fontSize: 12,
@@ -344,15 +354,15 @@ class _ProductDetail extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          top: 15,
-          left: 15,
-          child: CustomCheckBox(
-            isChecked: isSelected ?? false,
-            onTapped: onTap,
-            color: Colors.grey[200],
-          ),
-        ),
+        // Positioned(
+        //   top: 15,
+        //   left: 15,
+        //   child: CustomCheckBox(
+        //     isChecked: isSelected ?? false,
+        //     onTapped: onTap,
+        //     color: Colors.grey[200],
+        //   ),
+        // ),
         Positioned(
           top: 0,
           right: 0,

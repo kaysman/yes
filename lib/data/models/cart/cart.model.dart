@@ -48,5 +48,5 @@ class CartItem with EquatableMixin {
   String toString() => '${this.name_tm}  size: ${selectedSize}';
 
   @override
-  List<Object?> get props => [id];
+  List<Object?> get props => [selectedSizes, id];
 }

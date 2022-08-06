@@ -11,6 +11,8 @@ void main() {
   AppService.instance.startApp();
 }
 
+// TODO: extended_image: ^6.2.1 use this for cahce image...
+
 class YesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

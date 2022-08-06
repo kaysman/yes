@@ -3,22 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import '../cart_screen.dart';
-import 'custom_check_box.dart';
 
-class ItemSelectBar extends StatefulWidget {
+class ItemSelectBar extends StatelessWidget {
   const ItemSelectBar({
     Key? key,
   }) : super(key: key);
-
-  @override
-  State<ItemSelectBar> createState() => _ItemSelectBarState();
-}
-
-class _ItemSelectBarState extends State<ItemSelectBar> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,14 +23,7 @@ class _ItemSelectBarState extends State<ItemSelectBar> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CustomCheckBox(
-                      isChecked: state.cartItems.length > 0,
-                      onTapped: (v) {
-                        // context
-                        //     .read<ShoppingBagBloc>()
-                        //     .selectOrUnSelectAllproducts(v);
-                      },
-                    ),
+                    Icon(Icons.shopping_cart_outlined),
                     SizedBox(
                       width: 10,
                     ),

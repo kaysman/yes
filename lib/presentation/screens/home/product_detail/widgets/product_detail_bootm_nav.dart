@@ -24,7 +24,6 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
   late CartBloc cartBloc;
 
   SizeEntity? selectedSize;
-  int time = 0;
 
   @override
   void initState() {
@@ -61,14 +60,17 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
           Expanded(
             flex: 5,
             child: BlocConsumer<CartBloc, CartState>(
-              // listenWhen: (p, c) => p.cartItems != c.cartItems,
+              listenWhen: (p, c) =>
+                  p.cartItems != c.cartItems ||
+                  p.addToCartTime != c.addToCartTime,
               listener: (context, state) {},
               builder: (context, state) {
-                var hasItem = cartBloc.checkIfHasItem(widget.product);
+                var hasItem = cartBloc.checkIfHasItem(product: widget.product);
+                var hasSizes =
+                    cartBloc.checkIfHasItemsSizes(product: widget.product);
                 var item = state.toCartItem(widget.product);
-                print(hasItem);
                 return Button(
-                  text: state.cartItems.contains(item)
+                  text: hasItem == true
                       ? 'Sebede git'.toUpperCase()
                       : 'Sebede gos'.toUpperCase(),
                   icon: Icon(
@@ -81,16 +83,20 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
                   primary: kPrimaryColor,
                   textColor: kWhite,
                   onPressed: () async {
-                    if (!state.cartItems.contains(item)) {
+                    context.read<CartBloc>().addToCartTime();
+                    if (hasItem == false ||
+                        (hasSizes?.length ?? 0) < (item.sizes?.length ?? 0) &&
+                            state.addToCartTime.isOdd) {
                       await showAppBottomSheet(
                         context,
                         SizeSelectSheet(
-                          hasItem: hasItem != null && hasItem,
+                          hasSizes: hasSizes,
                           sizes: widget.product.sizes,
                           item: item,
                         ),
                       );
-                    } else if (state.cartItems.contains(item)) {
+                    } else if (hasItem == true && state.addToCartTime.isEven ||
+                        (hasSizes?.length ?? 0) == (item.sizes?.length ?? 0)) {
                       Navigator.pushNamed(context, CartScreen.routeName);
                     }
                   },
@@ -106,13 +112,13 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
 
 class SizeSelectSheet extends StatefulWidget {
   final List<SizeEntity>? sizes;
-  final bool hasItem;
+  final List<SizeEntity>? hasSizes;
   final CartItem item;
   SizeSelectSheet({
     Key? key,
     required this.sizes,
-    required this.hasItem,
     required this.item,
+    this.hasSizes,
   }) : super(key: key);
 
   @override
@@ -134,6 +140,7 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CartBloc, CartState>(
+      // listenWhen: (p, c) =>,
       listener: (context, state) {},
       builder: (context, state) {
         return Container(
@@ -162,8 +169,12 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
                   textColor: kWhite,
                   primary: kPrimaryColor,
                   onPressed: () => {
-                    widget.item.selectedSize = selectedSize,
-                    context.read<CartBloc>().addToCart(widget.item),
+                    if (selectedSize != null)
+                      {
+                        context
+                            .read<CartBloc>()
+                            .addToCart(widget.item, selectedSize!),
+                      },
                     if (state.cartItems.contains(widget.item))
                       {
                         Navigator.of(context).pop(),
@@ -188,12 +199,16 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
           widget.sizes?.length ?? 0,
           (index) {
             var size = widget.sizes?[index];
+            // var hasSize =
+            //     context.read<CartBloc>().checkIfHasSize(widget.item, size);
+
             return Container(
               margin: const EdgeInsets.only(
                 right: 10,
               ),
               child: SizeBox(
-                isSelected: size == selectedSize,
+                isSelected: size == selectedSize ||
+                    widget.hasSizes?.contains(size) == true,
                 onSelect: (v) {
                   setState(() {
                     selectedSize = v;

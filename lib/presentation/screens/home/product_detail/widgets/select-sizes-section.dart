@@ -22,58 +22,66 @@ class _SelectSizesSectionState extends State<SelectSizesSection> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CartBloc, CartState>(
-      listenWhen: (p, c) => p.selectedCartItem != c.selectedCartItem,
-      listener: (context, state) {},
-      builder: (context, state) {
-        return Container(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          width: double.infinity,
-          color: kWhite,
-          child: Column(
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      width: double.infinity,
+      color: kWhite,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select Size',
-                    style: TextStyle(
-                      color: kText1Color,
-                      fontSize: 13,
-                      fontWeight: FontWeight.bold,
-                    ),
+              Text(
+                'Select Size',
+                style: TextStyle(
+                  color: kText1Color,
+                  fontSize: 13,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              InkWell(
+                onTap: () {},
+                child: Text(
+                  'Size chart',
+                  style: TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
                   ),
-                  InkWell(
-                    onTap: () {},
-                    child: Text(
-                      'Size chart',
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 8,
-              ),
-              // * sizes here...
-              Container(
-                width: double.infinity,
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  children: List.generate(
-                    widget.product.sizes?.length ?? 0,
-                    (index) {
+                ),
+              )
+            ],
+          ),
+          SizedBox(
+            height: 8,
+          ),
+          // * sizes here...
+          Container(
+            width: double.infinity,
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.start,
+              children: List.generate(
+                widget.product.sizes?.length ?? 0,
+                (index) {
+                  return BlocBuilder<CartBloc, CartState>(
+                    builder: (context, state) {
                       var size = widget.product.sizes?[index];
+                      var item = state.toCartItem(widget.product);
+                      var hasSizes = context
+                          .read<CartBloc>()
+                          .checkIfHasItemsSizes(product: widget.product);
+                      // print('-----------SIZE---------');
+                      // print(hasSizes);
+                      // print('-----------SIZE---------');
                       return SizeBox(
-                        isSelected: selectedSize == size,
+                        isSelected: selectedSize == size ||
+                            hasSizes?.contains(size) == true,
                         onSelect: (v) {
-                          var item = state.toCartItem(widget.product);
-                          // item.selectedSize = v;
-                          context.read<CartBloc>().addToCart(item);
+                          context.read<CartBloc>().addToCart(
+                                item,
+                                v,
+                              );
+                          context.read<CartBloc>().addToCartTime(time: 2);
                           setState(() {
                             selectedSize = v;
                           });
@@ -81,13 +89,13 @@ class _SelectSizesSectionState extends State<SelectSizesSection> {
                         size: size!,
                       );
                     },
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
+                  );
+                },
+              ),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

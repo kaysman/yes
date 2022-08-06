@@ -75,11 +75,13 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(
                 height: 8,
               ),
+              // * offers
               Offers(),
-              SizedBox(
-                child: ItemSelectBar(),
-              ),
+              // * choosen item counts..
+              ItemSelectBar(),
+              // * item detail list
               ProductDetailList(),
+              // * Coupons
               SizedBox(
                 child: Padding(
                   padding:
