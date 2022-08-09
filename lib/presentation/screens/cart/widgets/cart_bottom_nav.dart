@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/data/models/order/create-order-item.model.dart';
 import 'package:yes/data/models/order/create-order.model.dart';
+import 'package:yes/presentation/screens/cart/blocs/order.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/user_adress.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/button.dart';
 import 'package:yes/presentation/shared/components/input_fields.dart';
@@ -10,65 +13,94 @@ import 'package:yes/presentation/shared/validators.dart';
 
 import '../cart_screen.dart';
 
-class CartBottomNav extends StatelessWidget {
+class CartBottomNav extends StatefulWidget {
   const CartBottomNav({Key? key}) : super(key: key);
 
   @override
+  State<CartBottomNav> createState() => _CartBottomNavState();
+}
+
+class _CartBottomNavState extends State<CartBottomNav> {
+  late OrderBloc orderBloc;
+
+  @override
+  void initState() {
+    orderBloc = BlocProvider.of<OrderBloc>(context);
+    super.initState();
+  }
+
+  String? note;
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CartBloc, CartState>(
-      listener: (context, state) {},
+    return BlocConsumer<OrderBloc, OrderState>(
+      listenWhen: (p, c) => p.createOrderStatus != c.createOrderStatus,
+      listener: (context, state) {
+        if (state.createOrderStatus == CreateOrderStatus.success) {
+          showSnackBar(
+            context,
+            Text('Sargydynyz ustunlikli yerne yetirildi'),
+            type: SnackbarType.success,
+          );
+          Navigator.of(context).pop();
+        }
+      },
       builder: (context, state) {
         return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           width: double.infinity,
-          height: 80,
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                alignment: Alignment.center,
-                color: Color.fromARGB(255, 255, 234, 240),
-                child: Text(
-                  '1 Item selected for order',
-                  style: TextStyleUtils().smallboldText,
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                child: Button(
-                  text: 'Satyn al',
-                  primary: kPrimaryColor,
-                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                        fontSize: 16,
-                        color: kWhite,
-                      ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                  textColor: kWhite,
-                  onPressed: () {
-                    showAppBottomSheet(
-                      context,
-                      buildOrderSheet(
+          height: 60,
+          child: Container(
+            width: double.infinity,
+            child: Button(
+              text: 'Satyn al',
+              isLoading: state.createOrderStatus == CreateOrderStatus.loading,
+              primary: kPrimaryColor,
+              textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    fontSize: 16,
+                    color: kWhite,
+                  ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              textColor: kWhite,
+              onPressed: () {
+                showAppBottomSheet(
+                  context,
+                  BlocBuilder<CartBloc, CartState>(
+                    builder: (context, cartState) {
+                      return buildOrderSheet(
                         context,
-                        () {
+                        () async {
+                          var orderProducts = cartState.cartItems
+                              .map(
+                                (e) => CreateOrderItem(
+                                  productId: e.id!,
+                                  quantity: e.defQuantity,
+                                  size_id: e.selectedSize!.id!,
+                                ),
+                              )
+                              .toList();
+
                           CreateOrderDTO data = CreateOrderDTO(
-                            products: [
-                              // CreateOrderItem(
-                              //   productId: 1,
-                              //   quantity: 10,
-                              //   size_id: 2,
-                              // ),
-                            ],
+                            products: orderProducts,
                             userId: 1,
                             addressId: 2,
+                            note: note,
                           );
+                          await orderBloc.createOrder(data);
+                          print(data);
+                        },
+                        (v) {
+                          setState(() {
+                            note = v;
+                          });
                         },
                         false,
-                      ),
-                    );
-                  },
-                ),
-              )
-            ],
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         );
       },
@@ -78,6 +110,7 @@ class CartBottomNav extends StatelessWidget {
   buildOrderSheet(
     BuildContext context,
     VoidCallback onOrder,
+    ValueChanged<String?> onNoteCahnged,
     bool orderLoading,
   ) {
     return SingleChildScrollView(
@@ -94,14 +127,18 @@ class CartBottomNav extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SheetHeader(title: 'Sargyda bellik ýazp bilersiňiz'),
+            SizedBox(
+              height: 14,
+            ),
             LabeledInput(
               contentPadding: const EdgeInsets.symmetric(
                 vertical: 10,
                 horizontal: 24,
               ),
               editMode: true,
-              hintText: 'Bellik :',
-              onChanged: (v) {},
+              label: 'Bellik',
+              onChanged: onNoteCahnged,
               validator: emtyField,
             ),
             SizedBox(

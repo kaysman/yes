@@ -1,12 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:yes/data/models/category-new/category.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 
-import '../../../../../../data/models/category/category.model.dart';
-
 class WishListState {
   List<WishListItem> wishListItems = [];
-  List<Category> categories = [];
+  List<CategoryEntity> categories = [];
   List<WishListItem> filteredList = [];
   // bool isMovedToCard;
 
@@ -37,7 +36,7 @@ class WishListState {
   WishListState copyWith({
     List<WishListItem>? wishListItems,
     List<WishListItem>? filteredList,
-    List<Category>? categories,
+    List<CategoryEntity>? categories,
     // bool? isMovedToCard,
   }) {
     return WishListState(
@@ -55,7 +54,7 @@ class WishListBloc extends Cubit<WishListState> {
       : super(
           WishListState(
             filteredList: [],
-            categories: [Category(id: 0, title_tm: 'All')],
+            categories: [CategoryEntity(id: 0, title_tm: 'All')],
             wishListItems: [],
           ),
         );
@@ -85,7 +84,7 @@ class WishListBloc extends Cubit<WishListState> {
     var category = categories[i];
     var l = state.wishListItems;
     var filterList = state.filteredList;
-    filterList = l.where((e) => e.category == category).toList();
+    filterList = l.where((e) => e == category).toList();
     emit(state.copyWith(wishListItems: l, filteredList: filterList));
   }
 
@@ -95,10 +94,10 @@ class WishListBloc extends Cubit<WishListState> {
       orElse: () => WishListItem(id: 0),
     );
     var cartItem = shoppingBagBloc.state.toCartItemFromWishList(item);
-    await shoppingBagBloc.addToCartFromWishList(cartItem);
-    if (shoppingBagBloc.state.isAdded) {
-      await state.wishListItems.remove(item);
-    }
+    // await shoppingBagBloc.addToCartFromWishList(cartItem);
+    // if (shoppingBagBloc.state.isAdded) {
+    await state.wishListItems.remove(item);
+    // }
     emit(
       state.copyWith(wishListItems: state.wishListItems),
     );

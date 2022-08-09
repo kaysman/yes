@@ -31,9 +31,7 @@ class ApiClient {
   // post
   post(Uri url, {Map<String, String>? headers, dynamic data}) async {
     var res = await client.post(url, headers: headers, body: data);
-    if (res.statusCode == 200) {
-      return ApiResponse.fromJson(jsonDecode(res.body));
-    }
+    return ApiResponse.fromJson(jsonDecode(res.body));
   }
 
   // dio post

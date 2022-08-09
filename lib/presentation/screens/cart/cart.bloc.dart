@@ -6,13 +6,7 @@ import 'package:yes/data/models/wishList/wish-list.model.dart';
 
 class CartState {
   List<CartItem> cartItems = [];
-  // SizeEntity? selectedSize;
-  CartItem? selectedCartItem;
-
   int addToCartTime;
-
-  bool isPriceUpdated;
-  bool isAdded;
 
   int get totalPrice {
     int sum = 0;
@@ -63,10 +57,7 @@ class CartState {
   }
 
   CartState({
-    this.isAdded = false,
     required this.cartItems,
-    this.isPriceUpdated = false,
-    this.selectedCartItem,
     this.addToCartTime = 0,
   });
 
@@ -79,11 +70,8 @@ class CartState {
     int? addToCartTime,
   }) {
     return CartState(
-      isAdded: isAdded ?? this.isAdded,
-      selectedCartItem: selectedCartItem ?? this.selectedCartItem,
       cartItems: cartItems ?? this.cartItems,
       addToCartTime: addToCartTime ?? this.addToCartTime,
-      isPriceUpdated: isPriceUpdated ?? this.isPriceUpdated,
     );
   }
 }
@@ -115,7 +103,11 @@ class CartBloc extends Cubit<CartState> {
           )
           .toList();
 
-      return [];
+      for (var item in hasItemSizes) {
+        hasSizes.addAll(item.selectedSizes);
+      }
+
+      return hasSizes;
     }
 
     return null;
@@ -141,22 +133,31 @@ class CartBloc extends Cubit<CartState> {
     );
   }
 
-  addToCartFromWishList(CartItem item) {
-    emit(state.copyWith(isAdded: false));
-    if (!state.cartItems.contains(item)) {
-      state.cartItems.add(item);
-    }
-    emit(
-      state.copyWith(
-        cartItems: state.cartItems,
-        isAdded: true,
-      ),
-    );
-  }
+  // addToCartFromWishList(CartItem item) {
+  //   emit(state.copyWith(isAdded: false));
+  //   if (!state.cartItems.contains(item)) {
+  //     state.cartItems.add(item);
+  //   }
+  //   emit(
+  //     state.copyWith(
+  //       cartItems: state.cartItems,
+  //       isAdded: true,
+  //     ),
+  //   );
+  // }
 
   remove(CartItem item) {
     state.cartItems.remove(item);
     emit(state.copyWith(cartItems: state.cartItems));
+  }
+
+  resetCart() {
+    emit(
+      state.copyWith(
+        cartItems: [],
+        addToCartTime: 1,
+      ),
+    );
   }
 
   updateItemCountAndSize(CartItem item, int? v, SizeEntity? size) {

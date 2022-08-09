@@ -27,6 +27,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
       },
       child: Container(
         decoration: BoxDecoration(
+          color: kWhite,
           border: Border.all(width: 1, color: Colors.grey[200]!),
         ),
         width: MediaQuery.of(context).size.width / 2.5,
@@ -37,11 +38,14 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
               child: Stack(
                 children: [
                   Container(
-                    color: widget.bgColor,
+                    // color: widget.bgColor,
+
                     child: buildProductImage(
                       context,
                       widget.gadgetImage ??
-                          item?.images?.first.getFullPathImage,
+                          (item != null && item.images!.isNotEmpty
+                              ? item.images?.first.getFullPathImage
+                              : ''),
                     ),
                   ),
                 ],
@@ -162,17 +166,18 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
   }
 
   buildProductImage(BuildContext context, String? image) {
-    print(image);
+    // print(image);
     return Container(
       // width: MediaQuery.of(context).size.width / 2,
       height: double.infinity,
       width: double.infinity,
-      color: widget.bgColor ?? kGrey5Color,
+      color: kScaffoldBgColor,
+      // color: widget.bgColor ?? kGrey5Color,
       child: image != null
           ? Image.network(
               cacheHeight: MediaQuery.of(context).size.width.toInt(),
               image,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             )
           : SizedBox(),
     );

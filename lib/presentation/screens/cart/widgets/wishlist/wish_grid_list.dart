@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/category/category.model.dart';
+import 'package:yes/data/models/category-new/category.model.dart';
 import 'package:yes/data/models/wishList/wish-list.model.dart';
 import 'package:yes/presentation/screens/cart/widgets/wishlist/bloc/wishList.bloc.dart';
 import 'package:yes/presentation/screens/cart/widgets/wishlist/wish_list_category.dart';
@@ -19,7 +19,7 @@ class WishGridList extends StatefulWidget {
     this.filteredList,
   }) : super(key: key);
 
-  final List<Category>? categories;
+  final List<CategoryEntity>? categories;
   final List<WishListItem>? products;
   final List<WishListItem>? filteredList;
   @override

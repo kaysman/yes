@@ -32,6 +32,7 @@ dependencies:
   infinite_scroll_pagination: ^3.2.0
   flutter_swiper: ^1.1.6
   faker: ^2.0.0
+  rxdart: ^0.27.5
 
 dev_dependencies:
   flutter_test:

@@ -94,7 +94,6 @@ class _ProductDetailResponseState extends State<ProductDetailResponse> {
 
   @override
   Widget build(BuildContext context) {
-    print('her000');
     return SingleChildScrollView(
       controller: widget.controller,
       primary: false,

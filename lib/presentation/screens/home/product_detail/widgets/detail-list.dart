@@ -74,21 +74,23 @@ class RowText extends StatelessWidget {
 class SizeBox extends StatelessWidget {
   final SizeEntity size;
   final bool isSelected;
+  final bool isHas;
   final ValueChanged<SizeEntity> onSelect;
   SizeBox(
       {Key? key,
       required this.size,
       required this.isSelected,
-      required this.onSelect})
+      required this.onSelect,
+      required this.isHas})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print('---is selected---');
-    print(size);
-    print('---is selected---');
+    // print('---is selected---');
+    // print(size);
+    // print('---is selected---');
     return InkWell(
-      onTap: () => onSelect.call(size),
+      onTap: () => isHas ? null : onSelect.call(size),
       child: Container(
         width: 45,
         height: 45,
@@ -96,7 +98,11 @@ class SizeBox extends StatelessWidget {
         alignment: Alignment.center,
         margin: const EdgeInsets.only(right: 5),
         decoration: BoxDecoration(
-          color: isSelected ? kPrimaryColor : null,
+          color: isSelected
+              ? kPrimaryColor
+              : isHas
+                  ? kPrimaryColor.withOpacity(.3)
+                  : null,
           border: Border.all(
             width: 1,
             color: kText1Color,
@@ -106,7 +112,7 @@ class SizeBox extends StatelessWidget {
         child: Text(
           size.name_tm ?? '-',
           style: TextStyle(
-            color: isSelected ? kWhite : kText1Color,
+            color: isSelected || isHas ? kWhite : kText1Color,
             fontSize: 11,
           ),
         ),

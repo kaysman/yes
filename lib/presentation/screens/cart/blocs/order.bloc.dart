@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:yes/data/models/order/create-order.model.dart';
 import 'package:yes/data/service/order_service.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 
 enum CreateOrderStatus { idle, success, error, loading }
 
@@ -31,7 +32,8 @@ class OrderState {
 }
 
 class OrderBloc extends Cubit<OrderState> {
-  OrderBloc() : super(OrderState());
+  final CartBloc cartBloc;
+  OrderBloc(this.cartBloc) : super(OrderState());
 
   createOrder(CreateOrderDTO data) async {
     emit(
@@ -42,11 +44,13 @@ class OrderBloc extends Cubit<OrderState> {
     try {
       var res = await OrderService.cerateOrder(data);
       if (res.success == true) {
+        print(res);
         emit(
           state.copyWith(
             createOrderStatus: CreateOrderStatus.success,
           ),
         );
+        cartBloc.resetCart();
       }
     } catch (_) {
       print(_);

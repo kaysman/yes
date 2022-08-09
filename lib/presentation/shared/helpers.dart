@@ -11,7 +11,7 @@ Map<String, String> header() {
 }
 
 class Apis {
-  static const kBaseUrl = 'http://192.168.1.4:3333';
+  static const kBaseUrl = 'http://192.168.1.5:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -80,6 +80,7 @@ void showSnackBar(
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       content: child,
+      width: 200,
     ),
   );
 }

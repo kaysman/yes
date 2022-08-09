@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
+import 'package:yes/presentation/screens/index/index.bloc.dart';
+import 'package:yes/presentation/screens/index/index_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
+import 'package:yes/presentation/shared/components/button.dart';
 
 import 'widgets/apply_cupon.dart';
 import 'widgets/cart_bottom_nav.dart';
@@ -33,190 +38,257 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-              onPressed: () {
-                showWhishListSheet(context);
-              },
-              icon: Icon(
-                Icons.favorite_border_outlined,
-                size: 20,
-              ),
-              ),
-        ],
-        elevation: 0.6,
-        title: Text('Shopping bag'),
-      ),
-      body: Container(
-        color: Colors.grey[100],
-        width: double.infinity,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                color: kWhite,
-                padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
-                child: Text(
-                  '${currentUser?.address}',
-                  style: TextStyle(
-                      color: kText1Color,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              UserAdress(user: currentUser),
-              SizedBox(
-                height: 8,
-              ),
-              // * offers
-              Offers(),
-              // * choosen item counts..
-              ItemSelectBar(),
-              // * item detail list
-              ProductDetailList(),
-              // * Coupons
-              SizedBox(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                  child: Text(
-                    'COUPONS',
-                    style: TextStyleUtils().smallboldText,
+    return BlocBuilder<CartBloc, CartState>(
+      builder: (context, state) {
+        if (state.cartItems.isEmpty) {
+          return Scaffold(
+            backgroundColor: kWhite,
+            appBar: AppBar(
+              actions: [
+                IconButton(
+                  onPressed: () {
+                    showWhishListSheet(context);
+                  },
+                  icon: Icon(
+                    Icons.favorite_border_outlined,
+                    size: 20,
                   ),
                 ),
+              ],
+              elevation: 0.6,
+              title: Text('Sebet'),
+            ),
+            body: Stack(
+              children: [
+                Container(
+                  child: Image.asset(
+                    'assets/emtyCart.jpg',
+                    // fit: BoxFit.fitHeight,
+                    height: MediaQuery.of(context).size.height,
+                    // width: MediaQuery.of(context).size.width * .95,
+                  ),
+                ),
+                Positioned(
+                    bottom: 100,
+                    left: 50,
+                    right: 50,
+                    child: BlocBuilder<IndexBloc, int>(
+                      builder: (context, state) {
+                        return Button(
+                          padding: const EdgeInsets.all(14),
+                          primary: kPrimaryColor,
+                          textColor: kWhite,
+                          textStyle:
+                              Theme.of(context).textTheme.bodyText2?.copyWith(
+                                    fontSize: 18,
+                                    color: kWhite,
+                                  ),
+                          text: 'Söwda başla',
+                          onPressed: () {
+                            context.read<IndexBloc>().resetIndex();
+                            if (Navigator.canPop(context)) {
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                IndexScreen.routeName,
+                                (route) => false,
+                              );
+                            }
+                          },
+                        );
+                      },
+                    )),
+              ],
+            ),
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showWhishListSheet(context);
+                },
+                icon: Icon(
+                  Icons.favorite_border_outlined,
+                  size: 20,
+                ),
               ),
-              ApplyCupon(),
-              SizedBox(
-                height: 10,
-              ),
-              MyContainer(
-                pVertical: 15,
-                pHorizontal: 12,
-                widget: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
+            ],
+            elevation: 0.6,
+            title: Text('Shopping bag'),
+          ),
+          body: Container(
+            color: Colors.grey[100],
+            width: double.infinity,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kWhite,
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+                    child: Text(
+                      '${currentUser?.address}',
+                      style: TextStyle(
+                          color: kText1Color,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  UserAdress(user: currentUser),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  // * offers
+                  Offers(),
+                  // * choosen item counts..
+                  ItemSelectBar(),
+                  // * item detail list
+                  ProductDetailList(),
+                  // * Coupons
+                  SizedBox(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 12, horizontal: 12),
                       child: Text(
-                        'PRICE DETAILS (1 Item)',
+                        'COUPONS',
                         style: TextStyleUtils().smallboldText,
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Divider(
-                      color: Colors.black26,
-                      height: .6,
-                      thickness: .2,
-                    ),
-                    MyContainer(
-                      pVertical: 12,
-                      pHorizontal: 0,
-                      widget: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _PriceRowText(
-                            txtColor: kText1Color,
-                            price: '1.499',
-                            text: 'Total MRP',
+                  ),
+                  ApplyCupon(),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  MyContainer(
+                    pVertical: 15,
+                    pHorizontal: 12,
+                    widget: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Text(
+                            'PRICE DETAILS (1 Item)',
+                            style: TextStyleUtils().smallboldText,
                           ),
-                          _PriceRowText(
-                            text: 'Discount on MRP',
-                            txtColor: Colors.green,
-                            price: '-750TMT',
-                          ),
-                          _PriceRowText(
-                            text: 'Coupon Discount',
-                            price: 'Apply Coupon',
-                            txtColor: kPrimaryColor,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Divider(
+                          color: Colors.black26,
+                          height: .6,
+                          thickness: .2,
+                        ),
+                        MyContainer(
+                          pVertical: 12,
+                          pHorizontal: 0,
+                          widget: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Convenience Fee   ',
-                                  style: TextStyleUtils().thinText,
-                                  children: [
-                                    TextSpan(
-                                        text: 'Know More',
-                                        style: TextStyle(
-                                            color: kPrimaryColor,
-                                            fontWeight: FontWeight.w500))
-                                  ],
-                                ),
+                              _PriceRowText(
+                                txtColor: kText1Color,
+                                price: '1.499',
+                                text: 'Total MRP',
                               ),
-                              Text(
-                                '99TMT',
-                                style: TextStyleUtils().smallthinText,
+                              _PriceRowText(
+                                text: 'Discount on MRP',
+                                txtColor: Colors.green,
+                                price: '-750TMT',
+                              ),
+                              _PriceRowText(
+                                text: 'Coupon Discount',
+                                price: 'Apply Coupon',
+                                txtColor: kPrimaryColor,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  RichText(
+                                    text: TextSpan(
+                                      text: 'Convenience Fee   ',
+                                      style: TextStyleUtils().thinText,
+                                      children: [
+                                        TextSpan(
+                                            text: 'Know More',
+                                            style: TextStyle(
+                                                color: kPrimaryColor,
+                                                fontWeight: FontWeight.w500))
+                                      ],
+                                    ),
+                                  ),
+                                  Text(
+                                    '99TMT',
+                                    style: TextStyleUtils().smallthinText,
+                                  ),
+                                ],
                               ),
                             ],
+                          ),
+                        ),
+                        Divider(
+                          color: Colors.black26,
+                          height: .6,
+                          thickness: .2,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        _PriceRowText(
+                            text: 'Total Amount',
+                            price: '848TMT',
+                            fontWeight: FontWeight.w500,
+                            txtColor: kText1Color)
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      width: double.infinity,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Expanded(
+                            flex: 3,
+                            child: ProductGurrantee(
+                                icon: Icons.generating_tokens_outlined,
+                                title: 'Geniune Products'),
+                          ),
+                          Dot(),
+                          Expanded(
+                            flex: 3,
+                            child: ProductGurrantee(
+                              icon: Icons.connect_without_contact_sharp,
+                              title: 'Contactless Delivery',
+                            ),
+                          ),
+                          Dot(),
+                          Expanded(
+                            flex: 3,
+                            child: ProductGurrantee(
+                              icon: Icons.security_sharp,
+                              title: 'Secure Payments',
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    Divider(
-                      color: Colors.black26,
-                      height: .6,
-                      thickness: .2,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    _PriceRowText(
-                        text: 'Total Amount',
-                        price: '848TMT',
-                        fontWeight: FontWeight.w500,
-                        txtColor: kText1Color)
-                  ],
-                ),
+                  )
+                ],
               ),
-              SizedBox(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: ProductGurrantee(
-                            icon: Icons.generating_tokens_outlined,
-                            title: 'Geniune Products'),
-                      ),
-                      Dot(),
-                      Expanded(
-                        flex: 3,
-                        child: ProductGurrantee(
-                          icon: Icons.connect_without_contact_sharp,
-                          title: 'Contactless Delivery',
-                        ),
-                      ),
-                      Dot(),
-                      Expanded(
-                        flex: 3,
-                        child: ProductGurrantee(
-                          icon: Icons.security_sharp,
-                          title: 'Secure Payments',
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-      bottomNavigationBar: CartBottomNav(),
+          bottomNavigationBar: CartBottomNav(),
+        );
+      },
     );
   }
 

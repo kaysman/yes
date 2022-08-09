@@ -140,7 +140,6 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CartBloc, CartState>(
-      // listenWhen: (p, c) =>,
       listener: (context, state) {},
       builder: (context, state) {
         return Container(
@@ -207,8 +206,8 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
                 right: 10,
               ),
               child: SizeBox(
-                isSelected: size == selectedSize ||
-                    widget.hasSizes?.contains(size) == true,
+                isHas: widget.hasSizes?.contains(size) == true,
+                isSelected: size == selectedSize,
                 onSelect: (v) {
                   setState(() {
                     selectedSize = v;

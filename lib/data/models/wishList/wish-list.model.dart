@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:yes/data/models/category/category.model.dart';
 
 class WishListItem with EquatableMixin {
   int id;
@@ -10,7 +9,6 @@ class WishListItem with EquatableMixin {
   String? code;
   int? quantity;
   int? totalPrice;
-  Category? category;
   String? description_tm;
   String? description_ru;
   bool isSelected;
@@ -18,7 +16,6 @@ class WishListItem with EquatableMixin {
 
   WishListItem({
     required this.id,
-    this.category,
     this.name_tm,
     this.name_ru,
     this.image,

@@ -19,6 +19,11 @@ class SelectSizesSection extends StatefulWidget {
 
 class _SelectSizesSectionState extends State<SelectSizesSection> {
   SizeEntity? selectedSize;
+  @override
+  void deactivate() {
+    print('=====deacsdc==========');
+    super.deactivate();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +75,12 @@ class _SelectSizesSectionState extends State<SelectSizesSection> {
                       var hasSizes = context
                           .read<CartBloc>()
                           .checkIfHasItemsSizes(product: widget.product);
-                      // print('-----------SIZE---------');
-                      // print(hasSizes);
-                      // print('-----------SIZE---------');
                       return SizeBox(
-                        isSelected: selectedSize == size ||
-                            hasSizes?.contains(size) == true,
+                        isHas: hasSizes?.contains(size) == true,
+                        isSelected:
+                            (hasSizes?.length ?? 0) < (item.sizes?.length ?? 0)
+                                ? selectedSize == size
+                                : false,
                         onSelect: (v) {
                           context.read<CartBloc>().addToCart(
                                 item,

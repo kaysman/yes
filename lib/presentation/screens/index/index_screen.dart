@@ -27,7 +27,8 @@ class _IndexScreenState extends State<IndexScreen> {
 
   List<Widget> screens = [
     HomeScreen(),
-    CategoryScreen(),
+    // CategoryScreen(),
+    SizedBox(),
     CartScreen(),
     ProfileScreen(),
   ];

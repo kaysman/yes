@@ -19,4 +19,7 @@ class CreateOrderItem {
       _$CreateOrderItemFromJson(json);
 
   Map<String, dynamic> toJson() => _$CreateOrderItemToJson(this);
+
+  @override
+  String toString() => '$productId sany: $quantity size:$size_id';
 }

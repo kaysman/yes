@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/screens/cart/cart_screen.dart';
+import 'package:yes/presentation/screens/cart/widgets/user_adress.dart';
 import 'package:yes/presentation/screens/cart/widgets/wishlist/wish_grid_list.dart';
 import 'package:yes/presentation/screens/home/products/products_screen.dart';
 import 'package:yes/presentation/screens/home/search/serach.dart';
+import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
 
 import '../screens/home/product_detail/product_detail_screen.dart';
@@ -21,6 +23,12 @@ List<Route<dynamic>> onGenerateInitialRoutes(String name) {
           builder: (_) => CartScreen(),
         )
       ];
+    // case SubCategoryList.routeName:
+    //   return [
+    //     MaterialPageRoute(
+    //       builder: (_) => SubCategoryList(),
+    //     )
+    //   ];
 
     default:
       return [
@@ -45,6 +53,17 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (_) => CartScreen(),
       );
+    case AdressCreateSheet.routeName:
+      return MaterialPageRoute(
+        builder: (_) => AdressCreateSheet(),
+      );
+    case SubCategoryList.routeName:
+      return MaterialPageRoute(builder: (_) {
+        var args = settings.arguments as Map<String, dynamic>;
+        return SubCategoryList(
+          subCategories: args['subCategories'],
+        );
+      });
     case ProductDetailScreen.routeName:
       return MaterialPageRoute(
         builder: (_) {

@@ -30,6 +30,7 @@ class ProductsService {
 
     try {
       var res = await ApiClient.instance.get(uri, headers: header());
+      print(res);
       return (res.data as List)
           .map((json) => ProductEntity.fromJson(json as Map<String, dynamic>))
           .toList();

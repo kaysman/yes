@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:yes/data/models/product%20-new/filter-for-product.model.dart';
 import 'package:yes/data/models/product%20-new/product.model.dart';
 import 'package:yes/data/service/products_service.dart';
 import 'package:yes/presentation/screens/home/products/widgets/product_bottom_nav.dart';
+import 'package:yes/presentation/screens/home/products/widgets/product_list_item.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/app-loading-bar.dart';
-import 'widgets/product_list.dart';
 
 class ProductsScreen extends StatefulWidget {
   static const routeName = "products";
@@ -26,31 +29,69 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  final ScrollController _scrollController = ScrollController();
+  late ScrollController scrollController;
+  List<ProductEntity> productList = [];
+  bool isLoading = false;
 
-  // late Future<Products> fetchProducts;
-  late Future<List<ProductEntity>> fetchProducts;
+  var productsStream = StreamController<List<ProductEntity>>.broadcast();
+  late StreamSubscription<List<ProductEntity>> productsSubscription;
 
-  // Filters? filters;
+  scrollListener() {
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      getAllProducts();
+    }
+  }
 
   @override
   void initState() {
-    fetchProducts = ProductsService.getProducts();
-    // if (widget.promotionId != null) {
-    //   print(widget.promotionId);
-    // }
-    // _scrollController.;
+    productsSubscription = productsStream.stream.listen((event) {
+      productList.addAll(event);
+    });
+    getAllProducts();
+
+    scrollController = ScrollController();
+    scrollController.addListener(scrollListener);
     super.initState();
   }
 
-  // Future<Filters?> fetchFilters() async {
-  //   await fetchProducts.then((value) {
-  //     setState(() {
-  //       filters = value.filters;
-  //     });
-  //   });
-  //   return filters;
-  // }
+  getAllProducts({FilterForProductDTO? filter}) async {
+    if (filter == null) {
+      filter = FilterForProductDTO();
+    }
+    changeLoading();
+    try {
+      if (productList.isNotEmpty) {
+        filter.lastId = productList.last.id;
+      }
+      var res = await ProductsService.getProducts(queryParams: filter.toJson());
+      if (res.length == 1) {
+        changeLoading();
+        return;
+      } else if (res.isNotEmpty && res.length > 1) {
+        productsStream.add(res);
+        setState(() {
+          productList.addAll(res);
+        });
+      }
+      changeLoading();
+    } catch (_) {
+      print(_);
+    }
+  }
+
+  changeLoading() {
+    setState(() {
+      isLoading = !isLoading;
+    });
+  }
+
+  @override
+  void dispose() {
+    productsStream.close();
+    productsSubscription.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,16 +101,36 @@ class _ProductsScreenState extends State<ProductsScreen> {
           title: Text(
             'Harytlar',
           )),
-      body: FutureBuilder<List<ProductEntity>>(
-        future: fetchProducts,
+      body: StreamBuilder<List<ProductEntity>>(
+        stream: productsStream.stream,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return AppLoadingBar();
-          } else if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            return ProductsGridList(
-              scrollController: _scrollController,
-              products: snapshot.data ?? [],
+          } else if (snapshot.hasData) {
+            var products = productList.isEmpty ? snapshot.data : productList;
+            return Column(
+              children: [
+                Expanded(
+                  child: GridView.count(
+                    controller: scrollController,
+                    crossAxisCount: 2,
+                    childAspectRatio: 3 / 4.3,
+                    children: products
+                            ?.map(
+                              (e) => ProductsGridItem(
+                                item: e,
+                              ),
+                            )
+                            .toList() ??
+                        [],
+                  ),
+                ),
+                if (isLoading && (snapshot.data?.length ?? 0) > 1)
+                  Container(
+                    margin: const EdgeInsets.only(top: 14),
+                    child: AppLoadingBar(),
+                  ),
+              ],
             );
           } else {
             return Center(
@@ -80,9 +141,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
           }
         },
       ),
-      bottomNavigationBar: ProductBootNav(
-          // filters: filters,
-          ),
+      bottomNavigationBar: ProductBootNav(),
     );
   }
 }

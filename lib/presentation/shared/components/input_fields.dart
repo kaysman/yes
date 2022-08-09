@@ -29,14 +29,16 @@ class LabeledInput extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          hintText ?? '-',
-          style: Theme.of(context).textTheme.headline5!.copyWith(
-                fontWeight: FontWeight.w500,
-                color: kGrey1Color,
-              ),
-        ),
-        SizedBox(height: 5),
+        if (hintText != null) ...[
+          Text(
+            hintText ?? '-',
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: kGrey1Color,
+                ),
+          ),
+          SizedBox(height: 5),
+        ],
         TextFormField(
           controller: controller,
           validator: validator,
@@ -47,7 +49,7 @@ class LabeledInput extends StatelessWidget {
             //     .textTheme
             //     .subtitle1
             //     ?.copyWith(color: kGrey2Color),
-            // labelText: label,
+            labelText: label,
             labelStyle: Theme.of(context).textTheme.subtitle1,
             contentPadding: contentPadding,
             enabled: editMode,

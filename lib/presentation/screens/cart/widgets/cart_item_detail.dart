@@ -8,7 +8,6 @@ import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/button.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 import '../cart_screen.dart';
-import 'custom_check_box.dart';
 
 class ProductDetailList extends StatefulWidget {
   ProductDetailList({Key? key}) : super(key: key);
@@ -160,8 +159,8 @@ class _CartModalSheetState extends State<CartModalSheet> {
               right: 10,
             ),
             child: SizeBox(
-              isSelected:
-                  size == selectedSize || hasSizes?.contains(size) == true,
+              isHas: hasSizes?.contains(size) == true,
+              isSelected: size == selectedSize,
               onSelect: (v) {
                 setState(() {
                   selectedSize = v;
