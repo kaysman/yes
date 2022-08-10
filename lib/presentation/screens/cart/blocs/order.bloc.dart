@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:yes/data/models/order/create-order.model.dart';
+import 'package:yes/data/models/order/order.model.dart';
 import 'package:yes/data/service/order_service.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 
@@ -10,7 +11,7 @@ enum UpdateOrderStatus { idle, success, error, loading }
 class OrderState {
   final CreateOrderStatus createOrderStatus;
   final UpdateOrderStatus updateOrderStatus;
-  final CreateOrderDTO? order;
+  final OrderEntity? order;
 
   OrderState({
     this.createOrderStatus = CreateOrderStatus.idle,
@@ -21,7 +22,7 @@ class OrderState {
   OrderState copyWith({
     CreateOrderStatus? createOrderStatus,
     UpdateOrderStatus? updateOrderStatus,
-    CreateOrderDTO? order,
+    OrderEntity? order,
   }) {
     return OrderState(
       createOrderStatus: createOrderStatus ?? this.createOrderStatus,
@@ -44,19 +45,28 @@ class OrderBloc extends Cubit<OrderState> {
     try {
       var res = await OrderService.cerateOrder(data);
       if (res.success == true) {
-        print(res);
+        var order = OrderEntity.fromJson(res.data);
+        print(res.data);
         emit(
           state.copyWith(
+            order: order,
             createOrderStatus: CreateOrderStatus.success,
           ),
         );
         cartBloc.resetCart();
+      } else if (res.success == false) {
+        emit(
+          state.copyWith(
+            createOrderStatus: CreateOrderStatus.error,
+          ),
+        );
       }
     } catch (_) {
       print(_);
       emit(
         state.copyWith(createOrderStatus: CreateOrderStatus.error),
       );
+      throw _;
     }
   }
 }

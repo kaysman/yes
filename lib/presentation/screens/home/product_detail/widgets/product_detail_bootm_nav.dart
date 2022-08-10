@@ -84,7 +84,10 @@ class _ProductDetailBottomNavBarState extends State<ProductDetailBottomNavBar> {
                   textColor: kWhite,
                   onPressed: () async {
                     context.read<CartBloc>().addToCartTime();
-                    if (hasItem == false ||
+
+                    if (state.isOrdered && state.cartItems.isEmpty) {
+                      alreadyOrderedSheet(context);
+                    } else if (hasItem == false ||
                         (hasSizes?.length ?? 0) < (item.sizes?.length ?? 0) &&
                             state.addToCartTime.isOdd) {
                       await showAppBottomSheet(
@@ -222,3 +225,5 @@ class _SizeSelectSheetState extends State<SizeSelectSheet> {
     );
   }
 }
+
+

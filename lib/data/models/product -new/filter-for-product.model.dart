@@ -1,8 +1,9 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'filter-for-product.model.g.dart';
 
 @JsonSerializable()
-class FilterForProductDTO {
+class FilterForProductDTO with EquatableMixin {
   final int? priceFrom;
   final int? priceTo;
   final int? color_id;
@@ -47,4 +48,24 @@ class FilterForProductDTO {
       _$FilterForProductDTOFromJson(json);
 
   Map<String, dynamic> toJson() => _$FilterForProductDTOToJson(this);
+
+  @override
+  String toString() => 'color:$color_id, size:$size_id, gender:$gender_id';
+
+  @override
+  List<Object?> get props => [
+        this.priceFrom,
+        this.priceTo,
+        this.color_id,
+        this.gender_id,
+        this.quantity,
+        this.brand_id,
+        this.category_id,
+        this.market_id,
+        this.size_id,
+        this.lastId,
+        this.take,
+        this.search,
+        this.next,
+      ];
 }

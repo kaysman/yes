@@ -20,9 +20,10 @@ class ApiClient {
   get(Uri url, {Map<String, String>? headers}) async {
     try {
       var res = await client.get(url, headers: headers);
-      if (res.statusCode == 200) {
-        return ApiResponse.fromJson(jsonDecode(res.body));
-      }
+      // if (res.statusCode == 200) {
+      print(res.body);
+      return ApiResponse.fromJson(jsonDecode(res.body));
+      // }
     } catch (_) {
       throw _;
     }

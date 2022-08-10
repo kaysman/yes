@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 const kPrimaryColor = Colors.pinkAccent;
 const kSecondaryColor = Color(0xffEBF7F9);
 final kScaffoldBgColor = Colors.grey[100];
+const kFailedColor = Color(0xffEB5757);
 
 const kText1Color = Color(0xff000000);
 const kText2Color = Color(0xff333333);

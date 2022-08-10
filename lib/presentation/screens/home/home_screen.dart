@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
+import 'package:yes/presentation/screens/home/widgets/home-app-bar.dart';
 import 'package:yes/presentation/screens/home/widgets/home-error-view.dart';
 import 'package:yes/presentation/screens/home/widgets/views.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
@@ -48,65 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
         var circleItems =
             types?.firstWhere((e) => e.type == GadgetType.CIRCLE_ITEMS);
         return Scaffold(
-          appBar: AppBar(
-            elevation: .5,
-            title: Logo(),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'search');
-                },
-                icon: AppIcons.svgAsset(
-                  AppIcons.search,
-                  color: kText1Color,
-                ),
-              ),
-              BlocBuilder<WishListBloc, WishListState>(
-                  builder: (context, state) {
-                return IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushNamed(
-                      WishGridList.routeName,
-                      arguments: {
-                        'products': state.wishListItems,
-                        'categories': state.categories,
-                        'filteredList': state.filteredList,
-                      },
-                    );
-                  },
-                  icon: Icon(Icons.favorite_border),
-                );
-              }),
-              Stack(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'shopping-bag');
-                    },
-                    icon: Image.asset(
-                      AppIcons.bag,
-                      width: 24,
-                      height: 24,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                  BlocBuilder<CartBloc, CartState>(
-                    builder: (context, state) {
-                      return state.cartItems.length > 0
-                          ? Positioned(
-                              top: 10,
-                              right: 6,
-                              child: ProductCountIndicator(
-                                state: state,
-                              ),
-                            )
-                          : SizedBox.shrink();
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
+          appBar: HomeAppBar(),
           body: NestedScrollView(
             floatHeaderSlivers: true,
             headerSliverBuilder:

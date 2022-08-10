@@ -54,7 +54,6 @@ class _CartBottomNavState extends State<CartBottomNav> {
             width: double.infinity,
             child: Button(
               text: 'Satyn al',
-              isLoading: state.createOrderStatus == CreateOrderStatus.loading,
               primary: kPrimaryColor,
               textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
                     fontSize: 16,
@@ -87,14 +86,13 @@ class _CartBottomNavState extends State<CartBottomNav> {
                             note: note,
                           );
                           await orderBloc.createOrder(data);
-                          print(data);
                         },
                         (v) {
                           setState(() {
                             note = v;
                           });
                         },
-                        false,
+                        state.createOrderStatus == CreateOrderStatus.loading,
                       );
                     },
                   ),

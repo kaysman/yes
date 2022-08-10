@@ -5,6 +5,7 @@ import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-list.dart';
 import 'package:yes/presentation/shared/colors.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 
 class SelectSizesSection extends StatefulWidget {
   final ProductEntity product;
@@ -81,15 +82,22 @@ class _SelectSizesSectionState extends State<SelectSizesSection> {
                             (hasSizes?.length ?? 0) < (item.sizes?.length ?? 0)
                                 ? selectedSize == size
                                 : false,
-                        onSelect: (v) {
-                          context.read<CartBloc>().addToCart(
-                                item,
-                                v,
-                              );
-                          context.read<CartBloc>().addToCartTime(time: 2);
+                        onSelect: (v) async {
                           setState(() {
                             selectedSize = v;
                           });
+                          if (state.isOrdered && state.cartItems.isEmpty) {
+                            await alreadyOrderedSheet(context);
+                            setState(() {
+                              selectedSize = null;
+                            });
+                          } else {
+                            context.read<CartBloc>().addToCart(
+                                  item,
+                                  v,
+                                );
+                            context.read<CartBloc>().addToCartTime(time: 2);
+                          }
                         },
                         size: size!,
                       );

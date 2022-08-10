@@ -18,7 +18,7 @@ CreateAddressDTO _$CreateAddressDTOFromJson(Map<String, dynamic> json) =>
       addressLine1: json['addressLine1'] as String,
       addressLine2: json['addressLine2'] as String?,
       title: json['title'] as String?,
-      userId: json['userId'] as int,
+      userId: json['userId'] as int?,
       isdefault: json['isdefault'] as bool?,
     );
 

@@ -43,7 +43,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
                     child: buildProductImage(
                       context,
                       widget.gadgetImage ??
-                          (item != null && item.images!.isNotEmpty
+                          (item != null && item.images?.isNotEmpty == true
                               ? item.images?.first.getFullPathImage
                               : ''),
                     ),

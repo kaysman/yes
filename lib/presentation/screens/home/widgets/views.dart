@@ -3,7 +3,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:yes/data/enums/gadget-type.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
-import 'package:yes/presentation/screens/home/product_detail/product_detail_screen.dart';
 import 'package:yes/presentation/screens/home/products/products_screen.dart';
 import 'package:yes/presentation/screens/home/products/widgets/product_list_item.dart';
 import 'package:yes/presentation/shared/colors.dart';
@@ -17,7 +16,6 @@ class GadgetGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final type = this.gadget.type;
-    print(gadget.title == null);
     return Container(
       color: kWhite,
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -71,7 +69,6 @@ class GadgetListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var items = gadget.items;
-    print(items);
     return Container(
       color: kWhite,
       margin: const EdgeInsets.symmetric(vertical: 10),

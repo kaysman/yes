@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/icons.dart';
+import 'package:yes/presentation/shared/components/button.dart';
 
 Map<String, String> header() {
   return {
@@ -10,8 +9,20 @@ Map<String, String> header() {
   };
 }
 
+// Future<Map<String, String>> get headers async => {
+//       "Content-Type": "application/json",
+//       "Accept": "*/*",
+//       "Authorization": 'Bearer ${await getToken()}',
+//       "x-timezone": "${await getTimezone()}",
+//     };
+
+// Future<String?> getToken() async {
+//   var disk = (await LocalStorage.instance);
+//   return disk.credentials?.accessToken;
+// }
+
 class Apis {
-  static const kBaseUrl = 'http://192.168.1.5:3333';
+  static const kBaseUrl = 'http://192.168.1.4:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -62,6 +73,14 @@ final OutlineInputBorder kDisabledInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(8),
 );
 
+List<BoxShadow> kBoxShadow = [
+  BoxShadow(
+    color: Colors.black.withOpacity(0.1),
+    offset: Offset(0, 4),
+    blurRadius: 30,
+  ),
+];
+
 enum SnackbarType { success, error }
 
 void showSnackBar(
@@ -104,6 +123,35 @@ Future<void> showAppBottomSheet(
         child: body,
       );
     },
+  );
+}
+
+Future<void> alreadyOrderedSheet(BuildContext context) async {
+  await showAppBottomSheet(
+    context,
+    Container(
+      padding: const EdgeInsets.all(14),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Siz sargyt etdiniz, sargydynyz gowsurulandan sonra, sargyt edip bilersiniz!',
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(
+            height: 14,
+          ),
+          Button(
+            text: 'OK',
+            primary: kPrimaryColor,
+            textColor: kWhite,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          )
+        ],
+      ),
+    ),
   );
 }
 

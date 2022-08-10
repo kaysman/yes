@@ -7,6 +7,7 @@ import 'package:yes/data/models/wishList/wish-list.model.dart';
 class CartState {
   List<CartItem> cartItems = [];
   int addToCartTime;
+  bool isOrdered;
 
   int get totalPrice {
     int sum = 0;
@@ -59,18 +60,17 @@ class CartState {
   CartState({
     required this.cartItems,
     this.addToCartTime = 0,
+    this.isOrdered = false,
   });
 
   CartState copyWith({
     List<CartItem>? cartItems,
-    List<CartItem>? selectedProducts,
-    CartItem? selectedCartItem,
-    bool? isPriceUpdated,
-    bool? isAdded,
+    bool? isOrdered,
     int? addToCartTime,
   }) {
     return CartState(
       cartItems: cartItems ?? this.cartItems,
+      isOrdered: isOrdered ?? this.isOrdered,
       addToCartTime: addToCartTime ?? this.addToCartTime,
     );
   }
@@ -154,6 +154,7 @@ class CartBloc extends Cubit<CartState> {
   resetCart() {
     emit(
       state.copyWith(
+        isOrdered: true,
         cartItems: [],
         addToCartTime: 1,
       ),

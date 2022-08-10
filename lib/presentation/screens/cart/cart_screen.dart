@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/screens/cart/blocs/order.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/emty-cart.screen.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/indicators.dart';
+import 'package:yes/presentation/shared/helpers.dart';
 
 import 'widgets/apply_cupon.dart';
 import 'widgets/cart_bottom_nav.dart';
@@ -40,65 +44,147 @@ class _CartScreenState extends State<CartScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<CartBloc, CartState>(
       builder: (context, state) {
-        if (state.cartItems.isEmpty) {
+        if (state.cartItems.isEmpty && state.isOrdered) {
           return Scaffold(
-            backgroundColor: kWhite,
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    showWhishListSheet(context);
-                  },
-                  icon: Icon(
-                    Icons.favorite_border_outlined,
-                    size: 20,
+            appBar: AppBar(),
+            body: BlocBuilder<OrderBloc, OrderState>(
+              builder: (context, state) {
+                var products = state.order?.products;
+
+                return Container(
+                  margin: const EdgeInsets.all(14),
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: kWhite,
+                    borderRadius: BorderRadius.circular(8),
+                    boxShadow: kBoxShadow,
                   ),
-                ),
-              ],
-              elevation: 0.6,
-              title: Text('Sebet'),
-            ),
-            body: Stack(
-              children: [
-                Container(
-                  child: Image.asset(
-                    'assets/emtyCart.jpg',
-                    // fit: BoxFit.fitHeight,
-                    height: MediaQuery.of(context).size.height,
-                    // width: MediaQuery.of(context).size.width * .95,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Sargydynyz barada',
+                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                              fontSize: 16,
+                            ),
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Divider(
+                        color: kGrey3Color,
+                        height: .4,
+                        thickness: .5,
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          StatusIndicator(
+                            label: state.order?.status == 'CREATED'
+                                ? 'Sargydynyz kabul edildi'
+                                : '-',
+                          ),
+                          Button(
+                            text: 'Goý bolsun et',
+                            primary: kWhite,
+                            padding: EdgeInsets.zero,
+                            onPressed: () {},
+                            hasBorder: true,
+                            borderColor: kFailedColor,
+                            textColor: kFailedColor,
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Harydyn ady'),
+                          Text('Sany'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Divider(
+                        color: kGrey3Color,
+                        height: .4,
+                        thickness: .5,
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Column(
+                        children: products
+                                ?.map((e) => Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Haryt ${e.productId}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                        Text(
+                                          'M X ${e.quantity}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1,
+                                        ),
+                                      ],
+                                    ))
+                                .toList() ??
+                            [],
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Divider(
+                        color: kGrey3Color,
+                        height: .4,
+                        thickness: .5,
+                      ),
+                      SizedBox(
+                        height: 7,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Jemi :'),
+                          Text('120 TMT'),
+                        ],
+                      )
+                    ],
                   ),
-                ),
-                Positioned(
-                    bottom: 100,
-                    left: 50,
-                    right: 50,
-                    child: BlocBuilder<IndexBloc, int>(
-                      builder: (context, state) {
-                        return Button(
-                          padding: const EdgeInsets.all(14),
-                          primary: kPrimaryColor,
-                          textColor: kWhite,
-                          textStyle:
-                              Theme.of(context).textTheme.bodyText2?.copyWith(
-                                    fontSize: 18,
-                                    color: kWhite,
-                                  ),
-                          text: 'Söwda başla',
-                          onPressed: () {
-                            context.read<IndexBloc>().resetIndex();
-                            if (Navigator.canPop(context)) {
-                              Navigator.pushNamedAndRemoveUntil(
-                                context,
-                                IndexScreen.routeName,
-                                (route) => false,
-                              );
-                            }
-                          },
-                        );
-                      },
-                    )),
-              ],
+                );
+              },
             ),
+          );
+        }
+
+        if (state.cartItems.isEmpty) {
+          return BlocBuilder<IndexBloc, int>(
+            builder: (context, state) {
+              return EmtyCartScreen(
+                onStartShop: () {
+                  context.read<IndexBloc>().resetIndex();
+                  if (Navigator.canPop(context)) {
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      IndexScreen.routeName,
+                      (route) => false,
+                    );
+                  }
+                },
+              );
+            },
           );
         }
         return Scaffold(

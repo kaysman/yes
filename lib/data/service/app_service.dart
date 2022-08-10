@@ -5,6 +5,10 @@ import 'package:yes/presentation/blocs/auth_bloc.dart';
 import 'package:yes/presentation/screens/cart/blocs/adress.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
+import 'package:yes/presentation/screens/home/products/blocs/brand.bloc.dart';
+import 'package:yes/presentation/screens/home/products/blocs/category.bloc.dart';
+import 'package:yes/presentation/screens/home/products/blocs/filter.bloc.dart';
+import 'package:yes/presentation/screens/home/products/blocs/market.bloc.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
 import 'package:yes/presentation/shared/storage.dart';
 
@@ -44,6 +48,11 @@ class AppService {
           BlocProvider<CartBloc>(create: (_) => cartBloc),
           BlocProvider<WishListBloc>(create: (_) => WishListBloc(cartBloc)),
           BlocProvider<OrderBloc>(create: (_) => OrderBloc(cartBloc)),
+          BlocProvider<AdressBloc>(create: (_) => AdressBloc()),
+          BlocProvider<MarketBloc>(create: (_) => MarketBloc()),
+          BlocProvider<FilterBloc>(create: (_) => FilterBloc()),
+          BlocProvider<BrandBloc>(create: (_) => BrandBloc()),
+          BlocProvider<CategoryBloc>(create: (_) => CategoryBloc()),
           BlocProvider<AdressBloc>(create: (_) => AdressBloc()),
         ],
         child: YesApp(),

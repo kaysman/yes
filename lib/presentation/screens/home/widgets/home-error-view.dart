@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/enums/gadget-type.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
 import 'package:yes/presentation/screens/home/home_bloc.dart';
-import 'package:yes/presentation/screens/home/home_screen.dart';
+import 'package:yes/presentation/screens/home/widgets/home-app-bar.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/shared/colors.dart';
-
+import 'package:yes/presentation/shared/components/button.dart';
 import 'views.dart';
 
 class HomeErrorView extends StatelessWidget {
@@ -15,47 +16,7 @@ class HomeErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Logo(),
-        elevation: 1,
-        actions: [
-          // buildIconBtn(
-          //   context,
-          //   () {
-          //     Navigator.pushNamed(context, 'search');
-          //   },
-          //   Icons.search,
-          // ),
-          // BlocBuilder<WishListBloc, WishListState>(builder: (context, state) {
-          //   return buildIconBtn(
-          //     context,
-          //     () {
-          //       Navigator.of(context).pushNamed(
-          //         WishGridList.routeName,
-          //         arguments: {
-          //           'products': state.wishListItems,
-          //           'categories': state.categories,
-          //           'filteredList': state.filteredList,
-          //         },
-          //       );
-          //     },
-          //     Icons.favorite_border,
-          //   );
-          // }),
-          // buildIconBtn(
-          //   context,
-          //   () {
-          //     Navigator.pushNamed(context, 'shopping-bag');
-          //   },
-          //   Icons.shopping_bag_outlined,
-          // ),
-        ],
-        // bottom: VipCategories(
-        //   gadget: GadgetEntity(
-        //     type: GadgetType.CIRCLE_ITEMS,
-        //   ),
-        // ),
-      ),
+      appBar: HomeAppBar(),
       body: NestedScrollView(
         floatHeaderSlivers: true,
         headerSliverBuilder: (_, b) {
@@ -65,17 +26,12 @@ class HomeErrorView extends StatelessWidget {
               automaticallyImplyLeading: false,
               forceElevated: true,
               centerTitle: false,
-              title: Container(
-                // color: kBlack,
-                child: VipCategories(
-                  isLoading: true,
-                  gadget: GadgetEntity(
-                    type: GadgetType.CIRCLE_ITEMS,
-                  ),
+              title: VipCategories(
+                isLoading: true,
+                gadget: GadgetEntity(
+                  type: GadgetType.CIRCLE_ITEMS,
                 ),
               ),
-              // leading:
-              // title:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             ),
           ];
         },
@@ -106,6 +62,41 @@ class HomeErrorView extends StatelessWidget {
                 type: GadgetType
                     .TWO_TO_THREE_PRODUCTS_IN_HORIZONTAL_WITH_TITLE_AS_TEXT,
               ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 80,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: kWhite, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              // flex: 8,
+              child: Text(
+                'Internet baglanyşygy ýok',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    ?.copyWith(color: kFailedColor),
+              ),
+            ),
+            BlocBuilder<HomeBloc, HomeState>(
+              builder: (context, state) {
+                return Button(
+                  icon: Icon(Icons.refresh),
+                  text: 'Sahypany täzele',
+                  primary: kPrimaryColor,
+                  onPressed: () {
+                    context.read<HomeBloc>().fetchGadgets();
+                  },
+                  textColor: kWhite,
+                );
+              },
             ),
           ],
         ),
