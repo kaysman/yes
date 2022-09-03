@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/client/client.model.dart';
+import 'package:yes/data/models/order/order-product.model.dart';
 import 'package:yes/data/service/app_service.dart';
 import 'package:yes/presentation/screens/cart/blocs/order.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/cart/widgets/emty-cart.screen.dart';
+import 'package:yes/presentation/screens/category/category_screen.dart';
 import 'package:yes/presentation/screens/index/index.bloc.dart';
 import 'package:yes/presentation/screens/index/index_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/components/indicators.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 
@@ -32,8 +34,10 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
-  late Client? currentUser;
+  // late Client? currentUser;
+  late String? currentUser;
 
+//
   @override
   void initState() {
     super.initState();
@@ -46,123 +50,17 @@ class _CartScreenState extends State<CartScreen> {
       builder: (context, state) {
         if (state.cartItems.isEmpty && state.isOrdered) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              leadingWidth: 30,
+              title: AppBarTitle(title: 'Order'),
+            ),
             body: BlocBuilder<OrderBloc, OrderState>(
               builder: (context, state) {
                 var products = state.order?.products;
 
-                return Container(
-                  margin: const EdgeInsets.all(14),
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: kWhite,
-                    borderRadius: BorderRadius.circular(8),
-                    boxShadow: kBoxShadow,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Sargydynyz barada',
-                        style: Theme.of(context).textTheme.bodyText2?.copyWith(
-                              fontSize: 16,
-                            ),
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Divider(
-                        color: kGrey3Color,
-                        height: .4,
-                        thickness: .5,
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          StatusIndicator(
-                            label: state.order?.status == 'CREATED'
-                                ? 'Sargydynyz kabul edildi'
-                                : '-',
-                          ),
-                          Button(
-                            text: 'Goý bolsun et',
-                            primary: kWhite,
-                            padding: EdgeInsets.zero,
-                            onPressed: () {},
-                            hasBorder: true,
-                            borderColor: kFailedColor,
-                            textColor: kFailedColor,
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Harydyn ady'),
-                          Text('Sany'),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Divider(
-                        color: kGrey3Color,
-                        height: .4,
-                        thickness: .5,
-                      ),
-                      SizedBox(
-                        height: 4,
-                      ),
-                      Column(
-                        children: products
-                                ?.map((e) => Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          'Haryt ${e.productId}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                        Text(
-                                          'M X ${e.quantity}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1,
-                                        ),
-                                      ],
-                                    ))
-                                .toList() ??
-                            [],
-                      ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      Divider(
-                        color: kGrey3Color,
-                        height: .4,
-                        thickness: .5,
-                      ),
-                      SizedBox(
-                        height: 7,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Jemi :'),
-                          Text('120 TMT'),
-                        ],
-                      )
-                    ],
-                  ),
+                return OrderView(
+                  products: products,
+                  status: state.order?.status ?? '-',
                 );
               },
             ),
@@ -190,18 +88,10 @@ class _CartScreenState extends State<CartScreen> {
         return Scaffold(
           appBar: AppBar(
             actions: [
-              IconButton(
-                onPressed: () {
-                  showWhishListSheet(context);
-                },
-                icon: Icon(
-                  Icons.favorite_border_outlined,
-                  size: 20,
-                ),
-              ),
+              FavoriteButton(),
             ],
             elevation: 0.6,
-            title: Text('Shopping bag'),
+            title: AppBarTitle(title: 'Sebet'),
           ),
           body: Container(
             color: Colors.grey[100],
@@ -216,7 +106,8 @@ class _CartScreenState extends State<CartScreen> {
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
                     child: Text(
-                      '${currentUser?.address}',
+                      // '${currentUser?.address}',
+                      '-',
                       style: TextStyle(
                           color: kText1Color,
                           fontSize: 12,
@@ -226,7 +117,14 @@ class _CartScreenState extends State<CartScreen> {
                   SizedBox(
                     height: 10,
                   ),
-                  UserAdress(user: currentUser),
+                  // TODO
+                  UserAdress(
+                      user: Client(
+                    address: '-',
+                    id: 1,
+                    phone: '-',
+                    name: '-',
+                  )),
                   SizedBox(
                     height: 8,
                   ),
@@ -388,6 +286,131 @@ class _CartScreenState extends State<CartScreen> {
   }
 }
 
+class OrderView extends StatelessWidget {
+  const OrderView({
+    Key? key,
+    required this.products,
+    required this.status,
+  }) : super(key: key);
+
+  final List<OrderProductEntity>? products;
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: kWhite,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: kBoxShadow,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'Sargydynyz barada',
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  fontSize: 16,
+                ),
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          CustomPaint(
+            size: Size(MediaQuery.of(context).size.width - 50, 1),
+            painter: DashedLineVerticalPainter(),
+          ),
+          // Divider(
+          //   color: kGrey3Color,
+          //   height: .4,
+          //   thickness: .5,
+          // ),
+          SizedBox(
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              StatusIndicator(
+                label: status == 'CREATED' ? 'Sargydynyz kabul edildi' : '-',
+              ),
+              Button(
+                text: 'Goý bolsun et',
+                primary: kWhite,
+                padding: EdgeInsets.zero,
+                onPressed: () {},
+                hasBorder: true,
+                borderColor: kFailedColor,
+                textColor: kFailedColor,
+              )
+            ],
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Harydyn ady'),
+              Text('Sany'),
+            ],
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Divider(
+            color: kGrey3Color,
+            height: .4,
+            thickness: .5,
+          ),
+          SizedBox(
+            height: 4,
+          ),
+          Column(
+            children: products
+                    ?.map((e) => Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Haryt ${e.productId}',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                            Text(
+                              'M X ${e.quantity}',
+                              style: Theme.of(context).textTheme.bodyText1,
+                            ),
+                          ],
+                        ))
+                    .toList() ??
+                [],
+          ),
+          SizedBox(
+            height: 14,
+          ),
+          Divider(
+            color: kGrey3Color,
+            height: .4,
+            thickness: .5,
+          ),
+          SizedBox(
+            height: 7,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Jemi :'),
+              Text('120 TMT'),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class Dot extends StatelessWidget {
   const Dot({Key? key}) : super(key: key);
 
@@ -438,6 +461,23 @@ class ProductGurrantee extends StatelessWidget {
       ),
     );
   }
+}
+
+class DashedLineVerticalPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    double dashHeight = 5, dashSpace = 3, startY = 0;
+    final paint = Paint()
+      ..color = kGrey1Color
+      ..strokeWidth = 1;
+    while (startY < size.width) {
+      canvas.drawLine(Offset(startY, 0), Offset(startY + dashHeight, 0), paint);
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
 class _PriceRowText extends StatelessWidget {

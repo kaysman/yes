@@ -23,7 +23,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
     var item = widget.item;
     return GestureDetector(
       onTap: () {
-        _navigaTo(context);
+        _navigateTo(context);
       },
       child: Container(
         decoration: BoxDecoration(
@@ -38,8 +38,6 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
               child: Stack(
                 children: [
                   Container(
-                    // color: widget.bgColor,
-
                     child: buildProductImage(
                       context,
                       widget.gadgetImage ??
@@ -175,6 +173,9 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
       // color: widget.bgColor ?? kGrey5Color,
       child: image != null
           ? Image.network(
+              errorBuilder: (context, error, stackTrace) {
+                return SizedBox();
+              },
               cacheHeight: MediaQuery.of(context).size.width.toInt(),
               image,
               fit: BoxFit.contain,
@@ -183,7 +184,7 @@ class _ProductsGridItemState extends State<ProductsGridItem> {
     );
   }
 
-  void _navigaTo(context) {
+  void _navigateTo(context) {
     Navigator.of(context).pushNamed(ProductDetailScreen.routeName, arguments: {
       "product": widget.item,
     });

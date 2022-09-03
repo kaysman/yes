@@ -1,18 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/presentation/blocs/gadget_bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
-import 'package:yes/presentation/screens/home/home_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/home-app-bar.dart';
 import 'package:yes/presentation/screens/home/widgets/home-error-view.dart';
 import 'package:yes/presentation/screens/home/widgets/views.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/icons.dart';
 
 import '../../../data/enums/gadget-type.dart';
 import '../../shared/components/app-loading-bar.dart';
-import '../cart/widgets/wishlist/bloc/wishList.bloc.dart';
-import '../cart/widgets/wishlist/wish_grid_list.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "home";
@@ -23,19 +22,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late HomeBloc homeBloc;
+  late GadgetBloc gadgetBloc;
   GadgetType? selectedType;
 
   @override
   void initState() {
-    homeBloc = BlocProvider.of<HomeBloc>(context);
+    gadgetBloc = BlocProvider.of<GadgetBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeBloc, HomeState>(
-      bloc: homeBloc,
+    return BlocConsumer<GadgetBloc, GadgetState>(
       listener: (context, state) {},
       builder: (context, state) {
         // loading widget
@@ -45,11 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         // error widget
 
-        var types = state.gadgets;
+        var types = state.homeGadgets;
         var circleItems =
             types?.firstWhere((e) => e.type == GadgetType.CIRCLE_ITEMS);
         return Scaffold(
-          appBar: HomeAppBar(),
+          appBar: HomeAppBar(
+            isSearchOnHome:true,
+          ),
           body: NestedScrollView(
             floatHeaderSlivers: true,
             headerSliverBuilder:
@@ -71,9 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: kGrey5Color,
                     child: ListView(
                       children: List.generate(
-                        state.gadgets?.length ?? 0,
+                        types?.length ?? 0,
                         (index) {
-                          var gadget = state.gadgets![index];
+                          var gadget = types![index];
                           switch (gadget.type) {
                             case GadgetType.BANNER_FOR_MEN_AND_WOMEN:
                             case GadgetType.ONE_IMAGE_WITH_FULL_WIDTH:

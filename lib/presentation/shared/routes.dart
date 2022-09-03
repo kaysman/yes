@@ -81,16 +81,15 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     case ProductsScreen.routeName:
       return MaterialPageRoute(
         builder: (_) {
-          return ProductsScreen(
-              // promotionId: args['promotionId'],
-              );
-          // var args = settings.arguments as Map<String, dynamic>;
-          // switch (args.keys.first) {
-          //   case "promotionId":
-
-          //   default:
-          //     return SizedBox();
-          // }
+          var args = settings.arguments as Map<String, dynamic>;
+          switch (args.keys.first) {
+            case "link":
+              return ProductsScreen(link: args['link']);
+            case "filter":
+              return ProductsScreen(filter: args['filter']);
+            default:
+              return ProductsScreen();
+          }
         },
       );
     case WishGridList.routeName:

@@ -38,34 +38,33 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        bottomNavigationBar: ProductDetailBottomNavBar(product: widget.product),
-        extendBodyBehindAppBar: true,
-        appBar: AnimatedAppBar(
-          controller: controller,
-        ),
-        body: FutureBuilder<ProductEntity?>(
-          future: fetchProduct,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return ProductDetailScreenLoading(product: widget.product);
-            } else if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              return ProductDetailResponse(
-                product: snapshot.data!,
-                controller: controller,
-              );
-            } else {
-              return Center(
-                child: Text(
-                  'Something went wrong',
-                  style: TextStyle(color: kPrimaryColor),
-                ),
-              );
-            }
-          },
-        ),
+    return Scaffold(
+      // backgroundColor: kWhite,
+      bottomNavigationBar: ProductDetailBottomNavBar(product: widget.product),
+      extendBodyBehindAppBar: true,
+      appBar: AnimatedAppBar(
+        controller: controller,
+      ),
+      body: FutureBuilder<ProductEntity?>(
+        future: fetchProduct,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ProductDetailScreenLoading(product: widget.product);
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            return ProductDetailResponse(
+              product: snapshot.data!,
+              controller: controller,
+            );
+          } else {
+            return Center(
+              child: Text(
+                'Something went wrong',
+                style: TextStyle(color: kPrimaryColor),
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -106,6 +105,7 @@ class _ProductDetailResponseState extends State<ProductDetailResponse> {
             ),
 
           ProductPriceAndDescription(
+            brand: widget.product.brand?.name ?? '-',
             description: widget.product.description_tm ?? '-',
             name: widget.product.name_tm ?? '-',
             ourPrice: widget.product.ourPrice ?? 0,

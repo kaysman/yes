@@ -43,6 +43,9 @@ class GadgetGridView extends StatelessWidget {
                         color: colors[index],
                         padding: const EdgeInsets.all(5),
                         child: Image.network(
+                          errorBuilder: (context, error, stackTrace) {
+                            return SizedBox();
+                          },
                           cacheHeight:
                               MediaQuery.of(context).size.height.toInt(),
                           item!.getFullPathImage!,
@@ -105,6 +108,9 @@ class GadgetListView extends StatelessWidget {
                               print(item?.link);
                             },
                             child: Image.network(
+                              errorBuilder: (context, error, stackTrace) {
+                                return SizedBox();
+                              },
                               cacheHeight:
                                   MediaQuery.of(context).size.height.toInt(),
                               item!.getFullPathImage!,
@@ -201,7 +207,7 @@ class _GadgetSwiperViewState extends State<GadgetSwiperView> {
   Widget build(BuildContext context) {
     var items = widget.gadget.items;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.only(bottom: 10),
       child: Column(
         children: [
           CarouselSlider(
@@ -215,6 +221,9 @@ class _GadgetSwiperViewState extends State<GadgetSwiperView> {
                           width: double.infinity,
                           color: bgColors[index],
                           child: Image.network(
+                            errorBuilder: (context, error, stackTrace) {
+                              return SizedBox();
+                            },
                             item.getFullPathImage!,
                             cacheWidth:
                                 MediaQuery.of(context).size.width.toInt(),
@@ -260,10 +269,11 @@ class _GadgetSwiperViewState extends State<GadgetSwiperView> {
       width: 5,
       height: 5,
       decoration: BoxDecoration(
-          color: activePage == index
-              ? Colors.blueAccent.withOpacity(.7)
-              : kGreyColor.withOpacity(.4),
-          shape: BoxShape.circle),
+        color: activePage == index
+            ? Colors.blueAccent.withOpacity(.7)
+            : kGreyColor.withOpacity(.4),
+        shape: BoxShape.circle,
+      ),
     );
   }
 }
@@ -284,8 +294,12 @@ class GadgetOneImageView extends StatelessWidget {
                 Container(
                   color: bgColors.last,
                   child: Image.network(
+                    errorBuilder: (context, error, stackTrace) {
+                      return SizedBox();
+                    },
                     item!.getFullPathImage!,
                     cacheWidth: MediaQuery.of(context).size.width.toInt(),
+                    cacheHeight: 180,
                   ),
                 ),
                 Positioned(
@@ -298,18 +312,20 @@ class GadgetOneImageView extends StatelessWidget {
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            print('Men');
                             Navigator.pushNamed(
-                              context,
-                              ProductsScreen.routeName,
-                            );
+                                context, ProductsScreen.routeName,
+                                arguments: {
+                                  'link': '/products',
+                                });
                           },
                         ),
                       ),
                       Expanded(
                         child: InkWell(
                           onTap: () {
-                            print('Women');
+                            Navigator.pushNamed(
+                                context, ProductsScreen.routeName,
+                                arguments: {'link': '/products'});
                           },
                         ),
                       ),

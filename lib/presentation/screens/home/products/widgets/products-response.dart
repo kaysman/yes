@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:yes/data/models/product%20-new/filter-for-product.model.dart';
 import 'package:yes/data/service/products_service.dart';
+import 'package:yes/presentation/screens/category/category_screen.dart';
+import 'package:yes/presentation/screens/home/products/widgets/emty-search-or-filter.dart';
 import 'package:yes/presentation/screens/home/products/widgets/product_list_item.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/app-loading-bar.dart';
-import 'package:yes/presentation/shared/components/button.dart';
 
 import '../../../../../data/models/product -new/product.model.dart';
 
@@ -15,8 +15,10 @@ class ProductsResponse extends StatefulWidget {
     Key? key,
     this.searchValue,
     this.filterVal,
+    this.link,
   }) : super(key: key);
   final String? searchValue;
+  final String? link;
   final FilterForProductDTO? filterVal;
 
   @override
@@ -34,20 +36,40 @@ class _ProductsResponseState extends State<ProductsResponse> {
   scrollListener() {
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      getAllProducts();
+      if (widget.filterVal != null) {
+        getAllProducts(
+          link: widget.link,
+          filter: widget.filterVal,
+        );
+      } else if (widget.searchValue != null) {
+        getAllProducts(
+          link: widget.link,
+          filter: FilterForProductDTO(
+            search: widget.searchValue,
+          ),
+        );
+      } else {
+        getAllProducts(
+          link: widget.link,
+        );
+      }
     }
   }
 
   @override
   void initState() {
-    print('=============');
-    productsSubscription = productsStream.stream.listen((event) {
-      productList.addAll(event);
-    });
+    productsSubscription = productsStream.stream.listen((event) {});
+
     if (widget.searchValue != null) {
-      getAllProducts(filter: FilterForProductDTO(search: widget.searchValue));
-    } else {
-      getAllProducts();
+      getAllProducts(
+          link: widget.link,
+          filter: FilterForProductDTO(search: widget.searchValue));
+    } else if (widget.link != null) {
+      getAllProducts(
+        link: widget.link,
+      );
+    } else if (widget.filterVal != null) {
+      getAllProducts(filter: widget.filterVal);
     }
 
     scrollController = ScrollController();
@@ -58,27 +80,23 @@ class _ProductsResponseState extends State<ProductsResponse> {
   @override
   void didUpdateWidget(covariant ProductsResponse oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (productList.isNotEmpty) {
+
+    if (oldWidget.searchValue != widget.searchValue) {
+      if (widget.searchValue != null) {
+        if (productList.isNotEmpty) {
+          productList = [];
+        }
+        getAllProducts(
+            link: widget.link,
+            filter: FilterForProductDTO(search: widget.searchValue));
+      }
+    } else if (widget.filterVal != oldWidget.filterVal) {
       productList = [];
+      getAllProducts(link: widget.link, filter: widget.filterVal);
     }
-    if (oldWidget.filterVal?.color_id != widget.filterVal?.color_id) {
-      getAllProducts(
-        filter: widget.filterVal,
-      );
-    }
-    // print(widget.filterVal);
-    // print('1111111111111111111111');
-    // if (oldWidget.searchValue != widget.searchValue) {
-    //   if (widget.searchValue != null) {
-    //     getAllProducts(filter: FilterForProductDTO(search: widget.searchValue));
-    //     if (productList.isNotEmpty) {
-    //       productList = [];
-    //     }
-    //   }
-    // }
   }
 
-  getAllProducts({FilterForProductDTO? filter}) async {
+  getAllProducts({FilterForProductDTO? filter, String? link}) async {
     if (filter == null) {
       filter = FilterForProductDTO();
     }
@@ -87,16 +105,20 @@ class _ProductsResponseState extends State<ProductsResponse> {
       if (productList.isNotEmpty) {
         filter.lastId = productList.last.id;
       }
-      var res = await ProductsService.getProducts(queryParams: filter.toJson());
-      if (widget.searchValue == null && res.length == 1) {
-        changeLoading();
-        return;
-      } else if (res.isNotEmpty && res.length > 1 ||
-          widget.searchValue != null) {
-        productsStream.add(res);
-        setState(() {
-          productList.addAll(res);
-        });
+      print(link);
+      var res = await ProductsService.getProducts(
+        queryParams: filter.toJson(),
+        link: link,
+      );
+      if (res.isNotEmpty) {
+        for (var item in res) {
+          if (!productList.contains(item)) {
+            setState(() {
+              productList.add(item);
+            });
+            productsStream.add(res);
+          }
+        }
       }
       changeLoading();
     } catch (_) {
@@ -125,69 +147,49 @@ class _ProductsResponseState extends State<ProductsResponse> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return AppLoadingBar();
         } else if (snapshot.hasData) {
-          var products = productList.isEmpty ? snapshot.data : productList;
-
-          if (snapshot.data?.isEmpty == true && widget.searchValue != null) {
-            return Center(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Image.asset(
-                    'assets/res.png',
-                    width: MediaQuery.of(context).size.width * .85,
-                    height: MediaQuery.of(context).size.height * .2,
-                  ),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Text('Siziň gözlegiňize degişli haryt tapylmady!'),
-                  SizedBox(
-                    height: 14,
-                  ),
-                  Button(
-                    text: 'Gaýtadan synanyşyň',
-                    onPressed: () {
-                      getAllProducts();
-                    },
-                    hasBorder: true,
-                  )
-                ],
-              ),
+          if (snapshot.data?.isEmpty == true && widget.searchValue != null ||
+              snapshot.data?.isEmpty == true && widget.filterVal != null) {
+            return EmptySearchOrFilterView(
+              onTryAgain: () {
+                getAllProducts(
+                  link: widget.link,
+                );
+              },
             );
           }
 
-          return Column(
+          var products = productList.isEmpty ? snapshot.data : productList;
+          return Stack(
             children: [
-              Expanded(
-                child: GridView.count(
+              GridView.count(
                   controller: scrollController,
                   crossAxisCount: 2,
+                  padding: isLoading
+                      ? EdgeInsets.only(
+                          bottom: 20,
+                        )
+                      : null,
                   childAspectRatio: 3 / 4.3,
-                  children: products
-                          ?.map(
-                            (e) => ProductsGridItem(
-                              item: e,
-                            ),
-                          )
-                          .toList() ??
-                      [],
-                ),
-              ),
-              if (isLoading && (snapshot.data?.length ?? 0) > 1)
-                Container(
-                  margin: const EdgeInsets.only(top: 14),
-                  child: AppLoadingBar(),
-                ),
+                  children: List.generate(products?.length ?? 0, (index) {
+                    var item = products?[index];
+
+                    return ProductsGridItem(
+                      item: item,
+                    );
+                  })),
+              if (isLoading)
+                Positioned(
+                  bottom: -40,
+                  left: 0,
+                  right: 0,
+                  child: Center(child: AppLoadingBar()),
+                )
             ],
           );
         } else {
-          return Center(
-              child: Text(
-            'Something went wrong',
-            style: TextStyle(color: kPrimaryColor),
-          ));
+          return AppErrorWidget(onTryAgain: () async {
+            await getAllProducts();
+          });
         }
       },
     );

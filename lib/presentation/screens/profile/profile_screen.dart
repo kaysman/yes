@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/data/service/app_service.dart';
 import 'package:yes/presentation/blocs/auth_bloc.dart';
+import 'package:yes/presentation/screens/category/category_screen.dart';
 import 'package:yes/presentation/screens/profile/login/login.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'login/bottom_login_sheet.dart';
@@ -22,7 +23,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _loginBloc = LoginBloc(context.read<AuthBloc>());
   }
 
-  late Client? currentUser;
+  // late Client? currentUser;
+  late String? currentUser;
   late LoginBloc _loginBloc;
 
   @override
@@ -30,16 +32,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 40,
-        elevation: 0,
+        elevation: .6,
         backgroundColor: kWhite,
-        title: const Text(
-          'Profile',
-          style: TextStyle(
-            fontSize: 17,
-            color: kSecondaryColor,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: AppBarTitle(title: 'Profile'),
       ),
       body: Container(
         width: double.infinity,
@@ -54,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         children: [
                           Container(
-                            color: Colors.grey[200],
+                            color: Color.fromARGB(255, 45, 67, 86),
                             height: 100,
                           ),
                           Container(
@@ -76,11 +71,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               decoration: BoxDecoration(
                                 border: Border.all(
                                     color: Colors.grey[100]!, width: 2),
-                                color: Colors.grey[300],
+                                color: kGrey5Color,
                                 borderRadius: BorderRadius.circular(3),
                               ),
                               child: Icon(
-                                Icons.person,
+                                CupertinoIcons.person,
+                                // color: kGrey1Color,
                                 size: 40,
                               ),
                             ),
@@ -91,18 +87,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: BlocConsumer<AuthBloc, AuthState>(
                                 listener: (_, state) {},
                                 builder: (context, state) {
-                                  print(state.status);
-                                  print(state.identity);
                                   return state.status ==
-                                                  AuthStatus.Authenticated &&
-                                              state.identity != null ||
+                                              AuthStatus.Authenticated ||
                                           currentUser != null
                                       ? ElevatedButton(
                                           onPressed: logOut,
                                           child: Text('Log out'))
                                       : GestureDetector(
                                           onTap: () {
-                                            _showLoginBottomSheet(context);
+                                            showLoginBottomSheet(context);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -132,6 +125,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  height: 14,
+                ),
+                Container(
+                  color: kWhite,
+                  child: Column(
+                    children: [
+                      Material(
+                        child: InkWell(
+                          onTap: () {},
+                          child: ListTile(
+                            minLeadingWidth: 20,
+                            leading: Icon(CupertinoIcons.cube_box),
+                            title: Text(
+                              'Orders',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2
+                                  ?.copyWith(color: kText2Color),
+                            ),
+                            subtitle: Text(
+                              'Check your order status',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  ?.copyWith(fontSize: 12),
+                            ),
+                            trailing: Icon(
+                              CupertinoIcons.forward,
+                              size: 14,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ],
@@ -140,17 +170,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _showLoginBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return BottomLoginSheet();
-      },
-    );
-  }
-
   void logOut() async {
     await _loginBloc.logOut();
   }
+}
+
+showLoginBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    isScrollControlled: true,
+    context: context,
+    builder: (context) {
+      return BottomLoginSheet();
+    },
+  );
 }

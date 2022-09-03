@@ -32,6 +32,7 @@ class CartState {
       name_tm: product.name_tm,
       quantity: product.quantity,
       price: product.ourPrice ?? 0,
+      ownerName: product.market?.ownerName,
     );
     return cartItem;
   }

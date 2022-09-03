@@ -4,7 +4,7 @@ import 'package:yes/data/models/adress/create-adress.model.dart';
 import 'package:yes/data/models/client/client.model.dart';
 import 'package:yes/presentation/screens/cart/blocs/adress.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/components/input_fields.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 import 'package:yes/presentation/shared/validators.dart';
@@ -93,7 +93,7 @@ class ChangeAdressOrAddnewAdressSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AdressBloc, AdressState>(
+    return BlocBuilder<AddressBloc, AdressState>(
       builder: (context, state) {
         return Container(
           color: kScaffoldBgColor,
@@ -256,7 +256,7 @@ class AdressCreateSheet extends StatefulWidget {
 }
 
 class _AdressCreateSheetState extends State<AdressCreateSheet> {
-  late AdressBloc adressBloc;
+  late AddressBloc adressBloc;
   TextEditingController adress1Controller = TextEditingController();
   TextEditingController adress2Controller = TextEditingController();
   TextEditingController titleController = TextEditingController();
@@ -265,13 +265,13 @@ class _AdressCreateSheetState extends State<AdressCreateSheet> {
 
   @override
   void initState() {
-    adressBloc = BlocProvider.of<AdressBloc>(context);
+    adressBloc = BlocProvider.of<AddressBloc>(context);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AdressBloc, AdressState>(
+    return BlocConsumer<AddressBloc, AdressState>(
       listenWhen: (p, c) => p.createAdressStatus != c.createAdressStatus,
       listener: (context, state) {
         if (state.createAdressStatus == CreateAdressStatus.success) {

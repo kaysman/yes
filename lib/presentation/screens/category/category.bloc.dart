@@ -1,55 +1,51 @@
-// import 'package:bloc/bloc.dart';
-// import 'package:yes/data/models/category/category.model.dart';
-// import 'package:yes/data/service/category_service.dart';
+import 'package:bloc/bloc.dart';
+import 'package:yes/data/models/category-new/category.model.dart';
+import 'package:yes/data/service/category_service.dart';
 
-// enum HomeCategoryFetchingStatus { Idle, Loading, Error }
+enum CategoryListStatus { idle, success, error, loading }
 
-// enum TabCategoryFetchingStatus { Idle, Loading, Error }
+class CategoryState {
+  final CategoryListStatus listingStatus;
+  final List<CategoryEntity>? categories;
 
-// class CategoryState {
-//   final HomeCategoryFetchingStatus? homeStatus;
-//   final TabCategoryFetchingStatus? tabStatus;
-//   final List<Category>? homeCategories;
-//   final List<Category>? tabCategories;
+  CategoryState({
+    this.listingStatus = CategoryListStatus.idle,
+    this.categories,
+  });
 
-//   CategoryState({
-//     this.homeStatus,
-//     this.tabStatus,
-//     this.homeCategories,
-//     this.tabCategories,
-//   });
+  CategoryState copyWith({
+    CategoryListStatus? listingStatus,
+    List<CategoryEntity>? categories,
+  }) {
+    return CategoryState(
+      categories: categories ?? this.categories,
+      listingStatus: listingStatus ?? this.listingStatus,
+    );
+  }
+}
 
-//   CategoryState copyWith({
-//     List<Category>? homeCategories,
-//     List<Category>? tabCategories,
-//     HomeCategoryFetchingStatus? homeStatus,
-//     TabCategoryFetchingStatus? tabStatus,
-//   }) {
-//     return CategoryState(
-//         homeCategories: homeCategories ?? this.homeCategories,
-//         tabCategories: tabCategories ?? this.tabCategories,
-//         homeStatus: homeStatus ?? this.homeStatus,
-//         tabStatus: tabStatus ?? this.tabStatus);
-//   }
-// }
+class CategoryBloc extends Cubit<CategoryState> {
+  CategoryBloc() : super(CategoryState()) {
+    getAllCategories();
+  }
 
-// class CategoryCubit extends Cubit<CategoryState> {
-//   CategoryCubit() : super(CategoryState()) {
-//     fetchTabCategories();
-//     fetchHomeCategories();
-//   }
-
-//   Future<void> fetchTabCategories() async {
-//     emit(state.copyWith(tabStatus: TabCategoryFetchingStatus.Loading));
-//     final res = await CategoryService.fetchTabCategories();
-//     emit(state.copyWith(
-//         tabCategories: res, tabStatus: TabCategoryFetchingStatus.Idle));
-//   }
-
-//   Future<void> fetchHomeCategories() async {
-//     emit(state.copyWith(homeStatus: HomeCategoryFetchingStatus.Loading));
-//     final res = await CategoryService.fetchHomeCategories();
-//     emit(state.copyWith(
-//         homeCategories: res, homeStatus: HomeCategoryFetchingStatus.Idle));
-//   }
-// }
+  getAllCategories() async {
+    emit(state.copyWith(listingStatus: CategoryListStatus.loading));
+    try {
+      var res = await CategoryService.getCategories();
+      emit(
+        state.copyWith(
+          categories: res,
+          listingStatus: CategoryListStatus.success,
+        ),
+      );
+    } catch (_) {
+      print(_);
+      emit(
+        state.copyWith(
+          listingStatus: CategoryListStatus.error,
+        ),
+      );
+    }
+  }
+}

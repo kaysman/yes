@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/filter/filter.enum.dart';
 import 'package:yes/data/models/product%20-new/filter-for-product.model.dart';
+import 'package:yes/presentation/screens/category/category.bloc.dart';
 import 'package:yes/presentation/screens/home/products/blocs/brand.bloc.dart';
 import 'package:yes/presentation/screens/home/products/blocs/category.bloc.dart';
 import 'package:yes/presentation/screens/home/products/blocs/filter.bloc.dart';
 import 'package:yes/presentation/screens/home/products/blocs/market.bloc.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/components/input_fields.dart';
 
 class FilterScreen extends StatefulWidget {
@@ -107,24 +108,24 @@ class _FilterScreenState extends State<FilterScreen> {
                       ),
                       // if (state.listingStatus ==
                       //     ProductListStatus.silentLoading)
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          SizedBox(
-                            width: 15,
-                          ),
-                          SizedBox(
-                            width: 16,
-                            height: 16,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: kPrimaryColor,
-                                strokeWidth: 2,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisSize: MainAxisSize.min,
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 15,
+                      //     ),
+                      //     SizedBox(
+                      //       width: 16,
+                      //       height: 16,
+                      //       child: Center(
+                      //         child: CircularProgressIndicator(
+                      //           color: kPrimaryColor,
+                      //           strokeWidth: 2,
+                      //         ),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                     ],
                   ),
                   onPressed: () {

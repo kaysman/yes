@@ -1,25 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AppBarIconBtn extends StatelessWidget {
-  final IconData icon;
-  final Function() onPressed;
+  final Widget iconButton;
   const AppBarIconBtn({
     Key? key,
-    required this.icon,
-    required this.onPressed,
+    required this.iconButton,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      child: IconButton(
-          icon: Icon(
-            icon,
-            size: 23,
-            color: Colors.black87,
-          ),
-          onPressed: onPressed),
+      child: iconButton,
       decoration: BoxDecoration(color: Colors.white70, shape: BoxShape.circle),
     );
   }

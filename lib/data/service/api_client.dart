@@ -21,7 +21,7 @@ class ApiClient {
     try {
       var res = await client.get(url, headers: headers);
       // if (res.statusCode == 200) {
-      print(res.body);
+      // print(res.body);
       return ApiResponse.fromJson(jsonDecode(res.body));
       // }
     } catch (_) {
@@ -32,7 +32,7 @@ class ApiClient {
   // post
   post(Uri url, {Map<String, String>? headers, dynamic data}) async {
     var res = await client.post(url, headers: headers, body: data);
-    return ApiResponse.fromJson(jsonDecode(res.body));
+    return ApiResponse.fromJson(json.decode(res.body));
   }
 
   // dio post

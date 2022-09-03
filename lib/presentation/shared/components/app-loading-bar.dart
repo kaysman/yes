@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:yes/presentation/shared/colors.dart';
@@ -20,6 +22,7 @@ class AppLoadingBar extends StatelessWidget {
         child: SpinKitRing(
           color: kPrimaryColor,
           lineWidth: 4,
+          
         ),
       ),
     );

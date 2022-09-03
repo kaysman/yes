@@ -26,35 +26,7 @@ class ProductBootNav extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // Expanded(
-          //   flex: 3,
-          //   child: Container(
-          //     alignment: Alignment.center,
-          //     child: TextButton(
-          //       style: ButtonStyle(
-          //         overlayColor: MaterialStateProperty.all(Colors.transparent),
-          //       ),
-          //       onPressed: () {},
-          //       child: Text(
-          //         'GENDER',
-          //         style: TextStyle(
-          //             color: kText1Color,
-          //             fontSize: 13,
-          //             fontWeight: FontWeight.w500),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // SizedBox(
-          //   height: 15,
-          //   child: VerticalDivider(
-          //     color: Colors.grey[100],
-          //     thickness: 1,
-          //     width: 1,
-          //   ),
-          // ),
           Expanded(
-            // flex: 3,
             child: Container(
               child: TextButton.icon(
                 style: ButtonStyle(
@@ -88,7 +60,6 @@ class ProductBootNav extends StatelessWidget {
             ),
           ),
           Expanded(
-            // flex: 3,
             child: Stack(
               children: [
                 Container(
@@ -108,9 +79,9 @@ class ProductBootNav extends StatelessWidget {
                       if (res != null) {
                         onFilterChanged.call(res);
                       }
-                      print('-----------');
-                      print(res);
-                      print('-----------');
+                      // print('-----------');
+                      // print(res);
+                      // print('-----------');
                     },
                     icon: Icon(
                       Icons.filter_alt,

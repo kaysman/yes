@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/app_bar_icon_btn.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-icons.dart';
@@ -71,10 +70,14 @@ class _AnimatedAppBarState extends State<AnimatedAppBar> {
     return Container(
       margin: const EdgeInsets.only(top: 5, bottom: 15),
       child: AppBarIconBtn(
-        icon: Icons.arrow_back,
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        iconButton: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
       ),
     );
   }

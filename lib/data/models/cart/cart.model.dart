@@ -11,6 +11,7 @@ class CartItem with EquatableMixin {
   int? marketPrice;
   int? quantity;
   String? code;
+  String? ownerName;
   String? description_tm;
   String? description_ru;
   List<ImageEntity>? images;
@@ -42,6 +43,7 @@ class CartItem with EquatableMixin {
     required this.price,
     this.selectedSize,
     required this.selectedSizes,
+    this.ownerName,
   });
 
   @override

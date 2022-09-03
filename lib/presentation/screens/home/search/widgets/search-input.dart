@@ -1,57 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:yes/presentation/shared/colors.dart';
 
 class SearchInput extends StatelessWidget {
-  const SearchInput(
-      {Key? key,
-      required this.serchTextController,
-      required this.onSearchChanged,
-      required this.onSearch,
-      required this.onChangedTextIsNotEmty})
-      : super(key: key);
-  final TextEditingController serchTextController;
+  const SearchInput({
+    Key? key,
+    required this.searchTextController,
+    required this.onSearchChanged,
+    this.contentPadding,
+  }) : super(key: key);
+  final TextEditingController searchTextController;
   final ValueChanged<String?> onSearchChanged;
-  final VoidCallback onSearch;
-  final bool onChangedTextIsNotEmty;
+  final EdgeInsets? contentPadding;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: serchTextController,
+      controller: searchTextController,
       style: TextStyle(),
       onChanged: onSearchChanged,
+      autofocus: true,
       decoration: InputDecoration(
         border: InputBorder.none,
         hintText: 'Haryt gözle',
-        contentPadding:
-            onChangedTextIsNotEmty ? const EdgeInsets.only(bottom: 14) : null,
-        suffix: onChangedTextIsNotEmty
-            ? Padding(
-                padding: const EdgeInsets.only(top: 14),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      onPressed: onSearch,
-                      icon: Icon(
-                        Icons.search,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        serchTextController.clear();
-                      },
-                      icon: Icon(
-                        Icons.close,
-                        color: kText1Color,
-                      ),
-                    )
-                  ],
-                ),
-              )
-            : null,
+        contentPadding: contentPadding,
       ),
     );
-    ;
   }
 }

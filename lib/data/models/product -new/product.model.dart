@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:yes/data/models/brand-new/brand.model.dart';
 import 'package:yes/data/models/category-new/category.model.dart';
@@ -8,7 +9,7 @@ import 'package:yes/data/models/product%20-new/size.model.dart';
 part 'product.model.g.dart';
 
 @JsonSerializable()
-class ProductEntity {
+class ProductEntity with EquatableMixin {
   final int? id;
   final String? name_tm;
   final String? name_ru;
@@ -58,4 +59,7 @@ class ProductEntity {
 
   @override
   String toString() => '${name_tm} size:${sizes}';
+  
+  @override
+  List<Object?> get props => [this.id];
 }

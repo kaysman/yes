@@ -350,11 +350,11 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
       ' possible elevation values.',
     );
 
-    final List<MergeableMaterialItem> items = <MergeableMaterialItem>[];
+    final List<SizedBox> items = <SizedBox>[];
 
     for (int index = 0; index < widget.children.length; index += 1) {
       if (_isChildExpanded(index) && index != 0 && !_isChildExpanded(index - 1))
-        items.add(MaterialGap(
+        items.add(SizedBox(
             key: _SaltedKey<BuildContext, int>(context, index * 2 - 1)));
 
       final ExpansionPanel child = widget.children[index];
@@ -384,24 +384,13 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
           child: expandIconContainer,
         );
       }
-      Widget header = Row(
-        children: <Widget>[
-          Expanded(
-            child: AnimatedContainer(
-              duration: widget.animationDuration,
-              curve: Curves.fastOutSlowIn,
-              margin: _isChildExpanded(index)
-                  ? widget.expandedHeaderPadding
-                  : EdgeInsets.zero,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(
-                    minHeight: _kPanelHeaderCollapsedHeight),
-                child: headerWidget,
-              ),
-            ),
-          ),
-          Container(child: child.hasIcon ? expandIconContainer : null),
-        ],
+      Widget header = AnimatedContainer(
+        duration: widget.animationDuration,
+        curve: Curves.fastOutSlowIn,
+        // margin: _isChildExpanded(index)
+        //     ? widget.expandedHeaderPadding
+        //     : EdgeInsets.zero,
+        child: headerWidget,
       );
       if (child.canTapOnHeader) {
         header = MergeSemantics(
@@ -412,19 +401,19 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
         );
       }
       items.add(
-        MaterialSlice(
+        SizedBox(
           key: _SaltedKey<BuildContext, int>(context, index * 2),
-          color: child.backgroundColor,
+          // color: child.backgroundColor,
           child: Column(
             children: <Widget>[
               header,
               AnimatedCrossFade(
                 firstChild: Container(height: 0.0),
                 secondChild: child.body,
-                firstCurve:
-                    const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
-                secondCurve:
-                    const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
+                // firstCurve:
+                //     const Interval(0.0, 0.6, curve: Curves.fastOutSlowIn),
+                // secondCurve:
+                //     const Interval(0.4, 1.0, curve: Curves.fastOutSlowIn),
                 sizeCurve: Curves.fastOutSlowIn,
                 crossFadeState: _isChildExpanded(index)
                     ? CrossFadeState.showSecond
@@ -437,14 +426,14 @@ class _ExpansionPanelListState extends State<ExpansionPanelList> {
       );
 
       if (_isChildExpanded(index) && index != widget.children.length - 1)
-        items.add(MaterialGap(
+        items.add(SizedBox(
             key: _SaltedKey<BuildContext, int>(context, index * 2 + 1)));
     }
 
-    return MergeableMaterial(
-      hasDividers: true,
-      dividerColor: widget.dividerColor,
-      elevation: widget.elevation,
+    return Column(
+      // hasDividers: true,
+      // dividerColor: widget.dividerColor,
+      // elevation: widget.elevation,
       children: items,
     );
   }

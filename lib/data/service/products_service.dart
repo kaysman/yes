@@ -17,8 +17,9 @@ class ProductsService {
 
   static Future<List<ProductEntity>> getProducts({
     Map<String, dynamic>? queryParams,
+    String? link,
   }) async {
-    String url = Apis.kBaseUrl + '/products?';
+    String url = Apis.kBaseUrl + '${link != null ? link : '/products'}?';
     queryParams?.forEach((key, value) {
       if (key != null && value != null) {
         url += url.endsWith('?')
@@ -30,7 +31,7 @@ class ProductsService {
 
     try {
       var res = await ApiClient.instance.get(uri, headers: header());
-    
+
       return (res.data as List)
           .map((json) => ProductEntity.fromJson(json as Map<String, dynamic>))
           .toList();

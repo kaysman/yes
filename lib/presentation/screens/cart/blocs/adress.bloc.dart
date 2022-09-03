@@ -32,8 +32,8 @@ class AdressState {
   }
 }
 
-class AdressBloc extends Cubit<AdressState> {
-  AdressBloc() : super(AdressState());
+class AddressBloc extends Cubit<AdressState> {
+  AddressBloc() : super(AdressState());
 
   createAdress(CreateAddressDTO data) async {
     emit(

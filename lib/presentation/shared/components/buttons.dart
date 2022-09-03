@@ -1,4 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yes/presentation/screens/cart/cart.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/bloc/wishList.bloc.dart';
+import 'package:yes/presentation/screens/cart/widgets/wishlist/wish_grid_list.dart';
+import 'package:yes/presentation/screens/home/home_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
 import 'package:yes/presentation/shared/components/indicators.dart';
 
@@ -187,6 +193,102 @@ class SmallCircleButton extends StatelessWidget {
           ],
         ),
         child: Center(child: child),
+      ),
+    );
+  }
+}
+
+class CartButton extends StatelessWidget {
+  const CartButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'shopping-bag');
+          },
+          icon: Icon(
+            CupertinoIcons.bag,
+          ),
+        ),
+        BlocBuilder<CartBloc, CartState>(
+          builder: (context, state) {
+            return state.cartItems.length > 0
+                ? Positioned(
+                    top: 10,
+                    right: 6,
+                    child: ProductCountIndicator(
+                      state: state,
+                    ),
+                  )
+                : SizedBox.shrink();
+          },
+        )
+      ],
+    );
+  }
+}
+
+class FavoriteButton extends StatelessWidget {
+  const FavoriteButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<WishListBloc, WishListState>(
+      builder: (context, state) {
+        return IconButton(
+          onPressed: () {
+            Navigator.of(context).pushNamed(
+              WishGridList.routeName,
+              arguments: {
+                'products': state.wishListItems,
+                'categories': state.categories,
+                'filteredList': state.filteredList,
+              },
+            );
+          },
+          icon: Icon(
+            CupertinoIcons.heart,
+          ),
+        );
+      },
+    );
+    ;
+  }
+}
+
+class SearchButton extends StatelessWidget {
+  const SearchButton({Key? key, required this.onSearch}) : super(key: key);
+  final VoidCallback onSearch;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onSearch,
+      icon: Icon(
+        CupertinoIcons.search,
+      ),
+    );
+  }
+}
+
+class ClearButton extends StatelessWidget {
+  const ClearButton({
+    Key? key,
+    required this.onClear,
+  }) : super(key: key);
+  final VoidCallback onClear;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      onPressed: onClear,
+      icon: Icon(
+        CupertinoIcons.clear,
+        color: kText1Color,
+        size: 18,
       ),
     );
   }

@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/enums/gadget-type.dart';
 import 'package:yes/data/models/gadget/gadget.model.dart';
-import 'package:yes/presentation/screens/home/home_bloc.dart';
+import 'package:yes/presentation/blocs/gadget_bloc.dart';
 import 'package:yes/presentation/screens/home/widgets/home-app-bar.dart';
 import 'package:yes/presentation/screens/home/widgets/vip_categories.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'views.dart';
 
 class HomeErrorView extends StatelessWidget {
   const HomeErrorView({Key? key, required this.state}) : super(key: key);
-  final HomeState state;
+  final GadgetState state;
 
   @override
   Widget build(BuildContext context) {
@@ -78,21 +78,21 @@ class HomeErrorView extends StatelessWidget {
             Expanded(
               // flex: 8,
               child: Text(
-                'Internet baglanyşygy ýok',
+                'Something went wrong',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2
                     ?.copyWith(color: kFailedColor),
               ),
             ),
-            BlocBuilder<HomeBloc, HomeState>(
+            BlocBuilder<GadgetBloc, GadgetState>(
               builder: (context, state) {
                 return Button(
                   icon: Icon(Icons.refresh),
                   text: 'Sahypany täzele',
                   primary: kPrimaryColor,
                   onPressed: () {
-                    context.read<HomeBloc>().fetchGadgets();
+                    context.read<GadgetBloc>().fetchGadgets();
                   },
                   textColor: kWhite,
                 );

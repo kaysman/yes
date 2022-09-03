@@ -7,7 +7,7 @@ import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart_screen.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-list.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 
 class ProductDetailBottomNavBar extends StatefulWidget {

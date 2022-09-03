@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/shared/colors.dart';
 
@@ -9,9 +7,11 @@ class ProductPriceAndDescription extends StatelessWidget {
     required this.name,
     required this.description,
     required this.ourPrice,
+    required this.brand,
   }) : super(key: key);
 
   final String name;
+  final String brand;
   final String description;
   final int ourPrice;
 
@@ -26,7 +26,7 @@ class ProductPriceAndDescription extends StatelessWidget {
         children: [
           Text.rich(
             TextSpan(
-              text: 'U.S. Polo Assn.  ',
+              text: '${brand}  ',
               style: TextStyle(
                 fontSize: 15,
                 color: kText1Color,

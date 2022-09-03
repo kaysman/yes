@@ -5,7 +5,7 @@ import 'package:yes/data/models/product%20-new/size.model.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/home/product_detail/widgets/detail-list.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 import '../cart_screen.dart';
 
@@ -26,6 +26,7 @@ class _ProductDetailListState extends State<ProductDetailList> {
           children: List.generate(products.length, (index) {
             var item = products[index];
             return _ProductDetail(
+              marketOwner: item.ownerName ?? '-',
               onTap: (v) {},
               sizes: [],
               selectedSize: item.selectedSize,
@@ -176,8 +177,7 @@ class _CartModalSheetState extends State<CartModalSheet> {
 
   buildCounterBtn(String sign, bool isIncrement, BuildContext ctx) {
     return Button(
-      primary: Colors.black45,
-      textColor: kWhite,
+      hasBorder: true,
       onPressed: () {
         setState(
           () {
@@ -198,6 +198,7 @@ class _CartModalSheetState extends State<CartModalSheet> {
 
 class _ProductDetail extends StatelessWidget {
   final String productName;
+  final String marketOwner;
   final bool? isSelected;
   final String productCode;
   final String image;
@@ -222,6 +223,7 @@ class _ProductDetail extends StatelessWidget {
     required this.sizes,
     required this.onChangeSizeAndCount,
     required this.selectedSize,
+    required this.marketOwner,
   }) : super(key: key);
 
   @override
@@ -271,7 +273,7 @@ class _ProductDetail extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        'Sold by: Gopala Srees',
+                        'Sold by: $marketOwner',
                         style: TextStyle(
                           color: Colors.black26,
                           fontSize: 11,

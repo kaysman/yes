@@ -18,7 +18,7 @@ class LocalStorage {
   }
 
   String? get getToken => _preferences!.getString("token");
-  Future<bool>  get removeToken => _preferences!.remove('token');
+  Future<bool> get removeToken => _preferences!.remove("token");
 
   // set setClient(Client value) {
   //   _preferences!.setString("client", json.encode(value.toJson()));

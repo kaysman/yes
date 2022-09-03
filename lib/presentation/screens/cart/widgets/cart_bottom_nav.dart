@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yes/data/models/order/create-order-item.model.dart';
 import 'package:yes/data/models/order/create-order.model.dart';
+import 'package:yes/data/service/app_service.dart';
+import 'package:yes/presentation/blocs/auth_bloc.dart';
 import 'package:yes/presentation/screens/cart/blocs/order.bloc.dart';
 import 'package:yes/presentation/screens/cart/cart.bloc.dart';
 import 'package:yes/presentation/screens/cart/widgets/user_adress.dart';
+import 'package:yes/presentation/screens/profile/profile_screen.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
 import 'package:yes/presentation/shared/components/input_fields.dart';
 import 'package:yes/presentation/shared/helpers.dart';
 import 'package:yes/presentation/shared/validators.dart';
@@ -22,9 +25,11 @@ class CartBottomNav extends StatefulWidget {
 
 class _CartBottomNavState extends State<CartBottomNav> {
   late OrderBloc orderBloc;
+  late String? currentUser;
 
   @override
   void initState() {
+    currentUser = AppService.currentUser.value;
     orderBloc = BlocProvider.of<OrderBloc>(context);
     super.initState();
   }
@@ -52,50 +57,62 @@ class _CartBottomNavState extends State<CartBottomNav> {
           height: 60,
           child: Container(
             width: double.infinity,
-            child: Button(
-              text: 'Satyn al',
-              primary: kPrimaryColor,
-              textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
-                    fontSize: 16,
-                    color: kWhite,
-                  ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              textColor: kWhite,
-              onPressed: () {
-                showAppBottomSheet(
-                  context,
-                  BlocBuilder<CartBloc, CartState>(
-                    builder: (context, cartState) {
-                      return buildOrderSheet(
+            child: BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, authState) {
+                return Button(
+                  text: 'Satyn al',
+                  primary: kPrimaryColor,
+                  textStyle: Theme.of(context).textTheme.bodyText2?.copyWith(
+                        fontSize: 16,
+                        color: kWhite,
+                      ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  textColor: kWhite,
+                  onPressed: () {
+                    if (authState.status == AuthStatus.Authenticated ||
+                        currentUser != null) {
+                      showAppBottomSheet(
                         context,
-                        () async {
-                          var orderProducts = cartState.cartItems
-                              .map(
-                                (e) => CreateOrderItem(
-                                  productId: e.id!,
-                                  quantity: e.defQuantity,
-                                  size_id: e.selectedSize!.id!,
-                                ),
-                              )
-                              .toList();
+                        BlocBuilder<CartBloc, CartState>(
+                          builder: (context, cartState) {
+                            return buildOrderSheet(
+                              context,
+                              () async {
+                                var orderProducts = cartState.cartItems
+                                    .map(
+                                      (e) => CreateOrderItem(
+                                        productId: e.id!,
+                                        quantity: e.defQuantity,
+                                        size_id: e.selectedSize!.id!,
+                                      ),
+                                    )
+                                    .toList();
 
-                          CreateOrderDTO data = CreateOrderDTO(
-                            products: orderProducts,
-                            userId: 1,
-                            addressId: 2,
-                            note: note,
-                          );
-                          await orderBloc.createOrder(data);
-                        },
-                        (v) {
-                          setState(() {
-                            note = v;
-                          });
-                        },
-                        state.createOrderStatus == CreateOrderStatus.loading,
+                                CreateOrderDTO data = CreateOrderDTO(
+                                  products: orderProducts,
+                                  userId: 1,
+                                  addressId: 2,
+                                  note: note,
+                                );
+                                await orderBloc.createOrder(data);
+                              },
+                              (v) {
+                                setState(() {
+                                  note = v;
+                                });
+                              },
+                              state.createOrderStatus ==
+                                  CreateOrderStatus.loading,
+                            );
+                          },
+                        ),
                       );
-                    },
-                  ),
+                    } else if (authState.status != AuthStatus.Authenticated ||
+                        currentUser == null) {
+                      showLoginBottomSheet(context);
+                    }
+                  },
                 );
               },
             ),

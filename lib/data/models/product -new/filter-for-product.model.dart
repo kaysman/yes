@@ -63,9 +63,6 @@ class FilterForProductDTO with EquatableMixin {
         this.category_id,
         this.market_id,
         this.size_id,
-        this.lastId,
-        this.take,
         this.search,
-        this.next,
       ];
 }

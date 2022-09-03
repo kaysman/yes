@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yes/presentation/shared/colors.dart';
-import 'package:yes/presentation/shared/components/button.dart';
+import 'package:yes/presentation/shared/components/buttons.dart';
+import 'package:yes/presentation/shared/storage.dart';
 
 Map<String, String> header() {
   return {
@@ -9,20 +11,19 @@ Map<String, String> header() {
   };
 }
 
-// Future<Map<String, String>> get headers async => {
-//       "Content-Type": "application/json",
-//       "Accept": "*/*",
-//       "Authorization": 'Bearer ${await getToken()}',
-//       "x-timezone": "${await getTimezone()}",
-//     };
+Future<Map<String, String>> get headers async => {
+      "Content-Type": "application/json",
+      "Accept": "*/*",
+      "Authorization": 'Bearer ${await getToken()}',
+    };
 
-// Future<String?> getToken() async {
-//   var disk = (await LocalStorage.instance);
-//   return disk.credentials?.accessToken;
-// }
+Future<String?> getToken() async {
+  var disk = (await LocalStorage.instance);
+  return disk.getToken;
+}
 
 class Apis {
-  static const kBaseUrl = 'http://192.168.1.4:3333';
+  static const kBaseUrl = 'http://192.168.1.8:3333';
   // http://yes.com.tm/api/front
 
   // auth
@@ -161,12 +162,6 @@ List<Map<String, dynamic>> menuItems = [
       Icons.home,
       color: kPrimaryColor,
     ),
-    // Image.asset(
-    //   AppIcons.home,
-    //   width: 24,
-    //   height: 24,
-    //   color: kPrimaryColor,
-    // ),
     "icon": Icon(
       Icons.home_outlined,
     ),
@@ -174,31 +169,31 @@ List<Map<String, dynamic>> menuItems = [
   },
   {
     "activeIcon": Icon(
-      Icons.category,
+      CupertinoIcons.rectangle_grid_2x2_fill,
       color: kPrimaryColor,
     ),
     "icon": Icon(
-      Icons.category_outlined,
+      CupertinoIcons.rectangle_grid_2x2,
     ),
-    "label": 'Kategoriýalar'
+    "label": 'Bolumler'
   },
   {
     "activeIcon": Icon(
-      Icons.shopping_bag,
+      CupertinoIcons.bag_fill,
       color: kPrimaryColor,
     ),
     "icon": Icon(
-      Icons.shopping_bag_outlined,
+      CupertinoIcons.bag,
     ),
     "label": 'Sebet'
   },
   {
     "activeIcon": Icon(
-      Icons.person,
+      CupertinoIcons.person_fill,
       color: kPrimaryColor,
     ),
     "icon": Icon(
-      Icons.person_outlined,
+      CupertinoIcons.person,
     ),
     "label": 'Profil'
   },
